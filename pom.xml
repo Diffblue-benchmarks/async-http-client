@@ -114,10 +114,28 @@
                 <artifactId>netty-leak-detector-junit-extension</artifactId>
                 <version>0.0.5</version>
             </dependency>
+            <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter-engine</artifactId>
+              <version>5.11.3</version>
+              <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <version>5.11.3</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>5.14.1</version>
+          <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
@@ -286,6 +304,11 @@
             <artifactId>annotations</artifactId>
             <version>${jetbrains-annotations.version}</version>
         </dependency>
+        <dependency>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.12</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -427,6 +450,26 @@
                     </execution>
                 </executions>
             </plugin>
+      
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.17.1</version>
+        <configuration>
+          <failWhenNoMutations>false</failWhenNoMutations>
+          <targetTests>
+            <param>**DiffblueTest</param>
+          </targetTests>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>1.2.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
         </plugins>
     </build>
 </project>
