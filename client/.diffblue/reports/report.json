@@ -4,18 +4,18 @@
   },
   "run" : {
     "version" : "2025.09.01-44e352d-licensed",
-    "creationTimestamp" : "2025-09-26T10:10:09.675654Z",
+    "creationTimestamp" : "2025-10-15T15:25:17.664243Z",
     "command" : "dcover create --coverage-reports --upload http://localhost:8080 --project-name async-http-client --name with-diffblue-tests",
-    "totalTime" : 5863.113,
-    "environmentDetectionTime" : 2.768,
-    "indexingTime" : 0.567,
-    "entryPointsTime" : 2.744,
-    "generationTime" : 5083.419,
-    "timeToFirstTest" : 71.657,
-    "timeToLastTest" : 5253.159,
-    "indexQueryTime" : 9.514,
-    "verificationTime" : 125.582,
-    "validationTime" : 404.039
+    "totalTime" : 5823.248,
+    "environmentDetectionTime" : 2.917,
+    "indexingTime" : 0.321,
+    "entryPointsTime" : 2.889,
+    "generationTime" : 5045.218,
+    "timeToFirstTest" : 70.733,
+    "timeToLastTest" : 5213.747,
+    "indexQueryTime" : 9.442,
+    "verificationTime" : 124.862,
+    "validationTime" : 404.189
   },
   "codes" : {
     "F009" : "Internal error",
@@ -54,9 +54,9 @@
   "summary" : {
     "classesCount" : 255,
     "methodsCount" : 2071,
-    "cumulativeDiffblueTestCount" : 1468,
+    "cumulativeDiffblueTestCount" : 1493,
     "cumulativeManualTestCount" : 802,
-    "completeTestCount" : 1471,
+    "completeTestCount" : 1496,
     "incompleteTestCount" : 0,
     "skeletonTestCount" : 0,
     "totalPhysicalLineCount" : 14431,
@@ -101,16 +101,16 @@
       "W002" : 6
     },
     "perTestOutcome" : {
-      "R000" : 1471
+      "R000" : 1496
     },
     "perTestValidation" : {
-      "V000" : 1468,
+      "V000" : 1493,
       "V003" : 3
     },
     "warnings" : {
       "F009" : 3,
-      "W001" : 34,
-      "W002" : 44
+      "W001" : 9,
+      "W002" : 43
     }
   },
   "classes" : {
@@ -294,7 +294,7 @@
     },
     "org.asynchttpclient.DefaultAsyncHttpClient" : {
       "methodsCount" : 33,
-      "completeTestCount" : 63,
+      "completeTestCount" : 69,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 27,
@@ -311,7 +311,7 @@
         "T023" : 1
       },
       "perTestOutcome" : {
-        "R000" : 63
+        "R000" : 69
       }
     },
     "org.asynchttpclient.DefaultAsyncHttpClientConfig" : {
@@ -364,7 +364,7 @@
     },
     "org.asynchttpclient.Dsl" : {
       "methodsCount" : 20,
-      "completeTestCount" : 20,
+      "completeTestCount" : 19,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 19,
@@ -377,7 +377,7 @@
         "T008" : 1
       },
       "perTestOutcome" : {
-        "R000" : 20
+        "R000" : 19
       }
     },
     "org.asynchttpclient.HostStats" : {
@@ -788,7 +788,7 @@
     },
     "org.asynchttpclient.cookie.CookieEvictionTask" : {
       "methodsCount" : 2,
-      "completeTestCount" : 4,
+      "completeTestCount" : 8,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 2
@@ -797,10 +797,7 @@
         "R000" : 2
       },
       "perTestOutcome" : {
-        "R000" : 4
-      },
-      "warnings" : {
-        "W001" : 25
+        "R000" : 8
       }
     },
     "org.asynchttpclient.cookie.CookieStore" : {
@@ -1596,7 +1593,7 @@
     },
     "org.asynchttpclient.netty.channel.DefaultChannelPool" : {
       "methodsCount" : 21,
-      "completeTestCount" : 32,
+      "completeTestCount" : 48,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 10,
@@ -1612,7 +1609,7 @@
         "T023" : 1
       },
       "perTestOutcome" : {
-        "R000" : 32
+        "R000" : 48
       }
     },
     "org.asynchttpclient.netty.channel.DefaultChannelPool$ChannelCreation" : {
@@ -2141,7 +2138,7 @@
     },
     "org.asynchttpclient.netty.request.NettyRequestFactory" : {
       "methodsCount" : 8,
-      "completeTestCount" : 16,
+      "completeTestCount" : 18,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 4,
@@ -2154,10 +2151,10 @@
         "T023" : 1
       },
       "perTestOutcome" : {
-        "R000" : 16
+        "R000" : 18
       },
       "warnings" : {
-        "W002" : 12
+        "W002" : 11
       }
     },
     "org.asynchttpclient.netty.request.NettyRequestSender" : {
@@ -2512,7 +2509,7 @@
     },
     "org.asynchttpclient.netty.ssl.DefaultSslEngineFactory" : {
       "methodsCount" : 6,
-      "completeTestCount" : 8,
+      "completeTestCount" : 9,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 4,
@@ -2526,7 +2523,7 @@
         "T003" : 1
       },
       "perTestOutcome" : {
-        "R000" : 8
+        "R000" : 9
       }
     },
     "org.asynchttpclient.netty.ssl.JsseSslEngineFactory" : {
@@ -3324,7 +3321,7 @@
     },
     "org.asynchttpclient.request.body.multipart.part.MessageEndMultipartPart" : {
       "methodsCount" : 12,
-      "completeTestCount" : 14,
+      "completeTestCount" : 12,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 11,
@@ -3336,7 +3333,7 @@
         "W002" : 2
       },
       "perTestOutcome" : {
-        "R000" : 14
+        "R000" : 12
       },
       "warnings" : {
         "W002" : 2
@@ -3344,7 +3341,7 @@
     },
     "org.asynchttpclient.request.body.multipart.part.MultipartPart" : {
       "methodsCount" : 28,
-      "completeTestCount" : 32,
+      "completeTestCount" : 31,
       "incompleteTestCount" : 0,
       "perMethodTestability" : {
         "T000" : 21,
@@ -3361,7 +3358,7 @@
         "T023" : 1
       },
       "perTestOutcome" : {
-        "R000" : 32
+        "R000" : 31
       }
     },
     "org.asynchttpclient.request.body.multipart.part.MultipartPart$1" : {
@@ -5525,12 +5522,12 @@
       ]
     },
     "org.asynchttpclient.DefaultAsyncHttpClient.prepareHead:(Ljava/lang/String;)Lorg/asynchttpclient/BoundRequestBuilder;" : {
-      "completeTestCount" : 2,
+      "completeTestCount" : 1,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 2
+        "R000" : 1
       },
       "lineNumbers" : [
         192
@@ -5585,24 +5582,24 @@
       ]
     },
     "org.asynchttpclient.DefaultAsyncHttpClient.prepareRequest:(Lorg/asynchttpclient/Request;)Lorg/asynchttpclient/BoundRequestBuilder;" : {
-      "completeTestCount" : 9,
+      "completeTestCount" : 13,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 9
+        "R000" : 13
       },
       "lineNumbers" : [
         222
       ]
     },
     "org.asynchttpclient.DefaultAsyncHttpClient.prepareRequest:(Lorg/asynchttpclient/RequestBuilder;)Lorg/asynchttpclient/BoundRequestBuilder;" : {
-      "completeTestCount" : 26,
+      "completeTestCount" : 23,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 26
+        "R000" : 23
       },
       "lineNumbers" : [
         227
@@ -5633,12 +5630,12 @@
       ]
     },
     "org.asynchttpclient.DefaultAsyncHttpClient.requestBuilder:(Lorg/asynchttpclient/Request;)Lorg/asynchttpclient/BoundRequestBuilder;" : {
-      "completeTestCount" : 5,
+      "completeTestCount" : 11,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 5
+        "R000" : 11
       },
       "lineNumbers" : [
         337
@@ -7943,12 +7940,12 @@
       ]
     },
     "org.asynchttpclient.Dsl.delete:(Ljava/lang/String;)Lorg/asynchttpclient/RequestBuilder;" : {
-      "completeTestCount" : 2,
+      "completeTestCount" : 1,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 2
+        "R000" : 1
       },
       "lineNumbers" : [
         62
@@ -7997,12 +7994,12 @@
       ]
     },
     "org.asynchttpclient.Dsl.options:(Ljava/lang/String;)Lorg/asynchttpclient/RequestBuilder;" : {
-      "completeTestCount" : 1,
+      "completeTestCount" : 2,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 1
+        "R000" : 2
       },
       "lineNumbers" : [
         70
@@ -8021,12 +8018,12 @@
       ]
     },
     "org.asynchttpclient.Dsl.post:(Ljava/lang/String;)Lorg/asynchttpclient/RequestBuilder;" : {
-      "completeTestCount" : 1,
+      "completeTestCount" : 2,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 1
+        "R000" : 2
       },
       "lineNumbers" : [
         58
@@ -8045,12 +8042,12 @@
       ]
     },
     "org.asynchttpclient.Dsl.put:(Ljava/lang/String;)Lorg/asynchttpclient/RequestBuilder;" : {
-      "completeTestCount" : 2,
+      "completeTestCount" : 1,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 2
+        "R000" : 1
       },
       "lineNumbers" : [
         54
@@ -8066,12 +8063,12 @@
       ]
     },
     "org.asynchttpclient.Dsl.realm:(Lorg/asynchttpclient/Realm;)Lorg/asynchttpclient/Realm$Builder;" : {
-      "completeTestCount" : 3,
+      "completeTestCount" : 4,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 3
+        "R000" : 4
       },
       "lineNumbers" : [
         97,
@@ -8109,12 +8106,12 @@
       ]
     },
     "org.asynchttpclient.Dsl.trace:(Ljava/lang/String;)Lorg/asynchttpclient/RequestBuilder;" : {
-      "completeTestCount" : 3,
+      "completeTestCount" : 1,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 3
+        "R000" : 1
       },
       "lineNumbers" : [
         78
@@ -11971,9 +11968,6 @@
       "perTestOutcome" : {
         "R000" : 2
       },
-      "warnings" : {
-        "W001" : 25
-      },
       "lineNumbers" : [
         34,
         35,
@@ -11982,12 +11976,12 @@
       ]
     },
     "org.asynchttpclient.cookie.CookieEvictionTask.run:(Lio/netty/util/Timeout;)V" : {
-      "completeTestCount" : 2,
+      "completeTestCount" : 6,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 2
+        "R000" : 6
       },
       "lineNumbers" : [
         41,
@@ -16599,12 +16593,12 @@
       "perMethodOutcome" : "T023"
     },
     "org.asynchttpclient.netty.channel.DefaultChannelPool.<init>:(Ljava/time/Duration;Ljava/time/Duration;Lio/netty/util/Timer;Ljava/time/Duration;)V" : {
-      "completeTestCount" : 7,
+      "completeTestCount" : 10,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 7
+        "R000" : 10
       },
       "lineNumbers" : [
         74,
@@ -16612,12 +16606,12 @@
       ]
     },
     "org.asynchttpclient.netty.channel.DefaultChannelPool.<init>:(Ljava/time/Duration;Ljava/time/Duration;Lorg/asynchttpclient/netty/channel/DefaultChannelPool$PoolLeaseStrategy;Lio/netty/util/Timer;Ljava/time/Duration;)V" : {
-      "completeTestCount" : 8,
+      "completeTestCount" : 10,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 8
+        "R000" : 10
       },
       "lineNumbers" : [
         77,
@@ -16641,12 +16635,12 @@
       ]
     },
     "org.asynchttpclient.netty.channel.DefaultChannelPool.<init>:(Lorg/asynchttpclient/AsyncHttpClientConfig;Lio/netty/util/Timer;)V" : {
-      "completeTestCount" : 9,
+      "completeTestCount" : 20,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 9
+        "R000" : 20
       },
       "lineNumbers" : [
         67,
@@ -18930,15 +18924,15 @@
       ]
     },
     "org.asynchttpclient.netty.request.NettyRequestFactory.newNettyRequest:(Lorg/asynchttpclient/Request;ZLorg/asynchttpclient/proxy/ProxyServer;Lorg/asynchttpclient/Realm;Lorg/asynchttpclient/Realm;)Lorg/asynchttpclient/netty/request/NettyRequest;" : {
-      "completeTestCount" : 10,
+      "completeTestCount" : 12,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 10
+        "R000" : 12
       },
       "warnings" : {
-        "W002" : 12
+        "W002" : 11
       },
       "lineNumbers" : [
         140,
@@ -20657,12 +20651,12 @@
       ]
     },
     "org.asynchttpclient.netty.ssl.DefaultSslEngineFactory.init:(Lorg/asynchttpclient/AsyncHttpClientConfig;)V" : {
-      "completeTestCount" : 7,
+      "completeTestCount" : 8,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 7
+        "R000" : 8
       },
       "lineNumbers" : [
         75,
@@ -25011,24 +25005,24 @@
       ]
     },
     "org.asynchttpclient.request.body.multipart.part.MessageEndMultipartPart.transferTo:(Lio/netty/buffer/ByteBuf;)J" : {
-      "completeTestCount" : 4,
-      "incompleteTestCount" : 0,
-      "perMethodTestability" : "T000",
-      "perMethodOutcome" : "R000",
-      "perTestOutcome" : {
-        "R000" : 4
-      },
-      "lineNumbers" : [
-        38
-      ]
-    },
-    "org.asynchttpclient.request.body.multipart.part.MessageEndMultipartPart.transferTo:(Ljava/nio/channels/WritableByteChannel;)J" : {
       "completeTestCount" : 3,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
         "R000" : 3
+      },
+      "lineNumbers" : [
+        38
+      ]
+    },
+    "org.asynchttpclient.request.body.multipart.part.MessageEndMultipartPart.transferTo:(Ljava/nio/channels/WritableByteChannel;)J" : {
+      "completeTestCount" : 2,
+      "incompleteTestCount" : 0,
+      "perMethodTestability" : "T000",
+      "perMethodOutcome" : "R000",
+      "perTestOutcome" : {
+        "R000" : 2
       },
       "lineNumbers" : [
         43,
@@ -25076,12 +25070,12 @@
       ]
     },
     "org.asynchttpclient.request.body.multipart.part.MultipartPart.computePostContentBytes:(I)Lio/netty/buffer/ByteBuf;" : {
-      "completeTestCount" : 2,
+      "completeTestCount" : 1,
       "incompleteTestCount" : 0,
       "perMethodTestability" : "T000",
       "perMethodOutcome" : "R000",
       "perTestOutcome" : {
-        "R000" : 2
+        "R000" : 1
       },
       "lineNumbers" : [
         249,

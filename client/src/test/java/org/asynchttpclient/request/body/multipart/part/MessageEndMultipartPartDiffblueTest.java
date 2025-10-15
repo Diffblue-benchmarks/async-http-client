@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
-import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -75,6 +74,7 @@ class MessageEndMultipartPartDiffblueTest {
     long actualTransferToResult = messageEndMultipartPart.transferTo(target);
 
     // Assert
+    assertEquals(0, target.readerIndex());
     assertEquals(0, target.writerIndex());
     assertEquals(0L, actualTransferToResult);
     assertEquals(MultipartState.PRE_CONTENT, messageEndMultipartPart.getState());
@@ -84,18 +84,18 @@ class MessageEndMultipartPartDiffblueTest {
    * Test {@link MessageEndMultipartPart#transferTo(ByteBuf)} with {@code ByteBuf}.
    *
    * <ul>
-   *   <li>Given forty-two.
-   *   <li>Then return fourteen.
+   *   <li>Then compositeBuffer three writerIndex is fifteen.
    * </ul>
    *
    * <p>Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
    */
   @Test
-  @DisplayName("Test transferTo(ByteBuf) with 'ByteBuf'; given forty-two; then return fourteen")
+  @DisplayName(
+      "Test transferTo(ByteBuf) with 'ByteBuf'; then compositeBuffer three writerIndex is fifteen")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(ByteBuf)"})
-  void testTransferToWithByteBuf_givenFortyTwo_thenReturnFourteen()
+  void testTransferToWithByteBuf_thenCompositeBufferThreeWriterIndexIsFifteen()
       throws UnsupportedEncodingException {
     // Arrange
     MessageEndMultipartPart messageEndMultipartPart =
@@ -104,10 +104,11 @@ class MessageEndMultipartPartDiffblueTest {
     CompositeByteBuf target = Unpooled.compositeBuffer(3);
     target.writeByte(42);
 
-    // Act and Assert
-    assertEquals(14L, messageEndMultipartPart.transferTo(target));
+    // Act
+    messageEndMultipartPart.transferTo(target);
+
+    // Assert
     assertEquals(15, target.writerIndex());
-    assertEquals(MultipartState.DONE, messageEndMultipartPart.getState());
     assertTrue(target.readBoolean());
     assertArrayEquals(
         new byte[] {
@@ -122,23 +123,23 @@ class MessageEndMultipartPartDiffblueTest {
    * Test {@link MessageEndMultipartPart#transferTo(ByteBuf)} with {@code ByteBuf}.
    *
    * <ul>
-   *   <li>Given {@code true}.
+   *   <li>Then compositeBuffer three writerIndex is zero.
    * </ul>
    *
    * <p>Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
    */
   @Test
-  @DisplayName("Test transferTo(ByteBuf) with 'ByteBuf'; given 'true'")
+  @DisplayName(
+      "Test transferTo(ByteBuf) with 'ByteBuf'; then compositeBuffer three writerIndex is zero")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(ByteBuf)"})
-  void testTransferToWithByteBuf_givenTrue() throws UnsupportedEncodingException {
+  void testTransferToWithByteBuf_thenCompositeBufferThreeWriterIndexIsZero()
+      throws UnsupportedEncodingException {
     // Arrange
     MessageEndMultipartPart messageEndMultipartPart =
         new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-
     CompositeByteBuf target = Unpooled.compositeBuffer(3);
-    target.addComponents(true, new ArrayList<>());
 
     // Act
     long actualTransferToResult = messageEndMultipartPart.transferTo(target);
@@ -151,79 +152,26 @@ class MessageEndMultipartPartDiffblueTest {
   }
 
   /**
-   * Test {@link MessageEndMultipartPart#transferTo(ByteBuf)} with {@code ByteBuf}.
+   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code
+   * WritableByteChannel}.
    *
    * <ul>
-   *   <li>When compositeBuffer three.
+   *   <li>Given fourteen.
+   *   <li>Then return fourteen.
    * </ul>
    *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
-   */
-  @Test
-  @DisplayName("Test transferTo(ByteBuf) with 'ByteBuf'; when compositeBuffer three")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(ByteBuf)"})
-  void testTransferToWithByteBuf_whenCompositeBufferThree() throws UnsupportedEncodingException {
-    // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-    CompositeByteBuf target = Unpooled.compositeBuffer(3);
-
-    // Act
-    long actualTransferToResult = messageEndMultipartPart.transferTo(target);
-
-    // Assert
-    assertEquals(0, target.writerIndex());
-    assertEquals(0L, actualTransferToResult);
-    assertEquals(MultipartState.PRE_CONTENT, messageEndMultipartPart.getState());
-    assertArrayEquals(new byte[] {}, target.array());
-  }
-
-  /**
-   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
    * <p>Method under test: {@link MessageEndMultipartPart#transferTo(WritableByteChannel)}
    */
   @Test
-  @DisplayName("Test transferTo(WritableByteChannel) with 'WritableByteChannel'")
+  @DisplayName(
+      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given fourteen; then return fourteen")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(WritableByteChannel)"})
-  void testTransferToWithWritableByteChannel() throws IOException {
+  void testTransferToWithWritableByteChannel_givenFourteen_thenReturnFourteen() throws IOException {
     // Arrange
     MessageEndMultipartPart messageEndMultipartPart =
         new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-
-    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
-    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(14);
-
-    // Act
-    long actualTransferToResult = messageEndMultipartPart.transferTo(target);
-
-    // Assert
-    verify(target).write(isA(ByteBuffer.class));
-    assertEquals(14L, actualTransferToResult);
-    assertEquals(MultipartState.DONE, messageEndMultipartPart.getState());
-    assertFalse(messageEndMultipartPart.isTargetSlow());
-  }
-
-  /**
-   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(WritableByteChannel)}
-   */
-  @Test
-  @DisplayName("Test transferTo(WritableByteChannel) with 'WritableByteChannel'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(WritableByteChannel)"})
-  void testTransferToWithWritableByteChannel2() throws IOException {
-    // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart(new byte[] {'A', 'X', 'A', Byte.MAX_VALUE, 'A', 'X', 'A', 'X'});
 
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(14);

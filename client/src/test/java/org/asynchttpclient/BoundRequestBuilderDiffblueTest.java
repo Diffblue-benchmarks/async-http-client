@@ -1103,8 +1103,7 @@ class BoundRequestBuilderDiffblueTest {
 
     BoundRequestBuilder boundRequestBuilder =
         new BoundRequestBuilder(new DefaultAsyncHttpClient(), prototype);
-    boundRequestBuilder.setBody(
-        Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile());
+    boundRequestBuilder.setLocalAddress(mock(InetAddress.class));
     boundRequestBuilder.setSignatureCalculator(signatureCalculator);
     boundRequestBuilder.setProxyServer(Dsl.proxyServer("https://example.org/example", 8080));
 

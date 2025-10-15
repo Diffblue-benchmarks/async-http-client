@@ -12,7 +12,6 @@ import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.resolver.DefaultNameResolver;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder;
@@ -188,59 +187,6 @@ class DslDiffblueTest {
   }
 
   /**
-   * Test {@link Dsl#put(String)}.
-   *
-   * <ul>
-   *   <li>When {@code https://example.org/examplewshost}.
-   *   <li>Then {@link RequestBuilderBase#headers} return {@link DefaultHttpHeaders}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Dsl#put(String)}
-   */
-  @Test
-  @DisplayName(
-      "Test put(String); when 'https://example.org/examplewshost'; then headers return DefaultHttpHeaders")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"RequestBuilder Dsl.put(String)"})
-  void testPut_whenHttpsExampleOrgExamplewshost_thenHeadersReturnDefaultHttpHeaders() {
-    // Arrange and Act
-    RequestBuilder actualPutResult = Dsl.put("https://example.org/examplewshost");
-
-    // Assert
-    assertTrue(actualPutResult.headers instanceof DefaultHttpHeaders);
-    assertTrue(actualPutResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning = actualPutResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("PUT", actualPutResult.method);
-    assertNull(actualPutResult.byteData);
-    assertNull(actualPutResult.byteBufData);
-    assertNull(actualPutResult.file);
-    assertNull(actualPutResult.streamData);
-    assertNull(actualPutResult.followRedirect);
-    assertNull(actualPutResult.stringData);
-    assertNull(actualPutResult.virtualHost);
-    assertNull(actualPutResult.address);
-    assertNull(actualPutResult.localAddress);
-    assertNull(actualPutResult.byteBufferData);
-    assertNull(actualPutResult.charset);
-    assertNull(actualPutResult.readTimeout);
-    assertNull(actualPutResult.requestTimeout);
-    assertNull(actualPutResult.cookies);
-    assertNull(actualPutResult.compositeByteData);
-    assertNull(actualPutResult.formParams);
-    assertNull(actualPutResult.queryParams);
-    assertNull(actualPutResult.bodyParts);
-    assertNull(actualPutResult.realm);
-    assertNull(actualPutResult.signatureCalculator);
-    assertNull(actualPutResult.proxyServer);
-    assertNull(actualPutResult.bodyGenerator);
-    assertEquals(0L, actualPutResult.rangeOffset);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-    assertEquals(UriEncoder.FIXING, actualPutResult.uriEncoder);
-  }
-
-  /**
    * Test {@link Dsl#post(String)}.
    *
    * <ul>
@@ -294,61 +240,109 @@ class DslDiffblueTest {
   }
 
   /**
-   * Test {@link Dsl#delete(String)}.
+   * Test {@link Dsl#post(String)}.
    *
    * <ul>
-   *   <li>When {@code https://example.org/example}.
-   *   <li>Then return {@link RequestBuilderBase#uri} Authority is {@code example.org:443}.
+   *   <li>When {@code https://example.org/exampleurl:}.
+   *   <li>Then {@link RequestBuilderBase#headers} return {@link DefaultHttpHeaders}.
    * </ul>
    *
-   * <p>Method under test: {@link Dsl#delete(String)}
+   * <p>Method under test: {@link Dsl#post(String)}
    */
   @Test
   @DisplayName(
-      "Test delete(String); when 'https://example.org/example'; then return uri Authority is 'example.org:443'")
+      "Test post(String); when 'https://example.org/exampleurl:'; then headers return DefaultHttpHeaders")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({"RequestBuilder Dsl.delete(String)"})
-  void testDelete_whenHttpsExampleOrgExample_thenReturnUriAuthorityIsExampleOrg443()
-      throws URISyntaxException {
-    // Arrange, Act and Assert
-    Uri uri = Dsl.delete("https://example.org/example").uri;
-    assertEquals("example.org:443", uri.getAuthority());
-    assertEquals("https", uri.getScheme());
-    assertEquals("https://example.org/example", uri.toJavaNetURI().toString());
-    assertEquals("https://example.org:443", uri.getBaseUrl());
-    assertEquals(443, uri.getExplicitPort());
-    assertEquals(443, uri.getSchemeDefaultPort());
-    assertTrue(uri.isSecured());
+  @MethodsUnderTest({"RequestBuilder Dsl.post(String)"})
+  void testPost_whenHttpsExampleOrgExampleurl_thenHeadersReturnDefaultHttpHeaders() {
+    // Arrange and Act
+    RequestBuilder actualPostResult = Dsl.post("https://example.org/exampleurl:");
+
+    // Assert
+    assertTrue(actualPostResult.headers instanceof DefaultHttpHeaders);
+    assertTrue(actualPostResult.nameResolver instanceof DefaultNameResolver);
+    ChannelPoolPartitioning channelPoolPartitioning = actualPostResult.channelPoolPartitioning;
+    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
+    assertEquals("POST", actualPostResult.method);
+    assertNull(actualPostResult.byteData);
+    assertNull(actualPostResult.byteBufData);
+    assertNull(actualPostResult.file);
+    assertNull(actualPostResult.streamData);
+    assertNull(actualPostResult.followRedirect);
+    assertNull(actualPostResult.stringData);
+    assertNull(actualPostResult.virtualHost);
+    assertNull(actualPostResult.address);
+    assertNull(actualPostResult.localAddress);
+    assertNull(actualPostResult.byteBufferData);
+    assertNull(actualPostResult.charset);
+    assertNull(actualPostResult.readTimeout);
+    assertNull(actualPostResult.requestTimeout);
+    assertNull(actualPostResult.cookies);
+    assertNull(actualPostResult.compositeByteData);
+    assertNull(actualPostResult.formParams);
+    assertNull(actualPostResult.queryParams);
+    assertNull(actualPostResult.bodyParts);
+    assertNull(actualPostResult.realm);
+    assertNull(actualPostResult.signatureCalculator);
+    assertNull(actualPostResult.proxyServer);
+    assertNull(actualPostResult.bodyGenerator);
+    assertEquals(0L, actualPostResult.rangeOffset);
+    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
+    assertEquals(UriEncoder.FIXING, actualPostResult.uriEncoder);
   }
 
   /**
    * Test {@link Dsl#delete(String)}.
    *
    * <ul>
-   *   <li>When {@code wsshttps://example.org/example}.
-   *   <li>Then return {@link RequestBuilderBase#uri} Authority is {@code example.org:80}.
+   *   <li>When {@code https://example.org/example}.
+   *   <li>Then {@link RequestBuilderBase#headers} return {@link DefaultHttpHeaders}.
    * </ul>
    *
    * <p>Method under test: {@link Dsl#delete(String)}
    */
   @Test
   @DisplayName(
-      "Test delete(String); when 'wsshttps://example.org/example'; then return uri Authority is 'example.org:80'")
+      "Test delete(String); when 'https://example.org/example'; then headers return DefaultHttpHeaders")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"RequestBuilder Dsl.delete(String)"})
-  void testDelete_whenWsshttpsExampleOrgExample_thenReturnUriAuthorityIsExampleOrg80()
-      throws URISyntaxException {
-    // Arrange, Act and Assert
-    Uri uri = Dsl.delete("wsshttps://example.org/example").uri;
-    assertEquals("example.org:80", uri.getAuthority());
-    assertEquals("wsshttps", uri.getScheme());
-    assertEquals("wsshttps://example.org/example", uri.toJavaNetURI().toString());
-    assertEquals("wsshttps://example.org:80", uri.getBaseUrl());
-    assertEquals(80, uri.getExplicitPort());
-    assertEquals(80, uri.getSchemeDefaultPort());
-    assertFalse(uri.isSecured());
+  void testDelete_whenHttpsExampleOrgExample_thenHeadersReturnDefaultHttpHeaders() {
+    // Arrange and Act
+    RequestBuilder actualDeleteResult = Dsl.delete("https://example.org/example");
+
+    // Assert
+    assertTrue(actualDeleteResult.headers instanceof DefaultHttpHeaders);
+    assertTrue(actualDeleteResult.nameResolver instanceof DefaultNameResolver);
+    ChannelPoolPartitioning channelPoolPartitioning = actualDeleteResult.channelPoolPartitioning;
+    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
+    assertEquals("DELETE", actualDeleteResult.method);
+    assertNull(actualDeleteResult.byteData);
+    assertNull(actualDeleteResult.byteBufData);
+    assertNull(actualDeleteResult.file);
+    assertNull(actualDeleteResult.streamData);
+    assertNull(actualDeleteResult.followRedirect);
+    assertNull(actualDeleteResult.stringData);
+    assertNull(actualDeleteResult.virtualHost);
+    assertNull(actualDeleteResult.address);
+    assertNull(actualDeleteResult.localAddress);
+    assertNull(actualDeleteResult.byteBufferData);
+    assertNull(actualDeleteResult.charset);
+    assertNull(actualDeleteResult.readTimeout);
+    assertNull(actualDeleteResult.requestTimeout);
+    assertNull(actualDeleteResult.cookies);
+    assertNull(actualDeleteResult.compositeByteData);
+    assertNull(actualDeleteResult.formParams);
+    assertNull(actualDeleteResult.queryParams);
+    assertNull(actualDeleteResult.bodyParts);
+    assertNull(actualDeleteResult.realm);
+    assertNull(actualDeleteResult.signatureCalculator);
+    assertNull(actualDeleteResult.proxyServer);
+    assertNull(actualDeleteResult.bodyGenerator);
+    assertEquals(0L, actualDeleteResult.rangeOffset);
+    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
+    assertEquals(UriEncoder.FIXING, actualDeleteResult.uriEncoder);
   }
 
   /**
@@ -458,6 +452,57 @@ class DslDiffblueTest {
   }
 
   /**
+   * Test {@link Dsl#options(String)}.
+   *
+   * <ul>
+   *   <li>When {@code https://example.org/exampleschemeurl:}.
+   * </ul>
+   *
+   * <p>Method under test: {@link Dsl#options(String)}
+   */
+  @Test
+  @DisplayName("Test options(String); when 'https://example.org/exampleschemeurl:'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"RequestBuilder Dsl.options(String)"})
+  void testOptions_whenHttpsExampleOrgExampleschemeurl() {
+    // Arrange and Act
+    RequestBuilder actualOptionsResult = Dsl.options("https://example.org/exampleschemeurl:");
+
+    // Assert
+    assertTrue(actualOptionsResult.headers instanceof DefaultHttpHeaders);
+    assertTrue(actualOptionsResult.nameResolver instanceof DefaultNameResolver);
+    ChannelPoolPartitioning channelPoolPartitioning = actualOptionsResult.channelPoolPartitioning;
+    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
+    assertEquals("OPTIONS", actualOptionsResult.method);
+    assertNull(actualOptionsResult.byteData);
+    assertNull(actualOptionsResult.byteBufData);
+    assertNull(actualOptionsResult.file);
+    assertNull(actualOptionsResult.streamData);
+    assertNull(actualOptionsResult.followRedirect);
+    assertNull(actualOptionsResult.stringData);
+    assertNull(actualOptionsResult.virtualHost);
+    assertNull(actualOptionsResult.address);
+    assertNull(actualOptionsResult.localAddress);
+    assertNull(actualOptionsResult.byteBufferData);
+    assertNull(actualOptionsResult.charset);
+    assertNull(actualOptionsResult.readTimeout);
+    assertNull(actualOptionsResult.requestTimeout);
+    assertNull(actualOptionsResult.cookies);
+    assertNull(actualOptionsResult.compositeByteData);
+    assertNull(actualOptionsResult.formParams);
+    assertNull(actualOptionsResult.queryParams);
+    assertNull(actualOptionsResult.bodyParts);
+    assertNull(actualOptionsResult.realm);
+    assertNull(actualOptionsResult.signatureCalculator);
+    assertNull(actualOptionsResult.proxyServer);
+    assertNull(actualOptionsResult.bodyGenerator);
+    assertEquals(0L, actualOptionsResult.rangeOffset);
+    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
+    assertEquals(UriEncoder.FIXING, actualOptionsResult.uriEncoder);
+  }
+
+  /**
    * Test {@link Dsl#patch(String)}.
    *
    * <ul>
@@ -529,110 +574,6 @@ class DslDiffblueTest {
   void testTrace_whenHttpsExampleOrgExample_thenHeadersReturnDefaultHttpHeaders() {
     // Arrange and Act
     RequestBuilder actualTraceResult = Dsl.trace("https://example.org/example");
-
-    // Assert
-    assertTrue(actualTraceResult.headers instanceof DefaultHttpHeaders);
-    assertTrue(actualTraceResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning = actualTraceResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("TRACE", actualTraceResult.method);
-    assertNull(actualTraceResult.byteData);
-    assertNull(actualTraceResult.byteBufData);
-    assertNull(actualTraceResult.file);
-    assertNull(actualTraceResult.streamData);
-    assertNull(actualTraceResult.followRedirect);
-    assertNull(actualTraceResult.stringData);
-    assertNull(actualTraceResult.virtualHost);
-    assertNull(actualTraceResult.address);
-    assertNull(actualTraceResult.localAddress);
-    assertNull(actualTraceResult.byteBufferData);
-    assertNull(actualTraceResult.charset);
-    assertNull(actualTraceResult.readTimeout);
-    assertNull(actualTraceResult.requestTimeout);
-    assertNull(actualTraceResult.cookies);
-    assertNull(actualTraceResult.compositeByteData);
-    assertNull(actualTraceResult.formParams);
-    assertNull(actualTraceResult.queryParams);
-    assertNull(actualTraceResult.bodyParts);
-    assertNull(actualTraceResult.realm);
-    assertNull(actualTraceResult.signatureCalculator);
-    assertNull(actualTraceResult.proxyServer);
-    assertNull(actualTraceResult.bodyGenerator);
-    assertEquals(0L, actualTraceResult.rangeOffset);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-    assertEquals(UriEncoder.FIXING, actualTraceResult.uriEncoder);
-  }
-
-  /**
-   * Test {@link Dsl#trace(String)}.
-   *
-   * <ul>
-   *   <li>When {@code https://example.org/examplehostscheme}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Dsl#trace(String)}
-   */
-  @Test
-  @DisplayName("Test trace(String); when 'https://example.org/examplehostscheme'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"RequestBuilder Dsl.trace(String)"})
-  void testTrace_whenHttpsExampleOrgExamplehostscheme() {
-    // Arrange and Act
-    RequestBuilder actualTraceResult = Dsl.trace("https://example.org/examplehostscheme");
-
-    // Assert
-    assertTrue(actualTraceResult.headers instanceof DefaultHttpHeaders);
-    assertTrue(actualTraceResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning = actualTraceResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("TRACE", actualTraceResult.method);
-    assertNull(actualTraceResult.byteData);
-    assertNull(actualTraceResult.byteBufData);
-    assertNull(actualTraceResult.file);
-    assertNull(actualTraceResult.streamData);
-    assertNull(actualTraceResult.followRedirect);
-    assertNull(actualTraceResult.stringData);
-    assertNull(actualTraceResult.virtualHost);
-    assertNull(actualTraceResult.address);
-    assertNull(actualTraceResult.localAddress);
-    assertNull(actualTraceResult.byteBufferData);
-    assertNull(actualTraceResult.charset);
-    assertNull(actualTraceResult.readTimeout);
-    assertNull(actualTraceResult.requestTimeout);
-    assertNull(actualTraceResult.cookies);
-    assertNull(actualTraceResult.compositeByteData);
-    assertNull(actualTraceResult.formParams);
-    assertNull(actualTraceResult.queryParams);
-    assertNull(actualTraceResult.bodyParts);
-    assertNull(actualTraceResult.realm);
-    assertNull(actualTraceResult.signatureCalculator);
-    assertNull(actualTraceResult.proxyServer);
-    assertNull(actualTraceResult.bodyGenerator);
-    assertEquals(0L, actualTraceResult.rangeOffset);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-    assertEquals(UriEncoder.FIXING, actualTraceResult.uriEncoder);
-  }
-
-  /**
-   * Test {@link Dsl#trace(String)}.
-   *
-   * <ul>
-   *   <li>When {@code https://example.org/examplews}.
-   *   <li>Then {@link RequestBuilderBase#headers} return {@link DefaultHttpHeaders}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Dsl#trace(String)}
-   */
-  @Test
-  @DisplayName(
-      "Test trace(String); when 'https://example.org/examplews'; then headers return DefaultHttpHeaders")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"RequestBuilder Dsl.trace(String)"})
-  void testTrace_whenHttpsExampleOrgExamplews_thenHeadersReturnDefaultHttpHeaders() {
-    // Arrange and Act
-    RequestBuilder actualTraceResult = Dsl.trace("https://example.org/examplews");
 
     // Assert
     assertTrue(actualTraceResult.headers instanceof DefaultHttpHeaders);
@@ -823,24 +764,24 @@ class DslDiffblueTest {
    *
    * <ul>
    *   <li>Given {@code false}.
-   *   <li>When {@link Realm} {@link Realm#isUseAbsoluteURI()} return {@code false}.
+   *   <li>When {@link Realm} {@link Realm#isUsePreemptiveAuth()} return {@code false}.
    * </ul>
    *
    * <p>Method under test: {@link Dsl#realm(Realm)}
    */
   @Test
   @DisplayName(
-      "Test realm(Realm) with 'prototype'; given 'false'; when Realm isUseAbsoluteURI() return 'false'")
+      "Test realm(Realm) with 'prototype'; given 'false'; when Realm isUsePreemptiveAuth() return 'false'")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"Realm.Builder Dsl.realm(Realm)"})
-  void testRealmWithPrototype_givenFalse_whenRealmIsUseAbsoluteURIReturnFalse() {
+  void testRealmWithPrototype_givenFalse_whenRealmIsUsePreemptiveAuthReturnFalse() {
     // Arrange
     Realm prototype = mock(Realm.class);
     when(prototype.isOmitQuery()).thenReturn(true);
-    when(prototype.isUseAbsoluteURI()).thenReturn(false);
+    when(prototype.isUseAbsoluteURI()).thenReturn(true);
     when(prototype.isUseCanonicalHostname()).thenReturn(true);
-    when(prototype.isUsePreemptiveAuth()).thenReturn(true);
+    when(prototype.isUsePreemptiveAuth()).thenReturn(false);
     when(prototype.getAlgorithm()).thenReturn("https://example.org/example");
     when(prototype.getLoginContextName()).thenReturn("https://example.org/example");
     when(prototype.getNc()).thenReturn("https://example.org/example");
@@ -897,17 +838,90 @@ class DslDiffblueTest {
    * Test {@link Dsl#realm(Realm)} with {@code prototype}.
    *
    * <ul>
-   *   <li>When {@link Realm} {@link Realm#isUseAbsoluteURI()} return {@code true}.
+   *   <li>Given {@code http.auth.ntlm.domain}.
    * </ul>
    *
    * <p>Method under test: {@link Dsl#realm(Realm)}
    */
   @Test
-  @DisplayName("Test realm(Realm) with 'prototype'; when Realm isUseAbsoluteURI() return 'true'")
+  @DisplayName("Test realm(Realm) with 'prototype'; given 'http.auth.ntlm.domain'")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"Realm.Builder Dsl.realm(Realm)"})
-  void testRealmWithPrototype_whenRealmIsUseAbsoluteURIReturnTrue() {
+  void testRealmWithPrototype_givenHttpAuthNtlmDomain() {
+    // Arrange
+    Realm prototype = mock(Realm.class);
+    when(prototype.isOmitQuery()).thenReturn(true);
+    when(prototype.isUseAbsoluteURI()).thenReturn(true);
+    when(prototype.isUseCanonicalHostname()).thenReturn(true);
+    when(prototype.isUsePreemptiveAuth()).thenReturn(false);
+    when(prototype.getAlgorithm()).thenReturn("https://example.org/example");
+    when(prototype.getLoginContextName()).thenReturn("https://example.org/example");
+    when(prototype.getNc()).thenReturn("https://example.org/example");
+    when(prototype.getNonce()).thenReturn("https://example.org/example");
+    when(prototype.getNtlmDomain()).thenReturn("http.auth.ntlm.domain");
+    when(prototype.getNtlmHost()).thenReturn("https://example.org/example");
+    when(prototype.getOpaque()).thenReturn("https://example.org/example");
+    when(prototype.getPassword()).thenReturn("https://example.org/example");
+    when(prototype.getPrincipal()).thenReturn("https://example.org/example");
+    when(prototype.getQop()).thenReturn("https://example.org/example");
+    when(prototype.getRealmName()).thenReturn("https://example.org/example");
+    when(prototype.getServicePrincipalName()).thenReturn("https://example.org/example");
+    when(prototype.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(prototype.getCustomLoginConfig()).thenReturn(new HashMap<>());
+    when(prototype.getScheme()).thenReturn(AuthScheme.BASIC);
+    Uri uri =
+        new Uri(
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example",
+            8080,
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example");
+    when(prototype.getUri()).thenReturn(uri);
+
+    // Act
+    Dsl.realm(prototype);
+
+    // Assert
+    verify(prototype).getAlgorithm();
+    verify(prototype).getCharset();
+    verify(prototype).getCustomLoginConfig();
+    verify(prototype).getLoginContextName();
+    verify(prototype).getNc();
+    verify(prototype).getNonce();
+    verify(prototype).getNtlmDomain();
+    verify(prototype).getNtlmHost();
+    verify(prototype).getOpaque();
+    verify(prototype).getPassword();
+    verify(prototype).getPrincipal();
+    verify(prototype).getQop();
+    verify(prototype).getRealmName();
+    verify(prototype).getScheme();
+    verify(prototype).getServicePrincipalName();
+    verify(prototype).getUri();
+    verify(prototype).isOmitQuery();
+    verify(prototype).isUseAbsoluteURI();
+    verify(prototype).isUseCanonicalHostname();
+    verify(prototype).isUsePreemptiveAuth();
+  }
+
+  /**
+   * Test {@link Dsl#realm(Realm)} with {@code prototype}.
+   *
+   * <ul>
+   *   <li>When {@link Realm} {@link Realm#isUsePreemptiveAuth()} return {@code true}.
+   * </ul>
+   *
+   * <p>Method under test: {@link Dsl#realm(Realm)}
+   */
+  @Test
+  @DisplayName("Test realm(Realm) with 'prototype'; when Realm isUsePreemptiveAuth() return 'true'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"Realm.Builder Dsl.realm(Realm)"})
+  void testRealmWithPrototype_whenRealmIsUsePreemptiveAuthReturnTrue() {
     // Arrange
     Realm prototype = mock(Realm.class);
     when(prototype.isOmitQuery()).thenReturn(true);

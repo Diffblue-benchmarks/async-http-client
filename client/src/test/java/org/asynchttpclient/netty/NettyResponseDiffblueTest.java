@@ -1061,7 +1061,8 @@ class NettyResponseDiffblueTest {
   void testGetResponseBodyAsBytes() {
     // Arrange
     ArrayList<HttpResponseBodyPart> bodyParts = new ArrayList<>();
-    bodyParts.add(new LazyResponseBodyPart(new EmptyByteBuf(new AdaptiveByteBufAllocator()), true));
+    EmptyByteBuf buf = new EmptyByteBuf(new AdaptiveByteBufAllocator());
+    bodyParts.add(new LazyResponseBodyPart(buf, true));
     Uri uri =
         new Uri(
             "https://example.org/example",
@@ -1079,8 +1080,14 @@ class NettyResponseDiffblueTest {
 
     NettyResponse nettyResponse = new NettyResponse(status, new DefaultHttpHeaders(), bodyParts);
 
-    // Act and Assert
-    assertArrayEquals(new byte[] {}, nettyResponse.getResponseBodyAsBytes());
+    // Act
+    byte[] actualResponseBodyAsBytes = nettyResponse.getResponseBodyAsBytes();
+
+    // Assert
+    ByteBuf responseBodyAsByteBuf = nettyResponse.getResponseBodyAsByteBuf();
+    assertTrue(responseBodyAsByteBuf instanceof CompositeByteBuf);
+    assertEquals(buf, responseBodyAsByteBuf);
+    assertArrayEquals(new byte[] {}, actualResponseBodyAsBytes);
   }
 
   /**
@@ -1102,7 +1109,8 @@ class NettyResponseDiffblueTest {
   void testGetResponseBodyAsBytes_givenDuplicatedByteBufWithBufferIsEmptyByteBuf() {
     // Arrange
     ArrayList<HttpResponseBodyPart> bodyParts = new ArrayList<>();
-    DuplicatedByteBuf buf = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    EmptyByteBuf buffer = new EmptyByteBuf(new AdaptiveByteBufAllocator());
+    DuplicatedByteBuf buf = new DuplicatedByteBuf(buffer);
     bodyParts.add(new EagerResponseBodyPart(buf, true));
     Uri uri =
         new Uri(
@@ -1121,8 +1129,14 @@ class NettyResponseDiffblueTest {
 
     NettyResponse nettyResponse = new NettyResponse(status, new DefaultHttpHeaders(), bodyParts);
 
-    // Act and Assert
-    assertArrayEquals(new byte[] {}, nettyResponse.getResponseBodyAsBytes());
+    // Act
+    byte[] actualResponseBodyAsBytes = nettyResponse.getResponseBodyAsBytes();
+
+    // Assert
+    ByteBuf responseBodyAsByteBuf = nettyResponse.getResponseBodyAsByteBuf();
+    assertTrue(responseBodyAsByteBuf instanceof CompositeByteBuf);
+    assertEquals(buffer, responseBodyAsByteBuf);
+    assertArrayEquals(new byte[] {}, actualResponseBodyAsBytes);
   }
 
   /**
@@ -1144,7 +1158,8 @@ class NettyResponseDiffblueTest {
   void testGetResponseBodyAsBytes_givenReadOnlyByteBufWithBufferIsEmptyByteBuf() {
     // Arrange
     ArrayList<HttpResponseBodyPart> bodyParts = new ArrayList<>();
-    ReadOnlyByteBuf buf = new ReadOnlyByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    EmptyByteBuf buffer = new EmptyByteBuf(new AdaptiveByteBufAllocator());
+    ReadOnlyByteBuf buf = new ReadOnlyByteBuf(buffer);
     bodyParts.add(new LazyResponseBodyPart(buf, true));
     Uri uri =
         new Uri(
@@ -1163,8 +1178,14 @@ class NettyResponseDiffblueTest {
 
     NettyResponse nettyResponse = new NettyResponse(status, new DefaultHttpHeaders(), bodyParts);
 
-    // Act and Assert
-    assertArrayEquals(new byte[] {}, nettyResponse.getResponseBodyAsBytes());
+    // Act
+    byte[] actualResponseBodyAsBytes = nettyResponse.getResponseBodyAsBytes();
+
+    // Assert
+    ByteBuf responseBodyAsByteBuf = nettyResponse.getResponseBodyAsByteBuf();
+    assertTrue(responseBodyAsByteBuf instanceof CompositeByteBuf);
+    assertEquals(buffer, responseBodyAsByteBuf);
+    assertArrayEquals(new byte[] {}, actualResponseBodyAsBytes);
   }
 
   /**
@@ -1538,8 +1559,8 @@ class NettyResponseDiffblueTest {
             "https://example.org/example",
             8080,
             "https://example.org/example",
-            "42",
-            "https://example.org/example");
+            "https://example.org/example",
+            Uri.HTTP);
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
     DefaultFullHttpResponse response =
         new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));

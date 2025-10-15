@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
+import io.netty.buffer.EmptyByteBuf;
 import io.netty.handler.codec.DefaultHeadersImpl;
 import io.netty.handler.codec.Headers;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
@@ -292,94 +293,6 @@ class NettyRequestFactoryDiffblueTest {
     assertTrue(headersResult instanceof DefaultHttpHeaders);
     assertEquals("https://example.org/example:80", httpRequest.getUri());
     assertEquals("https://example.org/example:80", httpRequest.uri());
-    assertEquals(5, unwrapResult.size());
-    assertEquals(5, headersResult.size());
-  }
-
-  /**
-   * Test {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)}.
-   *
-   * <p>Method under test: {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer,
-   * Realm, Realm)}
-   */
-  @Test
-  @DisplayName("Test newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "NettyRequest NettyRequestFactory.newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)"
-  })
-  void testNewNettyRequest2() {
-    // Arrange
-    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.isKeepAlive()).thenReturn(true);
-    when(config.isUseLaxCookieEncoder()).thenReturn(true);
-    when(config.getUserAgent()).thenReturn("https://example.org/example");
-    NettyRequestFactory nettyRequestFactory = new NettyRequestFactory(config);
-
-    EmptyHttpHeaders emptyHttpHeaders = mock(EmptyHttpHeaders.class);
-    when(emptyHttpHeaders.getAll(Mockito.<CharSequence>any())).thenReturn(new ArrayList<>());
-
-    Request request = mock(Request.class);
-    when(request.getVirtualHost()).thenReturn(null);
-    when(request.getHeaders()).thenReturn(emptyHttpHeaders);
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            null,
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    when(request.getUri()).thenReturn(uri);
-    ProxyServer proxyServer = mock(ProxyServer.class);
-
-    Realm realm = mock(Realm.class);
-    when(realm.getPassword()).thenReturn("https://example.org/example");
-    when(realm.getPrincipal()).thenReturn("https://example.org/example");
-    when(realm.getCharset()).thenReturn(Charset.forName("UTF-8"));
-    when(realm.getScheme()).thenReturn(AuthScheme.BASIC);
-    when(realm.isUsePreemptiveAuth()).thenReturn(true);
-
-    Realm proxyRealm = mock(Realm.class);
-    when(proxyRealm.getPassword()).thenReturn("https://example.org/example");
-    when(proxyRealm.getPrincipal()).thenReturn("https://example.org/example");
-    when(proxyRealm.getCharset()).thenReturn(Charset.forName("UTF-8"));
-    when(proxyRealm.getScheme()).thenReturn(AuthScheme.BASIC);
-    when(proxyRealm.isUsePreemptiveAuth()).thenReturn(true);
-
-    // Act
-    NettyRequest actualNewNettyRequestResult =
-        nettyRequestFactory.newNettyRequest(request, true, proxyServer, realm, proxyRealm);
-
-    // Assert
-    verify(emptyHttpHeaders, atLeast(1)).getAll(Mockito.<CharSequence>any());
-    verify(config, atLeast(1)).getUserAgent();
-    verify(config).isKeepAlive();
-    verify(config).isUseLaxCookieEncoder();
-    verify(realm).getCharset();
-    verify(proxyRealm).getCharset();
-    verify(realm).getPassword();
-    verify(proxyRealm).getPassword();
-    verify(realm).getPrincipal();
-    verify(proxyRealm).getPrincipal();
-    verify(realm).getScheme();
-    verify(proxyRealm).getScheme();
-    verify(realm).isUsePreemptiveAuth();
-    verify(proxyRealm).isUsePreemptiveAuth();
-    verify(request, atLeast(1)).getHeaders();
-    verify(request).getUri();
-    verify(request).getVirtualHost();
-    HttpRequest httpRequest = actualNewNettyRequestResult.getHttpRequest();
-    HttpHeaders headersResult = httpRequest.headers();
-    Headers<CharSequence, CharSequence, ?> unwrapResult =
-        ((DefaultHttpHeaders) headersResult).unwrap();
-    assertTrue(unwrapResult instanceof DefaultHeadersImpl);
-    assertTrue(httpRequest instanceof DefaultFullHttpRequest);
-    assertTrue(headersResult instanceof DefaultHttpHeaders);
-    assertEquals("https://example.org/example:8080", httpRequest.getUri());
-    assertEquals("https://example.org/example:8080", httpRequest.uri());
     assertEquals(5, unwrapResult.size());
     assertEquals(5, headersResult.size());
   }
@@ -779,6 +692,222 @@ class NettyRequestFactoryDiffblueTest {
    * Test {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)}.
    *
    * <ul>
+   *   <li>Given empty array of {@code byte}.
+   * </ul>
+   *
+   * <p>Method under test: {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer,
+   * Realm, Realm)}
+   */
+  @Test
+  @DisplayName(
+      "Test newNettyRequest(Request, boolean, ProxyServer, Realm, Realm); given empty array of byte")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "NettyRequest NettyRequestFactory.newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)"
+  })
+  void testNewNettyRequest_givenEmptyArrayOfByte() {
+    // Arrange
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.isCompressionEnforced()).thenReturn(true);
+    when(config.isKeepAlive()).thenReturn(true);
+    when(config.isUseLaxCookieEncoder()).thenReturn(true);
+    when(config.getUserAgent()).thenReturn("https://example.org/example");
+    NettyRequestFactory nettyRequestFactory = new NettyRequestFactory(config);
+
+    EmptyHttpHeaders emptyHttpHeaders = mock(EmptyHttpHeaders.class);
+    when(emptyHttpHeaders.isEmpty()).thenReturn(true);
+
+    Request request = mock(Request.class);
+    when(request.getCookies()).thenReturn(null);
+    when(request.getByteData()).thenReturn(new byte[] {});
+    when(request.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(request.getMethod()).thenReturn("https://example.org/example");
+    when(request.getVirtualHost()).thenReturn(null);
+    when(request.getHeaders()).thenReturn(emptyHttpHeaders);
+    Uri uri =
+        new Uri(
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example",
+            8080,
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example");
+    when(request.getUri()).thenReturn(uri);
+
+    ProxyServer proxyServer = mock(ProxyServer.class);
+    when(proxyServer.getProxyType()).thenReturn(ProxyType.HTTP);
+
+    Realm realm = mock(Realm.class);
+    when(realm.getPassword()).thenReturn("https://example.org/example");
+    when(realm.getPrincipal()).thenReturn("https://example.org/example");
+    when(realm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(realm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(realm.isUsePreemptiveAuth()).thenReturn(true);
+
+    Realm proxyRealm = mock(Realm.class);
+    when(proxyRealm.getPassword()).thenReturn("https://example.org/example");
+    when(proxyRealm.getPrincipal()).thenReturn("https://example.org/example");
+    when(proxyRealm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(proxyRealm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(proxyRealm.isUsePreemptiveAuth()).thenReturn(true);
+
+    // Act
+    NettyRequest actualNewNettyRequestResult =
+        nettyRequestFactory.newNettyRequest(request, false, proxyServer, realm, proxyRealm);
+
+    // Assert
+    verify(emptyHttpHeaders).isEmpty();
+    verify(config, atLeast(1)).getUserAgent();
+    verify(config).isCompressionEnforced();
+    verify(config).isKeepAlive();
+    verify(config).isUseLaxCookieEncoder();
+    verify(realm).getCharset();
+    verify(proxyRealm).getCharset();
+    verify(realm).getPassword();
+    verify(proxyRealm).getPassword();
+    verify(realm).getPrincipal();
+    verify(proxyRealm).getPrincipal();
+    verify(realm).getScheme();
+    verify(proxyRealm).getScheme();
+    verify(realm).isUsePreemptiveAuth();
+    verify(proxyRealm).isUsePreemptiveAuth();
+    verify(request, atLeast(1)).getByteData();
+    verify(request).getCharset();
+    verify(request).getCookies();
+    verify(request).getHeaders();
+    verify(request).getMethod();
+    verify(request).getUri();
+    verify(request).getVirtualHost();
+    verify(proxyServer).getProxyType();
+    HttpRequest httpRequest = actualNewNettyRequestResult.getHttpRequest();
+    assertTrue(((DefaultFullHttpRequest) httpRequest).content() instanceof EmptyByteBuf);
+    assertTrue(httpRequest instanceof DefaultFullHttpRequest);
+    assertTrue(httpRequest.headers() instanceof DefaultHttpHeaders);
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        httpRequest.getUri());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        httpRequest.uri());
+  }
+
+  /**
+   * Test {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)}.
+   *
+   * <ul>
+   *   <li>Then calls {@link Request#getCompositeByteData()}.
+   * </ul>
+   *
+   * <p>Method under test: {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer,
+   * Realm, Realm)}
+   */
+  @Test
+  @DisplayName(
+      "Test newNettyRequest(Request, boolean, ProxyServer, Realm, Realm); then calls getCompositeByteData()")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "NettyRequest NettyRequestFactory.newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)"
+  })
+  void testNewNettyRequest_thenCallsGetCompositeByteData() {
+    // Arrange
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.isCompressionEnforced()).thenReturn(true);
+    when(config.isKeepAlive()).thenReturn(true);
+    when(config.isUseLaxCookieEncoder()).thenReturn(true);
+    when(config.getUserAgent()).thenReturn("https://example.org/example");
+    NettyRequestFactory nettyRequestFactory = new NettyRequestFactory(config);
+
+    EmptyHttpHeaders emptyHttpHeaders = mock(EmptyHttpHeaders.class);
+    when(emptyHttpHeaders.isEmpty()).thenReturn(true);
+
+    Request request = mock(Request.class);
+    when(request.getCookies()).thenReturn(null);
+    when(request.getByteData()).thenReturn(null);
+    when(request.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(request.getCompositeByteData()).thenReturn(new ArrayList<>());
+    when(request.getMethod()).thenReturn("https://example.org/example");
+    when(request.getVirtualHost()).thenReturn(null);
+    when(request.getHeaders()).thenReturn(emptyHttpHeaders);
+    Uri uri =
+        new Uri(
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example",
+            8080,
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example");
+    when(request.getUri()).thenReturn(uri);
+
+    ProxyServer proxyServer = mock(ProxyServer.class);
+    when(proxyServer.getProxyType()).thenReturn(ProxyType.HTTP);
+
+    Realm realm = mock(Realm.class);
+    when(realm.getPassword()).thenReturn("https://example.org/example");
+    when(realm.getPrincipal()).thenReturn("https://example.org/example");
+    when(realm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(realm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(realm.isUsePreemptiveAuth()).thenReturn(true);
+
+    Realm proxyRealm = mock(Realm.class);
+    when(proxyRealm.getPassword()).thenReturn("https://example.org/example");
+    when(proxyRealm.getPrincipal()).thenReturn("https://example.org/example");
+    when(proxyRealm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(proxyRealm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(proxyRealm.isUsePreemptiveAuth()).thenReturn(true);
+
+    // Act
+    NettyRequest actualNewNettyRequestResult =
+        nettyRequestFactory.newNettyRequest(request, false, proxyServer, realm, proxyRealm);
+
+    // Assert
+    verify(emptyHttpHeaders).isEmpty();
+    verify(config, atLeast(1)).getUserAgent();
+    verify(config).isCompressionEnforced();
+    verify(config).isKeepAlive();
+    verify(config).isUseLaxCookieEncoder();
+    verify(realm).getCharset();
+    verify(proxyRealm).getCharset();
+    verify(realm).getPassword();
+    verify(proxyRealm).getPassword();
+    verify(realm).getPrincipal();
+    verify(proxyRealm).getPrincipal();
+    verify(realm).getScheme();
+    verify(proxyRealm).getScheme();
+    verify(realm).isUsePreemptiveAuth();
+    verify(proxyRealm).isUsePreemptiveAuth();
+    verify(request).getByteData();
+    verify(request).getCharset();
+    verify(request, atLeast(1)).getCompositeByteData();
+    verify(request).getCookies();
+    verify(request).getHeaders();
+    verify(request).getMethod();
+    verify(request).getUri();
+    verify(request).getVirtualHost();
+    verify(proxyServer).getProxyType();
+    HttpRequest httpRequest = actualNewNettyRequestResult.getHttpRequest();
+    assertTrue(((DefaultFullHttpRequest) httpRequest).content() instanceof EmptyByteBuf);
+    assertTrue(httpRequest instanceof DefaultFullHttpRequest);
+    assertTrue(httpRequest.headers() instanceof DefaultHttpHeaders);
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        httpRequest.getUri());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        httpRequest.uri());
+  }
+
+  /**
+   * Test {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)}.
+   *
+   * <ul>
    *   <li>Then return HttpRequest headers unwrap size is four.
    * </ul>
    *
@@ -866,6 +995,99 @@ class NettyRequestFactoryDiffblueTest {
     assertEquals("https://example.org/example:8080", httpRequest.uri());
     assertEquals(4, unwrapResult.size());
     assertEquals(4, headersResult.size());
+  }
+
+  /**
+   * Test {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)}.
+   *
+   * <ul>
+   *   <li>Then return HttpRequest Uri is {@code https://example.org/example:0}.
+   * </ul>
+   *
+   * <p>Method under test: {@link NettyRequestFactory#newNettyRequest(Request, boolean, ProxyServer,
+   * Realm, Realm)}
+   */
+  @Test
+  @DisplayName(
+      "Test newNettyRequest(Request, boolean, ProxyServer, Realm, Realm); then return HttpRequest Uri is 'https://example.org/example:0'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "NettyRequest NettyRequestFactory.newNettyRequest(Request, boolean, ProxyServer, Realm, Realm)"
+  })
+  void testNewNettyRequest_thenReturnHttpRequestUriIsHttpsExampleOrgExample0() {
+    // Arrange
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.isKeepAlive()).thenReturn(true);
+    when(config.isUseLaxCookieEncoder()).thenReturn(true);
+    when(config.getUserAgent()).thenReturn("https://example.org/example");
+    NettyRequestFactory nettyRequestFactory = new NettyRequestFactory(config);
+
+    EmptyHttpHeaders emptyHttpHeaders = mock(EmptyHttpHeaders.class);
+    when(emptyHttpHeaders.getAll(Mockito.<CharSequence>any())).thenReturn(new ArrayList<>());
+
+    Request request = mock(Request.class);
+    when(request.getVirtualHost()).thenReturn(null);
+    when(request.getHeaders()).thenReturn(emptyHttpHeaders);
+    Uri uri =
+        new Uri(
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example",
+            0,
+            "https://example.org/example",
+            "https://example.org/example",
+            "https://example.org/example");
+    when(request.getUri()).thenReturn(uri);
+    ProxyServer proxyServer = mock(ProxyServer.class);
+
+    Realm realm = mock(Realm.class);
+    when(realm.getPassword()).thenReturn("https://example.org/example");
+    when(realm.getPrincipal()).thenReturn("https://example.org/example");
+    when(realm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(realm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(realm.isUsePreemptiveAuth()).thenReturn(true);
+
+    Realm proxyRealm = mock(Realm.class);
+    when(proxyRealm.getPassword()).thenReturn("https://example.org/example");
+    when(proxyRealm.getPrincipal()).thenReturn("https://example.org/example");
+    when(proxyRealm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(proxyRealm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(proxyRealm.isUsePreemptiveAuth()).thenReturn(true);
+
+    // Act
+    NettyRequest actualNewNettyRequestResult =
+        nettyRequestFactory.newNettyRequest(request, true, proxyServer, realm, proxyRealm);
+
+    // Assert
+    verify(emptyHttpHeaders, atLeast(1)).getAll(Mockito.<CharSequence>any());
+    verify(config, atLeast(1)).getUserAgent();
+    verify(config).isKeepAlive();
+    verify(config).isUseLaxCookieEncoder();
+    verify(realm).getCharset();
+    verify(proxyRealm).getCharset();
+    verify(realm).getPassword();
+    verify(proxyRealm).getPassword();
+    verify(realm).getPrincipal();
+    verify(proxyRealm).getPrincipal();
+    verify(realm).getScheme();
+    verify(proxyRealm).getScheme();
+    verify(realm).isUsePreemptiveAuth();
+    verify(proxyRealm).isUsePreemptiveAuth();
+    verify(request, atLeast(1)).getHeaders();
+    verify(request).getUri();
+    verify(request).getVirtualHost();
+    HttpRequest httpRequest = actualNewNettyRequestResult.getHttpRequest();
+    HttpHeaders headersResult = httpRequest.headers();
+    Headers<CharSequence, CharSequence, ?> unwrapResult =
+        ((DefaultHttpHeaders) headersResult).unwrap();
+    assertTrue(unwrapResult instanceof DefaultHeadersImpl);
+    assertTrue(httpRequest instanceof DefaultFullHttpRequest);
+    assertTrue(headersResult instanceof DefaultHttpHeaders);
+    assertEquals("https://example.org/example:0", httpRequest.getUri());
+    assertEquals("https://example.org/example:0", httpRequest.uri());
+    assertEquals(5, unwrapResult.size());
+    assertEquals(5, headersResult.size());
   }
 
   /**

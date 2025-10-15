@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,6 +17,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.HttpHeaders;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -299,11 +301,16 @@ class MultipartBodyDiffblueTest {
     when(byteArrayPart.getName()).thenReturn("https://example.org/example");
     when(byteArrayPart.getTransferEncoding()).thenReturn("https://example.org/example");
     when(byteArrayPart.getCustomHeaders()).thenReturn(paramList);
+    doNothing().when(byteArrayPart).addCustomHeader(Mockito.<String>any(), Mockito.<String>any());
+    byteArrayPart.addCustomHeader("Name", "42");
 
     ArrayList<Part> parts = new ArrayList<>();
     parts.add(byteArrayPart);
-    MultipartBody newMultipartBodyResult =
-        MultipartUtils.newMultipartBody(parts, new DefaultHttpHeaders());
+
+    HttpHeaders requestHeaders = mock(HttpHeaders.class);
+    when(requestHeaders.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
+
+    MultipartBody newMultipartBodyResult = MultipartUtils.newMultipartBody(parts, requestHeaders);
 
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
@@ -313,8 +320,10 @@ class MultipartBodyDiffblueTest {
 
     // Assert
     verify(target).write(isA(ByteBuffer.class));
+    verify(requestHeaders).get(isA(CharSequence.class));
     verify(byteArrayPart, atLeast(1)).getBytes();
     verify(byteArrayPart, atLeast(1)).getFileName();
+    verify(byteArrayPart).addCustomHeader("Name", "42");
     verify(byteArrayPart, atLeast(1)).getCharset();
     verify(byteArrayPart, atLeast(1)).getContentId();
     verify(byteArrayPart, atLeast(1)).getContentType();
@@ -347,14 +356,19 @@ class MultipartBodyDiffblueTest {
     when(byteArrayPart.getName()).thenReturn("https://example.org/example");
     when(byteArrayPart.getTransferEncoding()).thenReturn("https://example.org/example");
     when(byteArrayPart.getCustomHeaders()).thenReturn(new ArrayList<>());
+    doNothing().when(byteArrayPart).addCustomHeader(Mockito.<String>any(), Mockito.<String>any());
+    byteArrayPart.addCustomHeader("Name", "42");
 
     ArrayList<Part> parts = new ArrayList<>();
     ByteArrayPart byteArrayPart2 =
         new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
     parts.add(byteArrayPart2);
     parts.add(byteArrayPart);
-    MultipartBody newMultipartBodyResult =
-        MultipartUtils.newMultipartBody(parts, new DefaultHttpHeaders());
+
+    HttpHeaders requestHeaders = mock(HttpHeaders.class);
+    when(requestHeaders.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
+
+    MultipartBody newMultipartBodyResult = MultipartUtils.newMultipartBody(parts, requestHeaders);
 
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
@@ -364,8 +378,10 @@ class MultipartBodyDiffblueTest {
 
     // Assert
     verify(target).write(isA(ByteBuffer.class));
+    verify(requestHeaders).get(isA(CharSequence.class));
     verify(byteArrayPart, atLeast(1)).getBytes();
     verify(byteArrayPart, atLeast(1)).getFileName();
+    verify(byteArrayPart).addCustomHeader("Name", "42");
     verify(byteArrayPart, atLeast(1)).getCharset();
     verify(byteArrayPart).getContentId();
     verify(byteArrayPart).getContentType();
@@ -373,60 +389,6 @@ class MultipartBodyDiffblueTest {
     verify(byteArrayPart, atLeast(1)).getDispositionType();
     verify(byteArrayPart, atLeast(1)).getName();
     verify(byteArrayPart).getTransferEncoding();
-    assertEquals(1L, actualTransferToResult);
-  }
-
-  /**
-   * Test {@link MultipartBody#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
-   *
-   * <ul>
-   *   <li>Given one.
-   *   <li>Then calls {@link ByteArrayPart#getBytes()}.
-   * </ul>
-   *
-   * <p>Method under test: {@link MultipartBody#transferTo(WritableByteChannel)}
-   */
-  @Test
-  @DisplayName(
-      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given one; then calls getBytes()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long MultipartBody.transferTo(WritableByteChannel)"})
-  void testTransferToWithWritableByteChannel_givenOne_thenCallsGetBytes() throws IOException {
-    // Arrange
-    ByteArrayPart byteArrayPart = mock(ByteArrayPart.class);
-    when(byteArrayPart.getCharset()).thenReturn(Charset.forName("UTF-8"));
-    when(byteArrayPart.getBytes()).thenReturn("AXAXAXAX".getBytes("UTF-8"));
-    when(byteArrayPart.getFileName()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getContentId()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getContentType()).thenReturn("text/plain");
-    when(byteArrayPart.getDispositionType()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getName()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getTransferEncoding()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getCustomHeaders()).thenReturn(new ArrayList<>());
-
-    ArrayList<Part> parts = new ArrayList<>();
-    parts.add(byteArrayPart);
-    MultipartBody newMultipartBodyResult =
-        MultipartUtils.newMultipartBody(parts, new DefaultHttpHeaders());
-
-    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
-    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
-
-    // Act
-    long actualTransferToResult = newMultipartBodyResult.transferTo(target);
-
-    // Assert
-    verify(target).write(isA(ByteBuffer.class));
-    verify(byteArrayPart, atLeast(1)).getBytes();
-    verify(byteArrayPart, atLeast(1)).getFileName();
-    verify(byteArrayPart, atLeast(1)).getCharset();
-    verify(byteArrayPart, atLeast(1)).getContentId();
-    verify(byteArrayPart, atLeast(1)).getContentType();
-    verify(byteArrayPart, atLeast(1)).getCustomHeaders();
-    verify(byteArrayPart, atLeast(1)).getDispositionType();
-    verify(byteArrayPart, atLeast(1)).getName();
-    verify(byteArrayPart, atLeast(1)).getTransferEncoding();
     assertEquals(1L, actualTransferToResult);
   }
 
@@ -460,6 +422,66 @@ class MultipartBodyDiffblueTest {
 
     // Assert
     verify(target).write(isA(ByteBuffer.class));
+    assertEquals(1L, actualTransferToResult);
+  }
+
+  /**
+   * Test {@link MultipartBody#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
+   *
+   * <ul>
+   *   <li>Then calls {@link HttpHeaders#get(CharSequence)}.
+   * </ul>
+   *
+   * <p>Method under test: {@link MultipartBody#transferTo(WritableByteChannel)}
+   */
+  @Test
+  @DisplayName(
+      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; then calls get(CharSequence)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"long MultipartBody.transferTo(WritableByteChannel)"})
+  void testTransferToWithWritableByteChannel_thenCallsGet() throws IOException {
+    // Arrange
+    ByteArrayPart byteArrayPart = mock(ByteArrayPart.class);
+    when(byteArrayPart.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(byteArrayPart.getBytes()).thenReturn("AXAXAXAX".getBytes("UTF-8"));
+    when(byteArrayPart.getFileName()).thenReturn("https://example.org/example");
+    when(byteArrayPart.getContentId()).thenReturn("https://example.org/example");
+    when(byteArrayPart.getContentType()).thenReturn("text/plain");
+    when(byteArrayPart.getDispositionType()).thenReturn("https://example.org/example");
+    when(byteArrayPart.getName()).thenReturn("https://example.org/example");
+    when(byteArrayPart.getTransferEncoding()).thenReturn("https://example.org/example");
+    when(byteArrayPart.getCustomHeaders()).thenReturn(new ArrayList<>());
+    doNothing().when(byteArrayPart).addCustomHeader(Mockito.<String>any(), Mockito.<String>any());
+    byteArrayPart.addCustomHeader("Name", "42");
+
+    ArrayList<Part> parts = new ArrayList<>();
+    parts.add(byteArrayPart);
+
+    HttpHeaders requestHeaders = mock(HttpHeaders.class);
+    when(requestHeaders.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
+
+    MultipartBody newMultipartBodyResult = MultipartUtils.newMultipartBody(parts, requestHeaders);
+
+    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
+    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
+
+    // Act
+    long actualTransferToResult = newMultipartBodyResult.transferTo(target);
+
+    // Assert
+    verify(target).write(isA(ByteBuffer.class));
+    verify(requestHeaders).get(isA(CharSequence.class));
+    verify(byteArrayPart, atLeast(1)).getBytes();
+    verify(byteArrayPart, atLeast(1)).getFileName();
+    verify(byteArrayPart).addCustomHeader("Name", "42");
+    verify(byteArrayPart, atLeast(1)).getCharset();
+    verify(byteArrayPart, atLeast(1)).getContentId();
+    verify(byteArrayPart, atLeast(1)).getContentType();
+    verify(byteArrayPart, atLeast(1)).getCustomHeaders();
+    verify(byteArrayPart, atLeast(1)).getDispositionType();
+    verify(byteArrayPart, atLeast(1)).getName();
+    verify(byteArrayPart, atLeast(1)).getTransferEncoding();
     assertEquals(1L, actualTransferToResult);
   }
 }

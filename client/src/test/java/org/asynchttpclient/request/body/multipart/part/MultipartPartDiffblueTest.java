@@ -659,19 +659,26 @@ class MultipartPartDiffblueTest {
   /**
    * Test {@link MultipartPart#computePreContentBytes(int)}.
    *
+   * <ul>
+   *   <li>Given {@code A}.
+   *   <li>When three.
+   *   <li>Then return Contiguous.
+   * </ul>
+   *
    * <p>Method under test: {@link MultipartPart#computePreContentBytes(int)}
    */
   @Test
-  @DisplayName("Test computePreContentBytes(int)")
+  @DisplayName("Test computePreContentBytes(int); given 'A'; when three; then return Contiguous")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"ByteBuf MultipartPart.computePreContentBytes(int)"})
-  void testComputePreContentBytes7() throws UnsupportedEncodingException {
+  void testComputePreContentBytes_givenA_whenThree_thenReturnContiguous()
+      throws UnsupportedEncodingException {
     // Arrange
     ByteArrayPart part =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-    part.addCustomHeader("42", "42");
-    part.addCustomHeader("https://example.org/example", "https://example.org/example");
+        new ByteArrayPart(
+            "https://example.org/example",
+            new byte[] {'A', Byte.MAX_VALUE, 'A', 'X', 'A', 'X', 'A', 'X'});
     ByteArrayMultipartPart byteArrayMultipartPart =
         new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
@@ -704,7 +711,6 @@ class MultipartPartDiffblueTest {
    * Test {@link MultipartPart#computePostContentBytes(int)}.
    *
    * <ul>
-   *   <li>Given {@code A}.
    *   <li>When three.
    *   <li>Then return Contiguous.
    * </ul>
@@ -712,37 +718,12 @@ class MultipartPartDiffblueTest {
    * <p>Method under test: {@link MultipartPart#computePostContentBytes(int)}
    */
   @Test
-  @DisplayName("Test computePostContentBytes(int); given 'A'; when three; then return Contiguous")
+  @DisplayName("Test computePostContentBytes(int); when three; then return Contiguous")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"ByteBuf MultipartPart.computePostContentBytes(int)"})
-  void testComputePostContentBytes_givenA_whenThree_thenReturnContiguous()
+  void testComputePostContentBytes_whenThree_thenReturnContiguous()
       throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart part =
-        new ByteArrayPart("Name", new byte[] {'A', 'X', 'A', 'X', -1, 'X', 'A', 'X'});
-    ByteArrayMultipartPart byteArrayMultipartPart =
-        new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertTrue(byteArrayMultipartPart.computePostContentBytes(3).isContiguous());
-  }
-
-  /**
-   * Test {@link MultipartPart#computePostContentBytes(int)}.
-   *
-   * <ul>
-   *   <li>Then return Contiguous.
-   * </ul>
-   *
-   * <p>Method under test: {@link MultipartPart#computePostContentBytes(int)}
-   */
-  @Test
-  @DisplayName("Test computePostContentBytes(int); then return Contiguous")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"ByteBuf MultipartPart.computePostContentBytes(int)"})
-  void testComputePostContentBytes_thenReturnContiguous() throws UnsupportedEncodingException {
     // Arrange
     ByteArrayPart part =
         new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));

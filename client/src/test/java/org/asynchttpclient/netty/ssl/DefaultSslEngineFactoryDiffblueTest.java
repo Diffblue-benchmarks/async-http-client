@@ -256,6 +256,51 @@ class DefaultSslEngineFactoryDiffblueTest {
    *
    * <ul>
    *   <li>When {@link AsyncHttpClientConfig} {@link
+   *       AsyncHttpClientConfig#isFilterInsecureCipherSuites()} return {@code false}.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultSslEngineFactory#init(AsyncHttpClientConfig)}
+   */
+  @Test
+  @DisplayName(
+      "Test init(AsyncHttpClientConfig); when AsyncHttpClientConfig isFilterInsecureCipherSuites() return 'false'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultSslEngineFactory.init(AsyncHttpClientConfig)"})
+  void testInit_whenAsyncHttpClientConfigIsFilterInsecureCipherSuitesReturnFalse2()
+      throws SSLException {
+    // Arrange
+    DefaultSslEngineFactory defaultSslEngineFactory = new DefaultSslEngineFactory();
+
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.isFilterInsecureCipherSuites()).thenReturn(false);
+    when(config.isUseInsecureTrustManager()).thenReturn(false);
+    when(config.isUseOpenSsl()).thenReturn(false);
+    when(config.getSslContext()).thenReturn(null);
+    when(config.getEnabledCipherSuites()).thenReturn(null);
+    when(config.getEnabledProtocols()).thenReturn(null);
+    when(config.getSslSessionCacheSize()).thenReturn(3);
+    when(config.getSslSessionTimeout()).thenReturn(10);
+
+    // Act
+    defaultSslEngineFactory.init(config);
+
+    // Assert
+    verify(config).getEnabledCipherSuites();
+    verify(config).getEnabledProtocols();
+    verify(config).getSslContext();
+    verify(config).getSslSessionCacheSize();
+    verify(config).getSslSessionTimeout();
+    verify(config).isFilterInsecureCipherSuites();
+    verify(config).isUseInsecureTrustManager();
+    verify(config).isUseOpenSsl();
+  }
+
+  /**
+   * Test {@link DefaultSslEngineFactory#init(AsyncHttpClientConfig)}.
+   *
+   * <ul>
+   *   <li>When {@link AsyncHttpClientConfig} {@link
    *       AsyncHttpClientConfig#isFilterInsecureCipherSuites()} return {@code true}.
    * </ul>
    *
