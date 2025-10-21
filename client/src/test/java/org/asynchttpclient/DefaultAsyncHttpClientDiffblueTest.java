@@ -12,7 +12,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.EventLoop;
@@ -28,7 +27,6 @@ import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.resolver.DefaultNameResolver;
 import io.netty.resolver.NameResolver;
 import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.EventExecutor;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -36,20 +34,14 @@ import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.commons.fileupload2.util.mime.RFC2231Utility;
 import org.asynchttpclient.ListenableFuture.CompletedFailure;
 import org.asynchttpclient.channel.ChannelPool;
 import org.asynchttpclient.channel.ChannelPoolPartitioning;
 import org.asynchttpclient.channel.ChannelPoolPartitioning.PerHostChannelPoolPartitioning;
 import org.asynchttpclient.config.AsyncHttpClientConfigDefaults;
-import org.asynchttpclient.netty.NettyResponseFuture;
 import org.asynchttpclient.netty.channel.ChannelManager;
 import org.asynchttpclient.netty.channel.DefaultChannelPool;
 import org.asynchttpclient.proxy.ProxyServer;
@@ -65,13 +57,12 @@ import org.mockito.Mockito;
 class DefaultAsyncHttpClientDiffblueTest {
   /**
    * Test {@link DefaultAsyncHttpClient#DefaultAsyncHttpClient()}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#DefaultAsyncHttpClient()}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#DefaultAsyncHttpClient()}
    */
   @Test
   @DisplayName("Test new DefaultAsyncHttpClient()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void DefaultAsyncHttpClient.<init>()"})
   void testNewDefaultAsyncHttpClient() {
     // Arrange and Act
@@ -86,9 +77,8 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link DefaultAsyncHttpClient#channelManager()}
    *   <li>{@link DefaultAsyncHttpClient#getConfig()}
@@ -96,22 +86,20 @@ class DefaultAsyncHttpClientDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "ChannelManager DefaultAsyncHttpClient.channelManager()",
-    "org.asynchttpclient.AsyncHttpClientConfig DefaultAsyncHttpClient.getConfig()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"ChannelManager DefaultAsyncHttpClient.channelManager()",
+      "AsyncHttpClientConfig DefaultAsyncHttpClient.getConfig()"})
   void testGettersAndSetters() {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
 
     // Act
     ChannelManager actualChannelManagerResult = defaultAsyncHttpClient.channelManager();
+    AsyncHttpClientConfig actualConfig = defaultAsyncHttpClient.getConfig();
 
     // Assert
     assertTrue(actualChannelManagerResult.getEventLoopGroup() instanceof NioEventLoopGroup);
-    assertTrue(defaultAsyncHttpClient.getConfig() instanceof DefaultAsyncHttpClientConfig);
+    assertTrue(actualConfig instanceof DefaultAsyncHttpClientConfig);
     assertTrue(actualChannelManagerResult.getChannelPool() instanceof DefaultChannelPool);
     ClientStats clientStats = actualChannelManagerResult.getClientStats();
     assertEquals(0L, clientStats.getTotalActiveConnectionCount());
@@ -123,13 +111,12 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#close()}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#close()}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#close()}
    */
   @Test
   @DisplayName("Test close()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void DefaultAsyncHttpClient.close()"})
   void testClose() {
     // Arrange
@@ -142,75 +129,58 @@ class DefaultAsyncHttpClientDiffblueTest {
     EventLoopGroup eventLoopGroup = defaultAsyncHttpClient.getEventLoopGroup();
     EventLoop nextResult = eventLoopGroup.next();
     assertTrue(nextResult instanceof NioEventLoop);
-    Iterator<EventExecutor> iteratorResult = eventLoopGroup.iterator();
-    EventExecutor nextResult2 = iteratorResult.next();
-    assertTrue(nextResult2 instanceof NioEventLoop);
-    EventExecutor nextResult3 = iteratorResult.next();
-    assertTrue(nextResult3 instanceof NioEventLoop);
     assertTrue(eventLoopGroup instanceof NioEventLoopGroup);
-    assertTrue(nextResult.isShuttingDown());
-    assertTrue(nextResult2.isShuttingDown());
-    assertTrue(nextResult3.isShuttingDown());
-    assertTrue(eventLoopGroup.isShuttingDown());
-    assertTrue(iteratorResult.hasNext());
+    assertFalse(nextResult.isShutdown());
+    assertFalse(eventLoopGroup.isShutdown());
+    assertFalse(nextResult.isTerminated());
+    assertFalse(eventLoopGroup.isTerminated());
     assertTrue(defaultAsyncHttpClient.isClosed());
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#isClosed()}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#isClosed()}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#isClosed()}
    */
   @Test
   @DisplayName("Test isClosed()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean DefaultAsyncHttpClient.isClosed()"})
   void testIsClosed() {
     // Arrange, Act and Assert
-    assertFalse(new DefaultAsyncHttpClient().isClosed());
+    assertFalse((new DefaultAsyncHttpClient()).isClosed());
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#setSignatureCalculator(SignatureCalculator)}.
-   *
-   * <p>Method under test: {@link
-   * DefaultAsyncHttpClient#setSignatureCalculator(SignatureCalculator)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#setSignatureCalculator(SignatureCalculator)}
    */
   @Test
   @DisplayName("Test setSignatureCalculator(SignatureCalculator)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "DefaultAsyncHttpClient DefaultAsyncHttpClient.setSignatureCalculator(SignatureCalculator)"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"DefaultAsyncHttpClient DefaultAsyncHttpClient.setSignatureCalculator(SignatureCalculator)"})
   void testSetSignatureCalculator() {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
 
-    // Act
-    DefaultAsyncHttpClient actualSetSignatureCalculatorResult =
-        defaultAsyncHttpClient.setSignatureCalculator(mock(SignatureCalculator.class));
-
-    // Assert
-    assertSame(defaultAsyncHttpClient, actualSetSignatureCalculatorResult);
+    // Act and Assert
+    assertSame(defaultAsyncHttpClient, defaultAsyncHttpClient.setSignatureCalculator(mock(SignatureCalculator.class)));
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepare(String, String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepare(String, String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepare(String, String)}
    */
   @Test
   @DisplayName("Test prepare(String, String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepare(String, String)"})
   void testPrepare() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareResult =
-        new DefaultAsyncHttpClient()
-            .prepare("https://example.org/example", "https://example.org/example");
+    BoundRequestBuilder actualPrepareResult = (new DefaultAsyncHttpClient()).prepare("https://example.org/example",
+        "https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareResult.headers instanceof DefaultHttpHeaders);
@@ -247,24 +217,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareGet(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareGet(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareGet(String)}
    */
   @Test
   @DisplayName("Test prepareGet(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareGet(String)"})
   void testPrepareGet() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareGetResult =
-        new DefaultAsyncHttpClient().prepareGet("https://example.org/example");
+    BoundRequestBuilder actualPrepareGetResult = (new DefaultAsyncHttpClient())
+        .prepareGet("https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareGetResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPrepareGetResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareGetResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPrepareGetResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("GET", actualPrepareGetResult.method);
     assertNull(actualPrepareGetResult.byteData);
@@ -296,24 +264,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareConnect(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareConnect(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareConnect(String)}
    */
   @Test
   @DisplayName("Test prepareConnect(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareConnect(String)"})
   void testPrepareConnect() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareConnectResult =
-        new DefaultAsyncHttpClient().prepareConnect("https://example.org/example");
+    BoundRequestBuilder actualPrepareConnectResult = (new DefaultAsyncHttpClient())
+        .prepareConnect("https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareConnectResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPrepareConnectResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareConnectResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPrepareConnectResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("CONNECT", actualPrepareConnectResult.method);
     assertNull(actualPrepareConnectResult.byteData);
@@ -345,24 +311,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareOptions(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareOptions(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareOptions(String)}
    */
   @Test
   @DisplayName("Test prepareOptions(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareOptions(String)"})
   void testPrepareOptions() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareOptionsResult =
-        new DefaultAsyncHttpClient().prepareOptions("https://example.org/example");
+    BoundRequestBuilder actualPrepareOptionsResult = (new DefaultAsyncHttpClient())
+        .prepareOptions("https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareOptionsResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPrepareOptionsResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareOptionsResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPrepareOptionsResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("OPTIONS", actualPrepareOptionsResult.method);
     assertNull(actualPrepareOptionsResult.byteData);
@@ -394,24 +358,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareHead(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareHead(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareHead(String)}
    */
   @Test
   @DisplayName("Test prepareHead(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareHead(String)"})
   void testPrepareHead() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareHeadResult =
-        new DefaultAsyncHttpClient().prepareHead("https://example.org/example");
+    BoundRequestBuilder actualPrepareHeadResult = (new DefaultAsyncHttpClient())
+        .prepareHead("https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareHeadResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPrepareHeadResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareHeadResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPrepareHeadResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("HEAD", actualPrepareHeadResult.method);
     assertNull(actualPrepareHeadResult.byteData);
@@ -443,24 +405,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#preparePost(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#preparePost(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#preparePost(String)}
    */
   @Test
   @DisplayName("Test preparePost(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.preparePost(String)"})
   void testPreparePost() {
     // Arrange and Act
-    BoundRequestBuilder actualPreparePostResult =
-        new DefaultAsyncHttpClient().preparePost("https://example.org/example");
+    BoundRequestBuilder actualPreparePostResult = (new DefaultAsyncHttpClient())
+        .preparePost("https://example.org/example");
 
     // Assert
     assertTrue(actualPreparePostResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPreparePostResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPreparePostResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPreparePostResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("POST", actualPreparePostResult.method);
     assertNull(actualPreparePostResult.byteData);
@@ -492,24 +452,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#preparePut(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#preparePut(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#preparePut(String)}
    */
   @Test
   @DisplayName("Test preparePut(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.preparePut(String)"})
   void testPreparePut() {
     // Arrange and Act
-    BoundRequestBuilder actualPreparePutResult =
-        new DefaultAsyncHttpClient().preparePut("https://example.org/example");
+    BoundRequestBuilder actualPreparePutResult = (new DefaultAsyncHttpClient())
+        .preparePut("https://example.org/example");
 
     // Assert
     assertTrue(actualPreparePutResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPreparePutResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPreparePutResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPreparePutResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("PUT", actualPreparePutResult.method);
     assertNull(actualPreparePutResult.byteData);
@@ -541,24 +499,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareDelete(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareDelete(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareDelete(String)}
    */
   @Test
   @DisplayName("Test prepareDelete(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareDelete(String)"})
   void testPrepareDelete() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareDeleteResult =
-        new DefaultAsyncHttpClient().prepareDelete("https://example.org/example");
+    BoundRequestBuilder actualPrepareDeleteResult = (new DefaultAsyncHttpClient())
+        .prepareDelete("https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareDeleteResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPrepareDeleteResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareDeleteResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPrepareDeleteResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("DELETE", actualPrepareDeleteResult.method);
     assertNull(actualPrepareDeleteResult.byteData);
@@ -590,24 +546,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#preparePatch(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#preparePatch(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#preparePatch(String)}
    */
   @Test
   @DisplayName("Test preparePatch(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.preparePatch(String)"})
   void testPreparePatch() {
     // Arrange and Act
-    BoundRequestBuilder actualPreparePatchResult =
-        new DefaultAsyncHttpClient().preparePatch("https://example.org/example");
+    BoundRequestBuilder actualPreparePatchResult = (new DefaultAsyncHttpClient())
+        .preparePatch("https://example.org/example");
 
     // Assert
     assertTrue(actualPreparePatchResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPreparePatchResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPreparePatchResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPreparePatchResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("PATCH", actualPreparePatchResult.method);
     assertNull(actualPreparePatchResult.byteData);
@@ -639,24 +593,22 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareTrace(String)}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareTrace(String)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareTrace(String)}
    */
   @Test
   @DisplayName("Test prepareTrace(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareTrace(String)"})
   void testPrepareTrace() {
     // Arrange and Act
-    BoundRequestBuilder actualPrepareTraceResult =
-        new DefaultAsyncHttpClient().prepareTrace("https://example.org/example");
+    BoundRequestBuilder actualPrepareTraceResult = (new DefaultAsyncHttpClient())
+        .prepareTrace("https://example.org/example");
 
     // Assert
     assertTrue(actualPrepareTraceResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualPrepareTraceResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareTraceResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualPrepareTraceResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("TRACE", actualPrepareTraceResult.method);
     assertNull(actualPrepareTraceResult.byteData);
@@ -687,1310 +639,40 @@ class DefaultAsyncHttpClientDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest2() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            Long.MIN_VALUE,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest3() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals(
-        new byte[] {1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'}, actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest4() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap(new byte[] {-1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'});
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest5() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData =
-        new ByteArrayInputStream(new byte[] {'A', 'X', 'A', 'X', 0, 'X', 'A', 'X'});
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals(new byte[] {}, actualPrepareRequestResult.byteData);
-  }
-
-  /**
    * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder2() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder3() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.AGGREGATE_WEBSOCKET_FRAME_FRAGMENTS_CONFIG,
-        "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder4() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.CONNECTION_TTL_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder5() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.DISABLE_URL_ENCODING_FOR_BOUND_REQUESTS_CONFIG,
-        "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder6() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.DISABLE_ZERO_COPY_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder7() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setHeader(
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT,
-        (Iterable<?>) new ArrayList<>());
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.DISABLE_ZERO_COPY_CONFIG, "host");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
    * <ul>
-   *   <li>Given {@link AsyncHttpClientConfigDefaults#ASYNC_CLIENT_CONFIG_ROOT}.
+   *   <li>Then return {@link RequestBuilderBase#cookies} is {@link RequestBuilder#RequestBuilder()} {@link RequestBuilderBase#cookies}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
    */
   @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; given ASYNC_CLIENT_CONFIG_ROOT")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenAsync_client_config_root() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ASYNC_CLIENT_CONFIG_ROOT, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@link AsyncHttpClientConfigDefaults#COMPRESSION_ENFORCED_CONFIG}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; given COMPRESSION_ENFORCED_CONFIG")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenCompression_enforced_config() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.COMPRESSION_ENFORCED_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@link AsyncHttpClientConfigDefaults#CONNECTION_TIMEOUT_CONFIG}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; given CONNECTION_TIMEOUT_CONFIG")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenConnection_timeout_config() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.CONNECTION_TIMEOUT_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given decodeText {@code secret}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; given decodeText 'secret'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenDecodeTextSecret()
-      throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(RFC2231Utility.decodeText("secret"), "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given empty string.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; given empty string")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenEmptyString() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.CONNECTION_TTL_CONFIG, "");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given empty string.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; given empty string")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenEmptyString2() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setBodyParts(new ArrayList<>());
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.CONNECTION_TTL_CONFIG, "");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@link AsyncHttpClientConfigDefaults#ENABLED_CIPHER_SUITES_CONFIG}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; given ENABLED_CIPHER_SUITES_CONFIG")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenEnabled_cipher_suites_config() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ENABLED_CIPHER_SUITES_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@link AsyncHttpClientConfigDefaults#ENABLED_PROTOCOLS_CONFIG}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; given ENABLED_PROTOCOLS_CONFIG")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenEnabled_protocols_config() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ENABLED_PROTOCOLS_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given forName {@code UTF-8}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; given forName 'UTF-8'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenForNameUtf8() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setCharset(Charset.forName("UTF-8"));
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@code host}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; given 'host'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenHost() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.DISABLE_ZERO_COPY_CONFIG, "host");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@code http}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; given 'http'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_givenHttp() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.DISABLE_ZERO_COPY_CONFIG, "http");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Then return {@link RequestBuilderBase#compositeByteData} Empty.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; then return compositeByteData Empty")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_thenReturnCompositeByteDataEmpty() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setBody(new ArrayList<>());
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.CONNECTION_TTL_CONFIG, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-    assertTrue(actualPrepareRequestResult.compositeByteData.isEmpty());
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Then return {@link RequestBuilderBase#cookies} is {@link RequestBuilder#RequestBuilder()}
-   *       {@link RequestBuilderBase#cookies}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; then return cookies is RequestBuilder() cookies")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; then return cookies is RequestBuilder() cookies")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
   void testPrepareRequestWithRequestBuilder_thenReturnCookiesIsRequestBuilderCookies() {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
 
     RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.addCookie(
-        new DefaultCookie("https://example.org/example", "https://example.org/example"));
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT, "https://example.org/example");
+    requestBuilder.addCookie(new DefaultCookie("https://example.org/example", "https://example.org/example"));
+    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT, "https://example.org/example");
 
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    assertEquals(requestBuilder.cookies, actualPrepareRequestResult.cookies);
+    // Act and Assert
+    assertEquals(requestBuilder.cookies, defaultAsyncHttpClient.prepareRequest(requestBuilder).cookies);
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
    * <ul>
-   *   <li>Then return {@link RequestBuilderBase#headers} unwrap size is zero.
+   *   <li>Then return {@link RequestBuilderBase#headers} unwrap size is zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
    */
   @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; then return headers unwrap size is zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test prepareRequest(RequestBuilder) with 'requestBuilder'; then return headers unwrap size is zero")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
   void testPrepareRequestWithRequestBuilder_thenReturnHeadersUnwrapSizeIsZero() {
     // Arrange
@@ -1998,8 +680,7 @@ class DefaultAsyncHttpClientDiffblueTest {
 
     // Act and Assert
     HttpHeaders httpHeaders = defaultAsyncHttpClient.prepareRequest(new RequestBuilder()).headers;
-    Headers<CharSequence, CharSequence, ?> unwrapResult =
-        ((DefaultHttpHeaders) httpHeaders).unwrap();
+    Headers<CharSequence, CharSequence, ?> unwrapResult = ((DefaultHttpHeaders) httpHeaders).unwrap();
     assertTrue(unwrapResult instanceof DefaultHeadersImpl);
     assertTrue(httpHeaders instanceof DefaultHttpHeaders);
     assertEquals(0, unwrapResult.size());
@@ -2010,124 +691,26 @@ class DefaultAsyncHttpClientDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>Then return {@link RequestBuilderBase#method} is {@code https://example.org/example}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; then return method is 'https://example.org/example'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_thenReturnMethodIsHttpsExampleOrgExample() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setMethod("https://example.org/example");
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(AsyncHttpClientConfigDefaults.DISABLE_ZERO_COPY_CONFIG, "host");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertEquals("https://example.org/example", actualPrepareRequestResult.method);
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)} with {@code requestBuilder}.
-   *
-   * <ul>
-   *   <li>When {@link RequestBuilder#RequestBuilder()} BodyParts is {@link ArrayList#ArrayList()}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(RequestBuilder)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(RequestBuilder) with 'requestBuilder'; when RequestBuilder() BodyParts is ArrayList()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(RequestBuilder)"})
-  void testPrepareRequestWithRequestBuilder_whenRequestBuilderBodyPartsIsArrayList() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    SignatureCalculator signatureCalculator = mock(SignatureCalculator.class);
-    doNothing()
-        .when(signatureCalculator)
-        .calculateAndAddSignature(Mockito.<Request>any(), Mockito.<RequestBuilderBase<?>>any());
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-    requestBuilder.setBodyParts(new ArrayList<>());
-    requestBuilder.setSignatureCalculator(signatureCalculator);
-    requestBuilder.addHeader(
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT, "https://example.org/example");
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult =
-        defaultAsyncHttpClient.prepareRequest(requestBuilder);
-
-    // Assert
-    verify(signatureCalculator)
-        .calculateAndAddSignature(isA(Request.class), isA(RequestBuilderBase.class));
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualPrepareRequestResult.channelPoolPartitioning;
-    assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
-    assertEquals("GET", actualPrepareRequestResult.method);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertNull(actualPrepareRequestResult.compositeByteData);
-    assertEquals(PerHostChannelPoolPartitioning.INSTANCE, channelPoolPartitioning);
-  }
-
-  /**
    * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()}.
-   *   <li>When {@link ArrayList#ArrayList()} addAll {@link ArrayList#ArrayList()}.
+   *   <li>Given {@link ArrayList#ArrayList()} iterator.</li>
+   *   <li>Then return {@link RequestBuilderBase#cookies} is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
    */
   @Test
-  @DisplayName(
-      "Test prepareRequest(Request) with 'request'; given ArrayList(); when ArrayList() addAll ArrayList()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test prepareRequest(Request) with 'request'; given ArrayList() iterator; then return cookies is 'null'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_givenArrayList_whenArrayListAddAllArrayList()
+  void testPrepareRequestWithRequest_givenArrayListIterator_thenReturnCookiesIsNull()
       throws UnsupportedEncodingException {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
     HttpHeaders headers = mock(HttpHeaders.class);
 
     ArrayList<Entry<String, String>> entryList = new ArrayList<>();
     when(headers.iterator()).thenReturn(entryList.iterator());
-
-    ArrayList<Param> formParams = new ArrayList<>();
-    formParams.addAll(new ArrayList<>());
     Uri uri = mock(Uri.class);
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
@@ -2138,280 +721,54 @@ class DefaultAsyncHttpClientDiffblueTest {
     ByteBuf byteBufData = mock(ByteBuf.class);
     ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
     BodyGenerator bodyGenerator = mock(BodyGenerator.class);
+    ArrayList<Param> formParams = new ArrayList<>();
     ArrayList<Part> bodyParts = new ArrayList<>();
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
+    DefaultRequest request = new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+        cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData,
+        bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null,
+        1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class));
 
     // Act
     BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
 
     // Assert
     verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <ul>
-   *   <li>Given one.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'; given one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_givenOne() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    streamData.mark(1);
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <ul>
-   *   <li>Then {@link RequestBuilderBase#headers} return {@link DefaultHttpHeaders}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(Request) with 'request'; then headers return DefaultHttpHeaders")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_thenHeadersReturnDefaultHttpHeaders()
-      throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-    SimpleEntry<String, String> simpleEntry = new SimpleEntry<>("foo", "foo");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    entryList.add(simpleEntry);
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    assertArrayEquals(
-        "AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteBufferData.array());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
     HttpHeaders httpHeaders = actualPrepareRequestResult.headers;
-    assertTrue(httpHeaders instanceof DefaultHttpHeaders);
-    assertFalse(httpHeaders.isEmpty());
-    assertEquals(1, httpHeaders.size());
-    Headers<CharSequence, CharSequence, ?> unwrapResult =
-        ((DefaultHttpHeaders) httpHeaders).unwrap();
+    Headers<CharSequence, CharSequence, ?> unwrapResult = ((DefaultHttpHeaders) httpHeaders).unwrap();
     assertTrue(unwrapResult instanceof DefaultHeadersImpl);
-    assertFalse(unwrapResult.isEmpty());
-    Iterator<Entry<CharSequence, CharSequence>> iteratorResult = unwrapResult.iterator();
-    Entry<CharSequence, CharSequence> actualNextResult = iteratorResult.next();
-    assertFalse(iteratorResult.hasNext());
-    assertEquals(simpleEntry, actualNextResult);
-    assertEquals(1, unwrapResult.size());
-    verify(headers).iterator();
+    assertTrue(httpHeaders instanceof DefaultHttpHeaders);
+    HttpHeaders httpHeaders2 = request.toBuilder().headers;
+    assertTrue(httpHeaders2 instanceof DefaultHttpHeaders);
+    assertNull(actualPrepareRequestResult.cookies);
+    assertEquals(0, unwrapResult.size());
+    assertEquals(0, httpHeaders.size());
+    assertFalse(unwrapResult.iterator().hasNext());
+    assertTrue(unwrapResult.isEmpty());
+    assertTrue(httpHeaders.isEmpty());
+    assertEquals(actualPrepareRequestResult.headers, httpHeaders2);
+    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
+    assertArrayEquals(expectedArrayResult, actualPrepareRequestResult.byteBufferData.array());
+    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
    * <ul>
-   *   <li>Then return {@link RequestBuilderBase#cookies} is {@link ArrayList#ArrayList()}.
+   *   <li>Then return {@link RequestBuilderBase#cookies} is {@link ArrayList#ArrayList()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
    */
   @Test
   @DisplayName("Test prepareRequest(Request) with 'request'; then return cookies is ArrayList()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_thenReturnCookiesIsArrayList()
-      throws UnsupportedEncodingException {
+  void testPrepareRequestWithRequest_thenReturnCookiesIsArrayList() throws UnsupportedEncodingException {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
     HttpHeaders headers = mock(HttpHeaders.class);
 
     ArrayList<Entry<String, String>> entryList = new ArrayList<>();
@@ -2433,40 +790,13 @@ class DefaultAsyncHttpClientDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
 
     // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
+    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient
+        .prepareRequest(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies,
+            byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData,
+            bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null,
+            null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
 
     // Assert
     verify(headers).iterator();
@@ -2477,406 +807,17 @@ class DefaultAsyncHttpClientDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <ul>
-   *   <li>Then return {@code Method}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'; then return 'Method'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_thenReturnMethod() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "Method",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertEquals("Method", actualPrepareRequestResult.method);
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals(
-        new byte[] {1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'}, actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <ul>
-   *   <li>Then return {@link RequestBuilderBase#method} is {@code 42}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'; then return method is '42'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_thenReturnMethodIs42() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "42",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            Long.MIN_VALUE,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertEquals("42", actualPrepareRequestResult.method);
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <ul>
-   *   <li>Then return {@code Virtual Host}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName("Test prepareRequest(Request) with 'request'; then return 'Virtual Host'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_thenReturnVirtualHost() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "Virtual Host",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            Long.MIN_VALUE,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertEquals("Virtual Host", actualPrepareRequestResult.virtualHost);
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#prepareRequest(Request)} with {@code request}.
-   *
-   * <ul>
-   *   <li>When {@link ByteArrayInputStream#ByteArrayInputStream(byte[])} with array of {@code byte}
-   *       with {@code A} and {@code X}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#prepareRequest(Request)}
-   */
-  @Test
-  @DisplayName(
-      "Test prepareRequest(Request) with 'request'; when ByteArrayInputStream(byte[]) with array of byte with 'A' and 'X'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.prepareRequest(Request)"})
-  void testPrepareRequestWithRequest_whenByteArrayInputStreamWithArrayOfByteWithAAndX()
-      throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData =
-        new ByteArrayInputStream(new byte[] {'A', 'X', 'A', 'X', 0, 'X', 'A', 'X'});
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualPrepareRequestResult = defaultAsyncHttpClient.prepareRequest(request);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualPrepareRequestResult.address, request.getAddress());
-    assertSame(actualPrepareRequestResult.bodyGenerator, request.getBodyGenerator());
-    assertSame(actualPrepareRequestResult.byteBufData, request.getByteBufData());
-    assertSame(actualPrepareRequestResult.byteBufferData, request.getByteBufferData());
-    assertSame(actualPrepareRequestResult.byteData, request.getByteData());
-    assertSame(
-        actualPrepareRequestResult.channelPoolPartitioning, request.getChannelPoolPartitioning());
-    assertSame(actualPrepareRequestResult.charset, request.getCharset());
-    assertSame(actualPrepareRequestResult.compositeByteData, request.getCompositeByteData());
-    assertSame(actualPrepareRequestResult.file, request.getFile());
-    assertSame(actualPrepareRequestResult.localAddress, request.getLocalAddress());
-    assertSame(actualPrepareRequestResult.nameResolver, request.getNameResolver());
-    assertSame(actualPrepareRequestResult.proxyServer, request.getProxyServer());
-    assertSame(actualPrepareRequestResult.readTimeout, request.getReadTimeout());
-    assertSame(actualPrepareRequestResult.realm, request.getRealm());
-    assertSame(actualPrepareRequestResult.requestTimeout, request.getRequestTimeout());
-    assertSame(actualPrepareRequestResult.streamData, request.getStreamData());
-    assertSame(actualPrepareRequestResult.uri, request.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualPrepareRequestResult.byteData);
-  }
-
-  /**
    * Test {@link DefaultAsyncHttpClient#executeRequest(Request)} with {@code request}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#executeRequest(Request)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#executeRequest(Request)}
    */
   @Test
   @DisplayName("Test executeRequest(Request) with 'request'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ListenableFuture DefaultAsyncHttpClient.executeRequest(Request)"})
   void testExecuteRequestWithRequest() throws UnsupportedEncodingException {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
     Uri uri = mock(Uri.class);
     when(uri.getScheme()).thenReturn("https://example.org/example");
     when(uri.isSecured()).thenReturn(true);
@@ -2898,41 +839,13 @@ class DefaultAsyncHttpClientDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
 
     // Act
-    ListenableFuture<Response> actualExecuteRequestResult =
-        defaultAsyncHttpClient.executeRequest(request);
+    ListenableFuture<Response> actualExecuteRequestResult = defaultAsyncHttpClient
+        .executeRequest(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies,
+            byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData,
+            bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null,
+            null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
 
     // Assert
     verify(uri).getHost();
@@ -2945,52 +858,17 @@ class DefaultAsyncHttpClientDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultAsyncHttpClient#executeRequest(RequestBuilder, AsyncHandler)} with {@code
-   * requestBuilder}, {@code handler}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#executeRequest(RequestBuilder,
-   * AsyncHandler)}
-   */
-  @Test
-  @DisplayName("Test executeRequest(RequestBuilder, AsyncHandler) with 'requestBuilder', 'handler'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "ListenableFuture DefaultAsyncHttpClient.executeRequest(RequestBuilder, AsyncHandler)"
-  })
-  void testExecuteRequestWithRequestBuilderHandler() {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    RequestBuilder requestBuilder = new RequestBuilder();
-
-    // Act
-    ListenableFuture<Object> actualExecuteRequestResult =
-        defaultAsyncHttpClient.executeRequest(requestBuilder, null);
-
-    // Assert
-    assertTrue(actualExecuteRequestResult instanceof NettyResponseFuture);
-    assertEquals("UTF-8", requestBuilder.charset.name());
-    assertTrue(actualExecuteRequestResult.isDone());
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#executeRequest(Request, AsyncHandler)} with {@code request},
-   * {@code handler}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#executeRequest(Request, AsyncHandler)}
+   * Test {@link DefaultAsyncHttpClient#executeRequest(Request, AsyncHandler)} with {@code request}, {@code handler}.
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#executeRequest(Request, AsyncHandler)}
    */
   @Test
   @DisplayName("Test executeRequest(Request, AsyncHandler) with 'request', 'handler'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "ListenableFuture DefaultAsyncHttpClient.executeRequest(Request, AsyncHandler)"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"ListenableFuture DefaultAsyncHttpClient.executeRequest(Request, AsyncHandler)"})
   void testExecuteRequestWithRequestHandler() throws UnsupportedEncodingException {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
     Uri uri = mock(Uri.class);
     when(uri.getScheme()).thenReturn("https://example.org/example");
     when(uri.isSecured()).thenReturn(true);
@@ -3012,44 +890,16 @@ class DefaultAsyncHttpClientDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest request =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
+    DefaultRequest request = new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+        cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData,
+        bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null,
+        1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class));
 
     AsyncHandler<Object> handler = mock(AsyncHandler.class);
     doNothing().when(handler).onThrowable(Mockito.<Throwable>any());
 
     // Act
-    ListenableFuture<Object> actualExecuteRequestResult =
-        defaultAsyncHttpClient.executeRequest(request, handler);
+    ListenableFuture<Object> actualExecuteRequestResult = defaultAsyncHttpClient.executeRequest(request, handler);
 
     // Assert
     verify(handler).onThrowable(isA(Throwable.class));
@@ -3064,17 +914,16 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#getChannelPool()}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#getChannelPool()}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#getChannelPool()}
    */
   @Test
   @DisplayName("Test getChannelPool()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ChannelPool DefaultAsyncHttpClient.getChannelPool()"})
   void testGetChannelPool() {
     // Arrange and Act
-    ChannelPool actualChannelPool = new DefaultAsyncHttpClient().getChannelPool();
+    ChannelPool actualChannelPool = (new DefaultAsyncHttpClient()).getChannelPool();
 
     // Assert
     assertTrue(actualChannelPool instanceof DefaultChannelPool);
@@ -3084,41 +933,36 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#getEventLoopGroup()}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#getEventLoopGroup()}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#getEventLoopGroup()}
    */
   @Test
   @DisplayName("Test getEventLoopGroup()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"EventLoopGroup DefaultAsyncHttpClient.getEventLoopGroup()"})
   void testGetEventLoopGroup() {
     // Arrange and Act
-    EventLoopGroup actualEventLoopGroup = new DefaultAsyncHttpClient().getEventLoopGroup();
+    EventLoopGroup actualEventLoopGroup = (new DefaultAsyncHttpClient()).getEventLoopGroup();
 
     // Assert
     assertTrue(actualEventLoopGroup.next() instanceof NioEventLoop);
     assertTrue(actualEventLoopGroup instanceof NioEventLoopGroup);
     assertTrue(actualEventLoopGroup.terminationFuture() instanceof DefaultPromise);
-    assertFalse(actualEventLoopGroup.isShuttingDown());
-    assertFalse(actualEventLoopGroup.isShutdown());
-    assertFalse(actualEventLoopGroup.isTerminated());
     assertTrue(actualEventLoopGroup.iterator().hasNext());
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#getClientStats()}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#getClientStats()}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#getClientStats()}
    */
   @Test
   @DisplayName("Test getClientStats()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ClientStats DefaultAsyncHttpClient.getClientStats()"})
   void testGetClientStats() {
     // Arrange and Act
-    ClientStats actualClientStats = new DefaultAsyncHttpClient().getClientStats();
+    ClientStats actualClientStats = (new DefaultAsyncHttpClient()).getClientStats();
 
     // Assert
     assertEquals(0L, actualClientStats.getTotalActiveConnectionCount());
@@ -3128,27 +972,23 @@ class DefaultAsyncHttpClientDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(String, String)} with {@code method}, {@code
-   * url}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(String, String)}
+   * Test {@link DefaultAsyncHttpClient#requestBuilder(String, String)} with {@code method}, {@code url}.
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#requestBuilder(String, String)}
    */
   @Test
   @DisplayName("Test requestBuilder(String, String) with 'method', 'url'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(String, String)"})
   void testRequestBuilderWithMethodUrl() {
     // Arrange and Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        new DefaultAsyncHttpClient()
-            .requestBuilder("https://example.org/example", "https://example.org/example");
+    BoundRequestBuilder actualRequestBuilderResult = (new DefaultAsyncHttpClient())
+        .requestBuilder("https://example.org/example", "https://example.org/example");
 
     // Assert
     assertTrue(actualRequestBuilderResult.headers instanceof DefaultHttpHeaders);
     assertTrue(actualRequestBuilderResult.nameResolver instanceof DefaultNameResolver);
-    ChannelPoolPartitioning channelPoolPartitioning =
-        actualRequestBuilderResult.channelPoolPartitioning;
+    ChannelPoolPartitioning channelPoolPartitioning = actualRequestBuilderResult.channelPoolPartitioning;
     assertTrue(channelPoolPartitioning instanceof PerHostChannelPoolPartitioning);
     assertEquals("https://example.org/example", actualRequestBuilderResult.method);
     assertNull(actualRequestBuilderResult.byteData);
@@ -3180,864 +1020,28 @@ class DefaultAsyncHttpClientDiffblueTest {
 
   /**
    * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype2() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', -1, 'A', 'X', 'A', 'X', 'A', 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', -1, 'A', 'X', 'A', 'X', 'A', 'X'}, actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype3() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', 'X', Byte.MAX_VALUE, 'X', 'A', 'X', 'A', 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', 'X', Byte.MAX_VALUE, 'X', 'A', 'X', 'A', 'X'},
-        actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype4() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAX=X".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals("AXAXAX=X".getBytes("UTF-8"), actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype5() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', 'X', 'A', 'X', 'A', 'X', -1, 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', 'X', 'A', 'X', 'A', 'X', -1, 'X'}, actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype6() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', 'X', 'A', 'X', 'A', 'X', Byte.MAX_VALUE, 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', 'X', 'A', 'X', 'A', 'X', Byte.MAX_VALUE, 'X'},
-        actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype7() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', 'X', 'A', 'X', 'A', 'X', 'A', 1},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', 'X', 'A', 'X', 'A', 'X', 'A', 1}, actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype8() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', 'X', 'A', 'X', 'A', 'X', 'A', 0},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', 'X', 'A', 'X', 'A', 'X', 'A', 0}, actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
-   */
-  @Test
-  @DisplayName("Test requestBuilder(Request) with 'prototype'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype9() throws UnsupportedEncodingException {
-    // Arrange
-    DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-    defaultAsyncHttpClient.setSignatureCalculator(mock(SignatureCalculator.class));
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    Uri uri = mock(Uri.class);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            new byte[] {'A', -1, 'A', 'X', 'A', 'X', 'A', 'X'},
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
-
-    // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
-
-    // Assert
-    verify(headers).iterator();
-    assertSame(actualRequestBuilderResult.address, prototype.getAddress());
-    assertSame(actualRequestBuilderResult.bodyGenerator, prototype.getBodyGenerator());
-    assertSame(actualRequestBuilderResult.byteBufData, prototype.getByteBufData());
-    assertSame(actualRequestBuilderResult.byteBufferData, prototype.getByteBufferData());
-    assertSame(actualRequestBuilderResult.byteData, prototype.getByteData());
-    assertSame(
-        actualRequestBuilderResult.channelPoolPartitioning, prototype.getChannelPoolPartitioning());
-    assertSame(actualRequestBuilderResult.charset, prototype.getCharset());
-    assertSame(actualRequestBuilderResult.compositeByteData, prototype.getCompositeByteData());
-    assertSame(actualRequestBuilderResult.file, prototype.getFile());
-    assertSame(actualRequestBuilderResult.localAddress, prototype.getLocalAddress());
-    assertSame(actualRequestBuilderResult.nameResolver, prototype.getNameResolver());
-    assertSame(actualRequestBuilderResult.proxyServer, prototype.getProxyServer());
-    assertSame(actualRequestBuilderResult.readTimeout, prototype.getReadTimeout());
-    assertSame(actualRequestBuilderResult.realm, prototype.getRealm());
-    assertSame(actualRequestBuilderResult.requestTimeout, prototype.getRequestTimeout());
-    assertSame(actualRequestBuilderResult.streamData, prototype.getStreamData());
-    assertSame(actualRequestBuilderResult.uri, prototype.getUri());
-    assertArrayEquals(
-        new byte[] {'A', -1, 'A', 'X', 'A', 'X', 'A', 'X'}, actualRequestBuilderResult.byteData);
-  }
-
-  /**
-   * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
    * <ul>
-   *   <li>Then {@link RequestBuilderBase#headers} return {@link DefaultHttpHeaders}.
+   *   <li>Given {@link ArrayList#ArrayList()} iterator.</li>
+   *   <li>Then return {@link RequestBuilderBase#cookies} is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
    */
   @Test
-  @DisplayName(
-      "Test requestBuilder(Request) with 'prototype'; then headers return DefaultHttpHeaders")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test requestBuilder(Request) with 'prototype'; given ArrayList() iterator; then return cookies is 'null'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype_thenHeadersReturnDefaultHttpHeaders()
+  void testRequestBuilderWithPrototype_givenArrayListIterator_thenReturnCookiesIsNull()
       throws UnsupportedEncodingException {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
+    HttpHeaders headers = mock(HttpHeaders.class);
+
+    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
+    when(headers.iterator()).thenReturn(entryList.iterator());
     Uri uri = mock(Uri.class);
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
-
-    HttpHeaders headers = mock(HttpHeaders.class);
-    SimpleEntry<String, String> simpleEntry = new SimpleEntry<>("foo", "foo");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    entryList.add(simpleEntry);
-    when(headers.iterator()).thenReturn(entryList.iterator());
     ArrayList<Cookie> cookies = new ArrayList<>();
     byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
     ArrayList<byte[]> compositeByteData = new ArrayList<>();
@@ -4050,81 +1054,49 @@ class DefaultAsyncHttpClientDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
+    DefaultRequest prototype = new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+        cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData,
+        bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null,
+        1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class));
 
     // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
+    BoundRequestBuilder actualRequestBuilderResult = defaultAsyncHttpClient.requestBuilder(prototype);
 
     // Assert
-    assertArrayEquals(
-        "AXAXAXAX".getBytes("UTF-8"), actualRequestBuilderResult.byteBufferData.array());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualRequestBuilderResult.byteData);
-    HttpHeaders httpHeaders = actualRequestBuilderResult.headers;
-    assertTrue(httpHeaders instanceof DefaultHttpHeaders);
-    assertFalse(httpHeaders.isEmpty());
-    assertEquals(1, httpHeaders.size());
-    Headers<CharSequence, CharSequence, ?> unwrapResult =
-        ((DefaultHttpHeaders) httpHeaders).unwrap();
-    assertTrue(unwrapResult instanceof DefaultHeadersImpl);
-    assertFalse(unwrapResult.isEmpty());
-    Iterator<Entry<CharSequence, CharSequence>> iteratorResult = unwrapResult.iterator();
-    Entry<CharSequence, CharSequence> actualNextResult = iteratorResult.next();
-    assertFalse(iteratorResult.hasNext());
-    assertEquals(simpleEntry, actualNextResult);
-    assertEquals(1, unwrapResult.size());
     verify(headers).iterator();
+    HttpHeaders httpHeaders = actualRequestBuilderResult.headers;
+    Headers<CharSequence, CharSequence, ?> unwrapResult = ((DefaultHttpHeaders) httpHeaders).unwrap();
+    assertTrue(unwrapResult instanceof DefaultHeadersImpl);
+    assertTrue(httpHeaders instanceof DefaultHttpHeaders);
+    HttpHeaders httpHeaders2 = prototype.toBuilder().headers;
+    assertTrue(httpHeaders2 instanceof DefaultHttpHeaders);
+    assertNull(actualRequestBuilderResult.cookies);
+    assertEquals(0, unwrapResult.size());
+    assertEquals(0, httpHeaders.size());
+    assertFalse(unwrapResult.iterator().hasNext());
+    assertTrue(unwrapResult.isEmpty());
+    assertTrue(httpHeaders.isEmpty());
+    assertEquals(actualRequestBuilderResult.headers, httpHeaders2);
+    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
+    assertArrayEquals(expectedArrayResult, actualRequestBuilderResult.byteBufferData.array());
+    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualRequestBuilderResult.byteData);
   }
 
   /**
    * Test {@link DefaultAsyncHttpClient#requestBuilder(Request)} with {@code prototype}.
-   *
    * <ul>
-   *   <li>Then return {@link RequestBuilderBase#cookies} is {@link ArrayList#ArrayList()}.
+   *   <li>Then return {@link RequestBuilderBase#cookies} is {@link ArrayList#ArrayList()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
+   * <p>
+   * Method under test: {@link DefaultAsyncHttpClient#requestBuilder(Request)}
    */
   @Test
   @DisplayName("Test requestBuilder(Request) with 'prototype'; then return cookies is ArrayList()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BoundRequestBuilder DefaultAsyncHttpClient.requestBuilder(Request)"})
-  void testRequestBuilderWithPrototype_thenReturnCookiesIsArrayList()
-      throws UnsupportedEncodingException {
+  void testRequestBuilderWithPrototype_thenReturnCookiesIsArrayList() throws UnsupportedEncodingException {
     // Arrange
     DefaultAsyncHttpClient defaultAsyncHttpClient = new DefaultAsyncHttpClient();
-
     HttpHeaders headers = mock(HttpHeaders.class);
 
     ArrayList<Entry<String, String>> entryList = new ArrayList<>();
@@ -4146,41 +1118,13 @@ class DefaultAsyncHttpClientDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest prototype =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
 
     // Act
-    BoundRequestBuilder actualRequestBuilderResult =
-        defaultAsyncHttpClient.requestBuilder(prototype);
+    BoundRequestBuilder actualRequestBuilderResult = defaultAsyncHttpClient
+        .requestBuilder(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies,
+            byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData,
+            bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null,
+            null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
 
     // Assert
     verify(headers).iterator();

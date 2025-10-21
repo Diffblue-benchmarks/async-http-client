@@ -2,7 +2,6 @@ package org.asynchttpclient.netty.channel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.util.Collection;
 import java.util.List;
@@ -14,9 +13,8 @@ import org.junit.jupiter.api.Test;
 class InfiniteSemaphoreDiffblueTest {
   /**
    * Test getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link InfiniteSemaphore#acquire()}
    *   <li>{@link InfiniteSemaphore#acquire(int)}
@@ -30,18 +28,11 @@ class InfiniteSemaphoreDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void InfiniteSemaphore.acquire()",
-    "void InfiniteSemaphore.acquire(int)",
-    "void InfiniteSemaphore.acquireUninterruptibly()",
-    "void InfiniteSemaphore.acquireUninterruptibly(int)",
-    "boolean InfiniteSemaphore.isFair()",
-    "void InfiniteSemaphore.reducePermits(int)",
-    "void InfiniteSemaphore.release()",
-    "void InfiniteSemaphore.release(int)"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void InfiniteSemaphore.acquire()", "void InfiniteSemaphore.acquire(int)",
+      "void InfiniteSemaphore.acquireUninterruptibly()", "void InfiniteSemaphore.acquireUninterruptibly(int)",
+      "boolean InfiniteSemaphore.isFair()", "void InfiniteSemaphore.reducePermits(int)",
+      "void InfiniteSemaphore.release()", "void InfiniteSemaphore.release(int)"})
   void testGettersAndSetters() {
     // Arrange
     InfiniteSemaphore infiniteSemaphore = InfiniteSemaphore.INSTANCE;
@@ -61,13 +52,12 @@ class InfiniteSemaphoreDiffblueTest {
 
   /**
    * Test {@link InfiniteSemaphore#tryAcquire()}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#tryAcquire()}
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#tryAcquire()}
    */
   @Test
   @DisplayName("Test tryAcquire()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean InfiniteSemaphore.tryAcquire()"})
   void testTryAcquire() {
     // Arrange, Act and Assert
@@ -76,13 +66,12 @@ class InfiniteSemaphoreDiffblueTest {
 
   /**
    * Test {@link InfiniteSemaphore#tryAcquire(int)} with {@code permits}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#tryAcquire(int)}
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#tryAcquire(int)}
    */
   @Test
   @DisplayName("Test tryAcquire(int) with 'permits'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean InfiniteSemaphore.tryAcquire(int)"})
   void testTryAcquireWithPermits() {
     // Arrange, Act and Assert
@@ -90,15 +79,13 @@ class InfiniteSemaphoreDiffblueTest {
   }
 
   /**
-   * Test {@link InfiniteSemaphore#tryAcquire(int, long, TimeUnit)} with {@code permits}, {@code
-   * timeout}, {@code unit}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#tryAcquire(int, long, TimeUnit)}
+   * Test {@link InfiniteSemaphore#tryAcquire(int, long, TimeUnit)} with {@code permits}, {@code timeout}, {@code unit}.
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#tryAcquire(int, long, TimeUnit)}
    */
   @Test
   @DisplayName("Test tryAcquire(int, long, TimeUnit) with 'permits', 'timeout', 'unit'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean InfiniteSemaphore.tryAcquire(int, long, TimeUnit)"})
   void testTryAcquireWithPermitsTimeoutUnit() {
     // Arrange, Act and Assert
@@ -107,13 +94,12 @@ class InfiniteSemaphoreDiffblueTest {
 
   /**
    * Test {@link InfiniteSemaphore#tryAcquire(long, TimeUnit)} with {@code timeout}, {@code unit}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#tryAcquire(long, TimeUnit)}
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#tryAcquire(long, TimeUnit)}
    */
   @Test
   @DisplayName("Test tryAcquire(long, TimeUnit) with 'timeout', 'unit'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean InfiniteSemaphore.tryAcquire(long, TimeUnit)"})
   void testTryAcquireWithTimeoutUnit() {
     // Arrange, Act and Assert
@@ -122,13 +108,12 @@ class InfiniteSemaphoreDiffblueTest {
 
   /**
    * Test {@link InfiniteSemaphore#availablePermits()}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#availablePermits()}
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#availablePermits()}
    */
   @Test
   @DisplayName("Test availablePermits()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int InfiniteSemaphore.availablePermits()"})
   void testAvailablePermits() {
     // Arrange, Act and Assert
@@ -137,13 +122,12 @@ class InfiniteSemaphoreDiffblueTest {
 
   /**
    * Test {@link InfiniteSemaphore#drainPermits()}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#drainPermits()}
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#drainPermits()}
    */
   @Test
   @DisplayName("Test drainPermits()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int InfiniteSemaphore.drainPermits()"})
   void testDrainPermits() {
     // Arrange, Act and Assert
@@ -152,13 +136,12 @@ class InfiniteSemaphoreDiffblueTest {
 
   /**
    * Test {@link InfiniteSemaphore#getQueuedThreads()}.
-   *
-   * <p>Method under test: {@link InfiniteSemaphore#getQueuedThreads()}
+   * <p>
+   * Method under test: {@link InfiniteSemaphore#getQueuedThreads()}
    */
   @Test
   @DisplayName("Test getQueuedThreads()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Collection InfiniteSemaphore.getQueuedThreads()"})
   void testGetQueuedThreads() {
     // Arrange and Act

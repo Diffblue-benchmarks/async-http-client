@@ -10,7 +10,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import com.aayushatharva.brotli4j.encoder.BrotliEncoderChannel;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
@@ -32,20 +31,19 @@ import org.mockito.Mockito;
 class StringMultipartPartDiffblueTest {
   /**
    * Test {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}.
-   *
-   * <p>Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
+   * <p>
+   * Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
    */
   @Test
   @DisplayName("Test new StringMultipartPart(StringPart, byte[])")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.<init>(StringPart, byte[])"})
   void testNewStringMultipartPart() throws UnsupportedEncodingException {
-    // Arrange and Act
-    StringMultipartPart actualStringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", "https://example.org/example"),
-            "AXAXAXAX".getBytes("UTF-8"));
+    // Arrange
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
+
+    // Act
+    StringMultipartPart actualStringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     StringPart stringPart = actualStringMultipartPart.part;
@@ -60,19 +58,16 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()}.
-   *   <li>Then return {@link MultipartPart#part} CustomHeaders Empty.
+   *   <li>Given {@link ArrayList#ArrayList()}.</li>
+   *   <li>Then return {@link MultipartPart#part} CustomHeaders Empty.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
+   * <p>
+   * Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new StringMultipartPart(StringPart, byte[]); given ArrayList(); then return part CustomHeaders Empty")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new StringMultipartPart(StringPart, byte[]); given ArrayList(); then return part CustomHeaders Empty")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.<init>(StringPart, byte[])"})
   void testNewStringMultipartPart_givenArrayList_thenReturnPartCustomHeadersEmpty()
       throws UnsupportedEncodingException {
@@ -81,8 +76,7 @@ class StringMultipartPartDiffblueTest {
     part.setCustomHeaders(new ArrayList<>());
 
     // Act
-    StringMultipartPart actualStringMultipartPart =
-        new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    StringMultipartPart actualStringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     StringPart stringPart = actualStringMultipartPart.part;
@@ -97,32 +91,24 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}.
-   *
    * <ul>
-   *   <li>Then return {@link MultipartPart#part} ContentType is {@code
-   *       https://example.org/example}.
+   *   <li>Then return {@link MultipartPart#part} ContentType is {@code https://example.org/example}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
+   * <p>
+   * Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new StringMultipartPart(StringPart, byte[]); then return part ContentType is 'https://example.org/example'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new StringMultipartPart(StringPart, byte[]); then return part ContentType is 'https://example.org/example'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.<init>(StringPart, byte[])"})
   void testNewStringMultipartPart_thenReturnPartContentTypeIsHttpsExampleOrgExample()
       throws UnsupportedEncodingException {
     // Arrange
-    StringPart part =
-        new StringPart(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example",
+        "https://example.org/example");
 
     // Act
-    StringMultipartPart actualStringMultipartPart =
-        new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    StringMultipartPart actualStringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     StringPart stringPart = actualStringMultipartPart.part;
@@ -134,28 +120,23 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}.
-   *
    * <ul>
-   *   <li>Then return {@link MultipartPart#part} CustomHeaders size is one.
+   *   <li>Then return {@link MultipartPart#part} CustomHeaders size is one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
+   * <p>
+   * Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new StringMultipartPart(StringPart, byte[]); then return part CustomHeaders size is one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new StringMultipartPart(StringPart, byte[]); then return part CustomHeaders size is one")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.<init>(StringPart, byte[])"})
-  void testNewStringMultipartPart_thenReturnPartCustomHeadersSizeIsOne()
-      throws UnsupportedEncodingException {
+  void testNewStringMultipartPart_thenReturnPartCustomHeadersSizeIsOne() throws UnsupportedEncodingException {
     // Arrange
     StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
     part.addCustomHeader("https://example.org/example", "https://example.org/example");
 
     // Act
-    StringMultipartPart actualStringMultipartPart =
-        new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    StringMultipartPart actualStringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     List<Param> customHeaders = actualStringMultipartPart.part.getCustomHeaders();
@@ -169,19 +150,15 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}.
-   *
    * <ul>
-   *   <li>Then return {@link MultipartPart#part} DispositionType is {@code
-   *       https://example.org/example}.
+   *   <li>Then return {@link MultipartPart#part} DispositionType is {@code https://example.org/example}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
+   * <p>
+   * Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new StringMultipartPart(StringPart, byte[]); then return part DispositionType is 'https://example.org/example'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new StringMultipartPart(StringPart, byte[]); then return part DispositionType is 'https://example.org/example'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.<init>(StringPart, byte[])"})
   void testNewStringMultipartPart_thenReturnPartDispositionTypeIsHttpsExampleOrgExample()
       throws UnsupportedEncodingException {
@@ -191,8 +168,7 @@ class StringMultipartPartDiffblueTest {
     part.addCustomHeader("https://example.org/example", "https://example.org/example");
 
     // Act
-    StringMultipartPart actualStringMultipartPart =
-        new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    StringMultipartPart actualStringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     StringPart stringPart = actualStringMultipartPart.part;
@@ -208,25 +184,22 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}.
-   *
    * <ul>
-   *   <li>Then return {@link MultipartPart#part} Value is empty string.
+   *   <li>Then return {@link MultipartPart#part} Value is empty string.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
+   * <p>
+   * Method under test: {@link StringMultipartPart#StringMultipartPart(StringPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new StringMultipartPart(StringPart, byte[]); then return part Value is empty string")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new StringMultipartPart(StringPart, byte[]); then return part Value is empty string")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.<init>(StringPart, byte[])"})
-  void testNewStringMultipartPart_thenReturnPartValueIsEmptyString()
-      throws UnsupportedEncodingException {
-    // Arrange and Act
-    StringMultipartPart actualStringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", ""), "AXAXAXAX".getBytes("UTF-8"));
+  void testNewStringMultipartPart_thenReturnPartValueIsEmptyString() throws UnsupportedEncodingException {
+    // Arrange
+    StringPart part = new StringPart("https://example.org/example", "");
+
+    // Act
+    StringMultipartPart actualStringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     assertEquals("", actualStringMultipartPart.part.getValue());
@@ -237,102 +210,104 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#getContentLength()}.
-   *
-   * <p>Method under test: {@link StringMultipartPart#getContentLength()}
+   * <ul>
+   *   <li>Then return twenty-seven.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link StringMultipartPart#getContentLength()}
    */
   @Test
-  @DisplayName("Test getContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test getContentLength(); then return twenty-seven")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long StringMultipartPart.getContentLength()"})
-  void testGetContentLength() throws UnsupportedEncodingException {
+  void testGetContentLength_thenReturnTwentySeven() throws UnsupportedEncodingException {
     // Arrange
-    StringMultipartPart stringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", "https://example.org/example"),
-            "AXAXAXAX".getBytes("UTF-8"));
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
 
     // Act and Assert
-    assertEquals(27L, stringMultipartPart.getContentLength());
+    assertEquals(27L, (new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"))).getContentLength());
+  }
+
+  /**
+   * Test {@link StringMultipartPart#getContentLength()}.
+   * <ul>
+   *   <li>Then return zero.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link StringMultipartPart#getContentLength()}
+   */
+  @Test
+  @DisplayName("Test getContentLength(); then return zero")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"long StringMultipartPart.getContentLength()"})
+  void testGetContentLength_thenReturnZero() throws UnsupportedEncodingException {
+    // Arrange
+    StringPart part = new StringPart("https://example.org/example", "");
+
+    // Act and Assert
+    assertEquals(0L, (new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"))).getContentLength());
   }
 
   /**
    * Test {@link StringMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
-   *
-   * <p>Method under test: {@link StringMultipartPart#transferContentTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link StringMultipartPart#transferContentTo(ByteBuf)}
    */
   @Test
   @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long StringMultipartPart.transferContentTo(ByteBuf)"})
   void testTransferContentToWithByteBuf() throws UnsupportedEncodingException {
     // Arrange
-    StringMultipartPart stringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", "https://example.org/example"),
-            "AXAXAXAX".getBytes("UTF-8"));
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
 
-    // Act
-    long actualTransferContentToResult =
-        stringMultipartPart.transferContentTo(
-            new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
-    // Assert
-    assertEquals(0L, actualTransferContentToResult);
+    // Act and Assert
+    assertEquals(0L,
+        stringMultipartPart.transferContentTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
     assertEquals(MultipartState.PRE_CONTENT, stringMultipartPart.getState());
   }
 
   /**
    * Test {@link StringMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
-   *
-   * <p>Method under test: {@link StringMultipartPart#transferContentTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link StringMultipartPart#transferContentTo(ByteBuf)}
    */
   @Test
   @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long StringMultipartPart.transferContentTo(ByteBuf)"})
   void testTransferContentToWithByteBuf2() throws UnsupportedEncodingException {
     // Arrange
-    StringMultipartPart stringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", ""), "AXAXAXAX".getBytes("UTF-8"));
+    StringPart part = new StringPart("https://example.org/example", "");
 
-    // Act
-    long actualTransferContentToResult =
-        stringMultipartPart.transferContentTo(
-            new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
-    // Assert
-    assertEquals(0L, actualTransferContentToResult);
+    // Act and Assert
+    assertEquals(0L,
+        stringMultipartPart.transferContentTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
     assertEquals(MultipartState.POST_CONTENT, stringMultipartPart.getState());
   }
 
   /**
-   * Test {@link StringMultipartPart#transferContentTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
+   * Test {@link StringMultipartPart#transferContentTo(WritableByteChannel)} with {@code WritableByteChannel}.
    * <ul>
-   *   <li>Given one.
-   *   <li>Then return one.
+   *   <li>Given one.</li>
+   *   <li>Then return one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#transferContentTo(WritableByteChannel)}
+   * <p>
+   * Method under test: {@link StringMultipartPart#transferContentTo(WritableByteChannel)}
    */
   @Test
-  @DisplayName(
-      "Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; given one; then return one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; given one; then return one")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long StringMultipartPart.transferContentTo(WritableByteChannel)"})
   void testTransferContentToWithWritableByteChannel_givenOne_thenReturnOne() throws IOException {
     // Arrange
-    StringMultipartPart stringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", "https://example.org/example"),
-            "AXAXAXAX".getBytes("UTF-8"));
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
 
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
 
@@ -347,28 +322,53 @@ class StringMultipartPartDiffblueTest {
   }
 
   /**
-   * Test {@link StringMultipartPart#transferContentTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
+   * Test {@link StringMultipartPart#transferContentTo(WritableByteChannel)} with {@code WritableByteChannel}.
    * <ul>
-   *   <li>Then return twenty-seven.
+   *   <li>Given zero.</li>
+   *   <li>Then return zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringMultipartPart#transferContentTo(WritableByteChannel)}
+   * <p>
+   * Method under test: {@link StringMultipartPart#transferContentTo(WritableByteChannel)}
    */
   @Test
-  @DisplayName(
-      "Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; then return twenty-seven")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; given zero; then return zero")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"long StringMultipartPart.transferContentTo(WritableByteChannel)"})
+  void testTransferContentToWithWritableByteChannel_givenZero_thenReturnZero() throws IOException {
+    // Arrange
+    StringPart part = new StringPart("https://example.org/example", "");
+
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
+    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(0);
+
+    // Act
+    long actualTransferContentToResult = stringMultipartPart.transferContentTo(target);
+
+    // Assert
+    verify(target).write(isA(ByteBuffer.class));
+    assertEquals(0L, actualTransferContentToResult);
+    assertEquals(MultipartState.POST_CONTENT, stringMultipartPart.getState());
+    assertFalse(stringMultipartPart.isTargetSlow());
+  }
+
+  /**
+   * Test {@link StringMultipartPart#transferContentTo(WritableByteChannel)} with {@code WritableByteChannel}.
+   * <ul>
+   *   <li>Then return twenty-seven.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link StringMultipartPart#transferContentTo(WritableByteChannel)}
+   */
+  @Test
+  @DisplayName("Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; then return twenty-seven")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long StringMultipartPart.transferContentTo(WritableByteChannel)"})
   void testTransferContentToWithWritableByteChannel_thenReturnTwentySeven() throws IOException {
     // Arrange
-    StringMultipartPart stringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", "https://example.org/example"),
-            "AXAXAXAX".getBytes("UTF-8"));
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
 
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(27);
 
@@ -384,25 +384,50 @@ class StringMultipartPartDiffblueTest {
 
   /**
    * Test {@link StringMultipartPart#close()}.
-   *
-   * <p>Method under test: {@link StringMultipartPart#close()}
+   * <p>
+   * Method under test: {@link StringMultipartPart#close()}
    */
   @Test
   @DisplayName("Test close()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringMultipartPart.close()"})
   void testClose() throws UnsupportedEncodingException {
     // Arrange
-    StringMultipartPart stringMultipartPart =
-        new StringMultipartPart(
-            new StringPart("https://example.org/example", "https://example.org/example"),
-            "AXAXAXAX".getBytes("UTF-8"));
+    StringPart part = new StringPart("https://example.org/example", "https://example.org/example");
+
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
 
     // Act
     stringMultipartPart.close();
 
     // Assert
+    assertEquals(0L, stringMultipartPart.getContentLength());
+    assertEquals(84L, stringMultipartPart.length());
+  }
+
+  /**
+   * Test {@link StringMultipartPart#close()}.
+   * <ul>
+   *   <li>Given {@link StringPart#StringPart(String, String)} with name is {@code https://example.org/example} and value is empty string.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link StringMultipartPart#close()}
+   */
+  @Test
+  @DisplayName("Test close(); given StringPart(String, String) with name is 'https://example.org/example' and value is empty string")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void StringMultipartPart.close()"})
+  void testClose_givenStringPartWithNameIsHttpsExampleOrgExampleAndValueIsEmptyString()
+      throws UnsupportedEncodingException {
+    // Arrange
+    StringPart part = new StringPart("https://example.org/example", "");
+
+    StringMultipartPart stringMultipartPart = new StringMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+
+    // Act
+    stringMultipartPart.close();
+
+    // Assert that nothing has changed
     assertEquals(0L, stringMultipartPart.getContentLength());
     assertEquals(84L, stringMultipartPart.length());
   }

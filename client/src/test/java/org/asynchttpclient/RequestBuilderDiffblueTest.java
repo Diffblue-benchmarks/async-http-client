@@ -3,7 +3,6 @@ package org.asynchttpclient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.resolver.DefaultNameResolver;
@@ -17,13 +16,12 @@ import org.junit.jupiter.api.Test;
 class RequestBuilderDiffblueTest {
   /**
    * Test {@link RequestBuilder#RequestBuilder()}.
-   *
-   * <p>Method under test: {@link RequestBuilder#RequestBuilder()}
+   * <p>
+   * Method under test: {@link RequestBuilder#RequestBuilder()}
    */
   @Test
   @DisplayName("Test new RequestBuilder()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void RequestBuilder.<init>()"})
   void testNewRequestBuilder() {
     // Arrange and Act
@@ -65,24 +63,20 @@ class RequestBuilderDiffblueTest {
 
   /**
    * Test {@link RequestBuilder#RequestBuilder(String, boolean, boolean)}.
-   *
    * <ul>
-   *   <li>When {@code false}.
-   *   <li>Then return {@link RequestBuilderBase#uriEncoder} is {@code FIXING}.
+   *   <li>When {@code false}.</li>
+   *   <li>Then return {@link RequestBuilderBase#uriEncoder} is {@code FIXING}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link RequestBuilder#RequestBuilder(String, boolean, boolean)}
+   * <p>
+   * Method under test: {@link RequestBuilder#RequestBuilder(String, boolean, boolean)}
    */
   @Test
-  @DisplayName(
-      "Test new RequestBuilder(String, boolean, boolean); when 'false'; then return uriEncoder is 'FIXING'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new RequestBuilder(String, boolean, boolean); when 'false'; then return uriEncoder is 'FIXING'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void RequestBuilder.<init>(String, boolean, boolean)"})
   void testNewRequestBuilder_whenFalse_thenReturnUriEncoderIsFixing() {
     // Arrange and Act
-    RequestBuilder actualRequestBuilder =
-        new RequestBuilder("https://example.org/example", false, false);
+    RequestBuilder actualRequestBuilder = new RequestBuilder("https://example.org/example", false, false);
 
     // Assert
     assertTrue(actualRequestBuilder.headers instanceof DefaultHttpHeaders);
@@ -120,24 +114,20 @@ class RequestBuilderDiffblueTest {
 
   /**
    * Test {@link RequestBuilder#RequestBuilder(String, boolean, boolean)}.
-   *
    * <ul>
-   *   <li>When {@code true}.
-   *   <li>Then return {@link RequestBuilderBase#uriEncoder} is {@code RAW}.
+   *   <li>When {@code true}.</li>
+   *   <li>Then return {@link RequestBuilderBase#uriEncoder} is {@code RAW}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link RequestBuilder#RequestBuilder(String, boolean, boolean)}
+   * <p>
+   * Method under test: {@link RequestBuilder#RequestBuilder(String, boolean, boolean)}
    */
   @Test
-  @DisplayName(
-      "Test new RequestBuilder(String, boolean, boolean); when 'true'; then return uriEncoder is 'RAW'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new RequestBuilder(String, boolean, boolean); when 'true'; then return uriEncoder is 'RAW'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void RequestBuilder.<init>(String, boolean, boolean)"})
   void testNewRequestBuilder_whenTrue_thenReturnUriEncoderIsRaw() {
     // Arrange and Act
-    RequestBuilder actualRequestBuilder =
-        new RequestBuilder("https://example.org/example", true, true);
+    RequestBuilder actualRequestBuilder = new RequestBuilder("https://example.org/example", true, true);
 
     // Assert
     assertTrue(actualRequestBuilder.headers instanceof DefaultHttpHeaders);

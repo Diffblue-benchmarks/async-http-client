@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -22,30 +21,26 @@ import org.junit.jupiter.api.Test;
 class NettyCompositeByteArrayBodyDiffblueTest {
   /**
    * Test {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}.
-   *
    * <ul>
-   *   <li>Given {@code A}.
-   *   <li>Then return ContentLength is sixteen.
+   *   <li>Given {@code A}.</li>
+   *   <li>Then return ContentLength is sixteen.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}
    */
   @Test
-  @DisplayName(
-      "Test new NettyCompositeByteArrayBody(List); given 'A'; then return ContentLength is sixteen")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new NettyCompositeByteArrayBody(List); given 'A'; then return ContentLength is sixteen")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyCompositeByteArrayBody.<init>(List)"})
   void testNewNettyCompositeByteArrayBody_givenA_thenReturnContentLengthIsSixteen()
       throws UnsupportedEncodingException {
     // Arrange
     ArrayList<byte[]> bytes = new ArrayList<>();
-    bytes.add(new byte[] {'A', 1, 'A', 1, 'A', 1, 'A', 1});
+    bytes.add(new byte[]{'A', 1, 'A', 1, 'A', 1, 'A', 1});
     bytes.add("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    NettyCompositeByteArrayBody actualNettyCompositeByteArrayBody =
-        new NettyCompositeByteArrayBody(bytes);
+    NettyCompositeByteArrayBody actualNettyCompositeByteArrayBody = new NettyCompositeByteArrayBody(bytes);
 
     // Assert
     assertNull(actualNettyCompositeByteArrayBody.getContentTypeOverride());
@@ -54,27 +49,23 @@ class NettyCompositeByteArrayBodyDiffblueTest {
 
   /**
    * Test {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}.
-   *
    * <ul>
-   *   <li>Then return ContentLength is eight.
+   *   <li>Then return ContentLength is eight.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}
    */
   @Test
   @DisplayName("Test new NettyCompositeByteArrayBody(List); then return ContentLength is eight")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyCompositeByteArrayBody.<init>(List)"})
-  void testNewNettyCompositeByteArrayBody_thenReturnContentLengthIsEight()
-      throws UnsupportedEncodingException {
+  void testNewNettyCompositeByteArrayBody_thenReturnContentLengthIsEight() throws UnsupportedEncodingException {
     // Arrange
     ArrayList<byte[]> bytes = new ArrayList<>();
     bytes.add("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    NettyCompositeByteArrayBody actualNettyCompositeByteArrayBody =
-        new NettyCompositeByteArrayBody(bytes);
+    NettyCompositeByteArrayBody actualNettyCompositeByteArrayBody = new NettyCompositeByteArrayBody(bytes);
 
     // Assert
     assertNull(actualNettyCompositeByteArrayBody.getContentTypeOverride());
@@ -83,24 +74,20 @@ class NettyCompositeByteArrayBodyDiffblueTest {
 
   /**
    * Test {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}.
-   *
    * <ul>
-   *   <li>When {@link ArrayList#ArrayList()}.
-   *   <li>Then return ContentLength is zero.
+   *   <li>When {@link ArrayList#ArrayList()}.</li>
+   *   <li>Then return ContentLength is zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#NettyCompositeByteArrayBody(List)}
    */
   @Test
-  @DisplayName(
-      "Test new NettyCompositeByteArrayBody(List); when ArrayList(); then return ContentLength is zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new NettyCompositeByteArrayBody(List); when ArrayList(); then return ContentLength is zero")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyCompositeByteArrayBody.<init>(List)"})
   void testNewNettyCompositeByteArrayBody_whenArrayList_thenReturnContentLengthIsZero() {
     // Arrange and Act
-    NettyCompositeByteArrayBody actualNettyCompositeByteArrayBody =
-        new NettyCompositeByteArrayBody(new ArrayList<>());
+    NettyCompositeByteArrayBody actualNettyCompositeByteArrayBody = new NettyCompositeByteArrayBody(new ArrayList<>());
 
     // Assert
     assertNull(actualNettyCompositeByteArrayBody.getContentTypeOverride());
@@ -109,34 +96,30 @@ class NettyCompositeByteArrayBodyDiffblueTest {
 
   /**
    * Test {@link NettyCompositeByteArrayBody#getContentLength()}.
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#getContentLength()}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#getContentLength()}
    */
   @Test
   @DisplayName("Test getContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long NettyCompositeByteArrayBody.getContentLength()"})
   void testGetContentLength() {
     // Arrange, Act and Assert
-    assertEquals(0L, new NettyCompositeByteArrayBody(new ArrayList<>()).getContentLength());
+    assertEquals(0L, (new NettyCompositeByteArrayBody(new ArrayList<>())).getContentLength());
   }
 
   /**
    * Test {@link NettyCompositeByteArrayBody#byteBuf()}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()} add {@code AXAXAXAX} Bytes is {@code UTF-8}.
-   *   <li>Then return {@link UnpooledHeapByteBuf}.
+   *   <li>Given {@link ArrayList#ArrayList()} add {@code AXAXAXAX} Bytes is {@code UTF-8}.</li>
+   *   <li>Then return {@link UnpooledHeapByteBuf}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#byteBuf()}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#byteBuf()}
    */
   @Test
-  @DisplayName(
-      "Test byteBuf(); given ArrayList() add 'AXAXAXAX' Bytes is 'UTF-8'; then return UnpooledHeapByteBuf")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test byteBuf(); given ArrayList() add 'AXAXAXAX' Bytes is 'UTF-8'; then return UnpooledHeapByteBuf")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ByteBuf NettyCompositeByteArrayBody.byteBuf()"})
   void testByteBuf_givenArrayListAddAxaxaxaxBytesIsUtf8_thenReturnUnpooledHeapByteBuf()
       throws UnsupportedEncodingException {
@@ -145,7 +128,7 @@ class NettyCompositeByteArrayBodyDiffblueTest {
     bytes.add("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    ByteBuf actualByteBufResult = new NettyCompositeByteArrayBody(bytes).byteBuf();
+    ByteBuf actualByteBufResult = (new NettyCompositeByteArrayBody(bytes)).byteBuf();
 
     // Assert
     ByteBufAllocator allocResult = actualByteBufResult.alloc();
@@ -163,29 +146,26 @@ class NettyCompositeByteArrayBodyDiffblueTest {
 
   /**
    * Test {@link NettyCompositeByteArrayBody#byteBuf()}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()} add empty array of {@code byte}.
-   *   <li>Then return maxNumComponents is two.
+   *   <li>Given {@link ArrayList#ArrayList()} add empty array of {@code byte}.</li>
+   *   <li>Then return maxNumComponents is two.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#byteBuf()}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#byteBuf()}
    */
   @Test
-  @DisplayName(
-      "Test byteBuf(); given ArrayList() add empty array of byte; then return maxNumComponents is two")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test byteBuf(); given ArrayList() add empty array of byte; then return maxNumComponents is two")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ByteBuf NettyCompositeByteArrayBody.byteBuf()"})
   void testByteBuf_givenArrayListAddEmptyArrayOfByte_thenReturnMaxNumComponentsIsTwo()
       throws UnsupportedEncodingException {
     // Arrange
     ArrayList<byte[]> bytes = new ArrayList<>();
-    bytes.add(new byte[] {});
+    bytes.add(new byte[]{});
     bytes.add("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    ByteBuf actualByteBufResult = new NettyCompositeByteArrayBody(bytes).byteBuf();
+    ByteBuf actualByteBufResult = (new NettyCompositeByteArrayBody(bytes)).byteBuf();
 
     // Assert
     assertTrue(actualByteBufResult instanceof CompositeByteBuf);
@@ -206,17 +186,15 @@ class NettyCompositeByteArrayBodyDiffblueTest {
 
   /**
    * Test {@link NettyCompositeByteArrayBody#byteBuf()}.
-   *
    * <ul>
-   *   <li>Then return readUnsignedInt is {@code 1096302936}.
+   *   <li>Then return readUnsignedInt is {@code 1096302936}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyCompositeByteArrayBody#byteBuf()}
+   * <p>
+   * Method under test: {@link NettyCompositeByteArrayBody#byteBuf()}
    */
   @Test
   @DisplayName("Test byteBuf(); then return readUnsignedInt is '1096302936'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ByteBuf NettyCompositeByteArrayBody.byteBuf()"})
   void testByteBuf_thenReturnReadUnsignedIntIs1096302936() throws UnsupportedEncodingException {
     // Arrange
@@ -225,7 +203,7 @@ class NettyCompositeByteArrayBodyDiffblueTest {
     bytes.add("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    ByteBuf actualByteBufResult = new NettyCompositeByteArrayBody(bytes).byteBuf();
+    ByteBuf actualByteBufResult = (new NettyCompositeByteArrayBody(bytes)).byteBuf();
 
     // Assert
     assertTrue(actualByteBufResult instanceof CompositeByteBuf);

@@ -2,7 +2,6 @@ package org.asynchttpclient.proxy;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -11,13 +10,12 @@ import org.junit.jupiter.api.Test;
 class ProxyTypeDiffblueTest {
   /**
    * Test {@link ProxyType#isHttp()}.
-   *
-   * <p>Method under test: {@link ProxyType#isHttp()}
+   * <p>
+   * Method under test: {@link ProxyType#isHttp()}
    */
   @Test
   @DisplayName("Test isHttp()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ProxyType.isHttp()"})
   void testIsHttp() {
     // Arrange, Act and Assert
@@ -26,18 +24,16 @@ class ProxyTypeDiffblueTest {
 
   /**
    * Test {@link ProxyType#isSocks()}.
-   *
    * <ul>
-   *   <li>Given {@code HTTP}.
-   *   <li>Then return {@code false}.
+   *   <li>Given {@code HTTP}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ProxyType#isSocks()}
+   * <p>
+   * Method under test: {@link ProxyType#isSocks()}
    */
   @Test
   @DisplayName("Test isSocks(); given 'HTTP'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ProxyType.isSocks()"})
   void testIsSocks_givenHttp_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -46,18 +42,16 @@ class ProxyTypeDiffblueTest {
 
   /**
    * Test {@link ProxyType#isSocks()}.
-   *
    * <ul>
-   *   <li>Given {@code SOCKS_V4}.
-   *   <li>Then return {@code true}.
+   *   <li>Given {@code SOCKS_V4}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ProxyType#isSocks()}
+   * <p>
+   * Method under test: {@link ProxyType#isSocks()}
    */
   @Test
   @DisplayName("Test isSocks(); given 'SOCKS_V4'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ProxyType.isSocks()"})
   void testIsSocks_givenSocksV4_thenReturnTrue() {
     // Arrange, Act and Assert

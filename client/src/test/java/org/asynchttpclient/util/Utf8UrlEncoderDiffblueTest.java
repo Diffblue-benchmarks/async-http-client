@@ -2,7 +2,6 @@ package org.asynchttpclient.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -11,43 +10,38 @@ import org.junit.jupiter.api.Test;
 class Utf8UrlEncoderDiffblueTest {
   /**
    * Test {@link Utf8UrlEncoder#encodePath(String)}.
-   *
    * <ul>
-   *   <li>When {@code https://example.org/example}.
-   *   <li>Then return {@code https://example.org/example}.
+   *   <li>When {@code https://example.org/example}.</li>
+   *   <li>Then return {@code https://example.org/example}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodePath(String)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodePath(String)}
    */
   @Test
-  @DisplayName(
-      "Test encodePath(String); when 'https://example.org/example'; then return 'https://example.org/example'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test encodePath(String); when 'https://example.org/example'; then return 'https://example.org/example'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String Utf8UrlEncoder.encodePath(String)"})
   void testEncodePath_whenHttpsExampleOrgExample_thenReturnHttpsExampleOrgExample() {
     // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example", Utf8UrlEncoder.encodePath("https://example.org/example"));
+    assertEquals("https://example.org/example", Utf8UrlEncoder.encodePath("https://example.org/example"));
   }
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendQuery(StringBuilder, String)}.
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendQuery(StringBuilder, String)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendQuery(StringBuilder, String)}
    */
   @Test
   @DisplayName("Test encodeAndAppendQuery(StringBuilder, String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendQuery(StringBuilder, String)"})
   void testEncodeAndAppendQuery() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendQueryResult =
-        Utf8UrlEncoder.encodeAndAppendQuery(sb, "https://example.org/example");
+    StringBuilder actualEncodeAndAppendQueryResult = Utf8UrlEncoder.encodeAndAppendQuery(sb,
+        "https://example.org/example");
 
     // Assert
     assertEquals("foohttps://example.org/example", sb.toString());
@@ -56,47 +50,38 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#encodeQueryElement(String)}.
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeQueryElement(String)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeQueryElement(String)}
    */
   @Test
   @DisplayName("Test encodeQueryElement(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String Utf8UrlEncoder.encodeQueryElement(String)"})
   void testEncodeQueryElement() {
     // Arrange, Act and Assert
-    assertEquals(
-        "https%3A%2F%2Fexample.org%2Fexample",
+    assertEquals("https%3A%2F%2Fexample.org%2Fexample",
         Utf8UrlEncoder.encodeQueryElement("https://example.org/example"));
   }
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendQueryElement(StringBuilder, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       foo*%2F*}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code foo*%2F*}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendQueryElement(StringBuilder,
-   * CharSequence)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendQueryElement(StringBuilder, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test encodeAndAppendQueryElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'foo*%2F*'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "StringBuilder Utf8UrlEncoder.encodeAndAppendQueryElement(StringBuilder, CharSequence)"
-  })
+  @DisplayName("Test encodeAndAppendQueryElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'foo*%2F*'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendQueryElement(StringBuilder, CharSequence)"})
   void testEncodeAndAppendQueryElement_thenStringBuilderWithFooToStringIsFoo2f() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendQueryElementResult =
-        Utf8UrlEncoder.encodeAndAppendQueryElement(sb, HttpUtils.ACCEPT_ALL_HEADER_VALUE);
+    StringBuilder actualEncodeAndAppendQueryElementResult = Utf8UrlEncoder.encodeAndAppendQueryElement(sb,
+        HttpUtils.ACCEPT_ALL_HEADER_VALUE);
 
     // Assert
     assertEquals("foo*%2F*", sb.toString());
@@ -105,30 +90,23 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendQueryElement(StringBuilder, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       fooNegotiate}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code fooNegotiate}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendQueryElement(StringBuilder,
-   * CharSequence)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendQueryElement(StringBuilder, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test encodeAndAppendQueryElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'fooNegotiate'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "StringBuilder Utf8UrlEncoder.encodeAndAppendQueryElement(StringBuilder, CharSequence)"
-  })
+  @DisplayName("Test encodeAndAppendQueryElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'fooNegotiate'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendQueryElement(StringBuilder, CharSequence)"})
   void testEncodeAndAppendQueryElement_thenStringBuilderWithFooToStringIsFooNegotiate() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendQueryElementResult =
-        Utf8UrlEncoder.encodeAndAppendQueryElement(sb, AuthenticatorUtils.NEGOTIATE);
+    StringBuilder actualEncodeAndAppendQueryElementResult = Utf8UrlEncoder.encodeAndAppendQueryElement(sb,
+        AuthenticatorUtils.NEGOTIATE);
 
     // Assert
     assertEquals("fooNegotiate", sb.toString());
@@ -137,30 +115,23 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendFormElement(StringBuilder, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       foo*%2F*}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code foo*%2F*}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendFormElement(StringBuilder,
-   * CharSequence)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendFormElement(StringBuilder, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test encodeAndAppendFormElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'foo*%2F*'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "StringBuilder Utf8UrlEncoder.encodeAndAppendFormElement(StringBuilder, CharSequence)"
-  })
+  @DisplayName("Test encodeAndAppendFormElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'foo*%2F*'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendFormElement(StringBuilder, CharSequence)"})
   void testEncodeAndAppendFormElement_thenStringBuilderWithFooToStringIsFoo2f() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendFormElementResult =
-        Utf8UrlEncoder.encodeAndAppendFormElement(sb, HttpUtils.ACCEPT_ALL_HEADER_VALUE);
+    StringBuilder actualEncodeAndAppendFormElementResult = Utf8UrlEncoder.encodeAndAppendFormElement(sb,
+        HttpUtils.ACCEPT_ALL_HEADER_VALUE);
 
     // Assert
     assertEquals("foo*%2F*", sb.toString());
@@ -169,30 +140,23 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendFormElement(StringBuilder, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       fooNegotiate}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code fooNegotiate}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendFormElement(StringBuilder,
-   * CharSequence)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendFormElement(StringBuilder, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test encodeAndAppendFormElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'fooNegotiate'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "StringBuilder Utf8UrlEncoder.encodeAndAppendFormElement(StringBuilder, CharSequence)"
-  })
+  @DisplayName("Test encodeAndAppendFormElement(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'fooNegotiate'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendFormElement(StringBuilder, CharSequence)"})
   void testEncodeAndAppendFormElement_thenStringBuilderWithFooToStringIsFooNegotiate() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendFormElementResult =
-        Utf8UrlEncoder.encodeAndAppendFormElement(sb, AuthenticatorUtils.NEGOTIATE);
+    StringBuilder actualEncodeAndAppendFormElementResult = Utf8UrlEncoder.encodeAndAppendFormElement(sb,
+        AuthenticatorUtils.NEGOTIATE);
 
     // Assert
     assertEquals("fooNegotiate", sb.toString());
@@ -201,40 +165,34 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#percentEncodeQueryElement(String)}.
-   *
    * <ul>
-   *   <li>Then return {@code https%3A%2F%2Fexample.org%2Fexample}.
+   *   <li>Then return {@code https%3A%2F%2Fexample.org%2Fexample}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#percentEncodeQueryElement(String)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#percentEncodeQueryElement(String)}
    */
   @Test
-  @DisplayName(
-      "Test percentEncodeQueryElement(String); then return 'https%3A%2F%2Fexample.org%2Fexample'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test percentEncodeQueryElement(String); then return 'https%3A%2F%2Fexample.org%2Fexample'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String Utf8UrlEncoder.percentEncodeQueryElement(String)"})
   void testPercentEncodeQueryElement_thenReturnHttps3a2f2FexampleOrg2Fexample() {
     // Arrange, Act and Assert
-    assertEquals(
-        "https%3A%2F%2Fexample.org%2Fexample",
+    assertEquals("https%3A%2F%2Fexample.org%2Fexample",
         Utf8UrlEncoder.percentEncodeQueryElement("https://example.org/example"));
   }
 
   /**
    * Test {@link Utf8UrlEncoder#percentEncodeQueryElement(String)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code null}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#percentEncodeQueryElement(String)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#percentEncodeQueryElement(String)}
    */
   @Test
   @DisplayName("Test percentEncodeQueryElement(String); when 'null'; then return 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String Utf8UrlEncoder.percentEncodeQueryElement(String)"})
   void testPercentEncodeQueryElement_whenNull_thenReturnNull() {
     // Arrange, Act and Assert
@@ -243,30 +201,23 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendPercentEncoded(StringBuilder, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       foo%2A%2F%2A}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code foo%2A%2F%2A}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendPercentEncoded(StringBuilder,
-   * CharSequence)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendPercentEncoded(StringBuilder, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test encodeAndAppendPercentEncoded(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'foo%2A%2F%2A'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "StringBuilder Utf8UrlEncoder.encodeAndAppendPercentEncoded(StringBuilder, CharSequence)"
-  })
+  @DisplayName("Test encodeAndAppendPercentEncoded(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'foo%2A%2F%2A'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendPercentEncoded(StringBuilder, CharSequence)"})
   void testEncodeAndAppendPercentEncoded_thenStringBuilderWithFooToStringIsFoo2a2f2a() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendPercentEncodedResult =
-        Utf8UrlEncoder.encodeAndAppendPercentEncoded(sb, HttpUtils.ACCEPT_ALL_HEADER_VALUE);
+    StringBuilder actualEncodeAndAppendPercentEncodedResult = Utf8UrlEncoder.encodeAndAppendPercentEncoded(sb,
+        HttpUtils.ACCEPT_ALL_HEADER_VALUE);
 
     // Assert
     assertEquals("foo%2A%2F%2A", sb.toString());
@@ -275,30 +226,23 @@ class Utf8UrlEncoderDiffblueTest {
 
   /**
    * Test {@link Utf8UrlEncoder#encodeAndAppendPercentEncoded(StringBuilder, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       fooNegotiate}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code fooNegotiate}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Utf8UrlEncoder#encodeAndAppendPercentEncoded(StringBuilder,
-   * CharSequence)}
+   * <p>
+   * Method under test: {@link Utf8UrlEncoder#encodeAndAppendPercentEncoded(StringBuilder, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test encodeAndAppendPercentEncoded(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'fooNegotiate'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "StringBuilder Utf8UrlEncoder.encodeAndAppendPercentEncoded(StringBuilder, CharSequence)"
-  })
+  @DisplayName("Test encodeAndAppendPercentEncoded(StringBuilder, CharSequence); then StringBuilder(String) with 'foo' toString is 'fooNegotiate'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"StringBuilder Utf8UrlEncoder.encodeAndAppendPercentEncoded(StringBuilder, CharSequence)"})
   void testEncodeAndAppendPercentEncoded_thenStringBuilderWithFooToStringIsFooNegotiate() {
     // Arrange
     StringBuilder sb = new StringBuilder("foo");
 
     // Act
-    StringBuilder actualEncodeAndAppendPercentEncodedResult =
-        Utf8UrlEncoder.encodeAndAppendPercentEncoded(sb, AuthenticatorUtils.NEGOTIATE);
+    StringBuilder actualEncodeAndAppendPercentEncodedResult = Utf8UrlEncoder.encodeAndAppendPercentEncoded(sb,
+        AuthenticatorUtils.NEGOTIATE);
 
     // Assert
     assertEquals("fooNegotiate", sb.toString());

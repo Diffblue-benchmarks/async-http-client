@@ -3,7 +3,6 @@ package org.asynchttpclient.netty.request.body;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
@@ -17,26 +16,21 @@ import org.junit.jupiter.api.Test;
 class NettyByteBufBodyDiffblueTest {
   /**
    * Test {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}.
-   *
    * <ul>
-   *   <li>Then return ContentTypeOverride is {@code acquireFreeChannelTimeout}.
+   *   <li>Then return ContentTypeOverride is {@code acquireFreeChannelTimeout}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}
+   * <p>
+   * Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}
    */
   @Test
-  @DisplayName(
-      "Test new NettyByteBufBody(ByteBuf, CharSequence); then return ContentTypeOverride is 'acquireFreeChannelTimeout'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new NettyByteBufBody(ByteBuf, CharSequence); then return ContentTypeOverride is 'acquireFreeChannelTimeout'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyByteBufBody.<init>(ByteBuf, CharSequence)"})
   void testNewNettyByteBufBody_thenReturnContentTypeOverrideIsAcquireFreeChannelTimeout() {
-    // Arrange
-    DuplicatedByteBuf bb = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-
-    // Act
-    NettyByteBufBody actualNettyByteBufBody =
-        new NettyByteBufBody(bb, AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT);
+    // Arrange and Act
+    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())),
+        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT);
 
     // Assert
     assertEquals("acquireFreeChannelTimeout", actualNettyByteBufBody.getContentTypeOverride());
@@ -45,24 +39,20 @@ class NettyByteBufBodyDiffblueTest {
 
   /**
    * Test {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}.
-   *
    * <ul>
-   *   <li>Then return ContentTypeOverride is {@code null}.
+   *   <li>Then return ContentTypeOverride is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}
+   * <p>
+   * Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}
    */
   @Test
   @DisplayName("Test new NettyByteBufBody(ByteBuf); then return ContentTypeOverride is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyByteBufBody.<init>(ByteBuf)"})
   void testNewNettyByteBufBody_thenReturnContentTypeOverrideIsNull() {
-    // Arrange
-    DuplicatedByteBuf bb = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-
-    // Act
-    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(bb);
+    // Arrange and Act
+    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
 
     // Assert
     assertNull(actualNettyByteBufBody.getContentTypeOverride());
@@ -71,9 +61,8 @@ class NettyByteBufBodyDiffblueTest {
 
   /**
    * Test getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link NettyByteBufBody#getContentLength()}
    *   <li>{@link NettyByteBufBody#getContentTypeOverride()}
@@ -81,16 +70,13 @@ class NettyByteBufBodyDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "long NettyByteBufBody.getContentLength()",
-    "CharSequence NettyByteBufBody.getContentTypeOverride()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"long NettyByteBufBody.getContentLength()",
+      "CharSequence NettyByteBufBody.getContentTypeOverride()"})
   void testGettersAndSetters() {
     // Arrange
-    DuplicatedByteBuf bb = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    NettyByteBufBody nettyByteBufBody = new NettyByteBufBody(bb);
+    NettyByteBufBody nettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
 
     // Act
     long actualContentLength = nettyByteBufBody.getContentLength();
@@ -102,19 +88,18 @@ class NettyByteBufBodyDiffblueTest {
 
   /**
    * Test {@link NettyByteBufBody#byteBuf()}.
-   *
-   * <p>Method under test: {@link NettyByteBufBody#byteBuf()}
+   * <p>
+   * Method under test: {@link NettyByteBufBody#byteBuf()}
    */
   @Test
   @DisplayName("Test byteBuf()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ByteBuf NettyByteBufBody.byteBuf()"})
   void testByteBuf() {
     // Arrange
     DuplicatedByteBuf bb = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
 
     // Act and Assert
-    assertSame(bb, new NettyByteBufBody(bb).byteBuf());
+    assertSame(bb, (new NettyByteBufBody(bb)).byteBuf());
   }
 }

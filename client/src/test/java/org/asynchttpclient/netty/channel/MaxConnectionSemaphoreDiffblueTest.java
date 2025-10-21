@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.IOException;
 import java.util.Collection;
@@ -18,13 +17,12 @@ import org.junit.jupiter.api.Test;
 class MaxConnectionSemaphoreDiffblueTest {
   /**
    * Test {@link MaxConnectionSemaphore#MaxConnectionSemaphore(int, int)}.
-   *
-   * <p>Method under test: {@link MaxConnectionSemaphore#MaxConnectionSemaphore(int, int)}
+   * <p>
+   * Method under test: {@link MaxConnectionSemaphore#MaxConnectionSemaphore(int, int)}
    */
   @Test
   @DisplayName("Test new MaxConnectionSemaphore(int, int)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void MaxConnectionSemaphore.<init>(int, int)"})
   void testNewMaxConnectionSemaphore() {
     // Arrange and Act
@@ -46,19 +44,16 @@ class MaxConnectionSemaphoreDiffblueTest {
 
   /**
    * Test {@link MaxConnectionSemaphore#MaxConnectionSemaphore(int, int)}.
-   *
    * <ul>
-   *   <li>When zero.
-   *   <li>Then {@link MaxConnectionSemaphore#freeChannels} QueuedThreads return {@link List}.
+   *   <li>When zero.</li>
+   *   <li>Then {@link MaxConnectionSemaphore#freeChannels} QueuedThreads return {@link List}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MaxConnectionSemaphore#MaxConnectionSemaphore(int, int)}
+   * <p>
+   * Method under test: {@link MaxConnectionSemaphore#MaxConnectionSemaphore(int, int)}
    */
   @Test
-  @DisplayName(
-      "Test new MaxConnectionSemaphore(int, int); when zero; then freeChannels QueuedThreads return List")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new MaxConnectionSemaphore(int, int); when zero; then freeChannels QueuedThreads return List")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void MaxConnectionSemaphore.<init>(int, int)"})
   void testNewMaxConnectionSemaphore_whenZero_thenFreeChannelsQueuedThreadsReturnList() {
     // Arrange and Act

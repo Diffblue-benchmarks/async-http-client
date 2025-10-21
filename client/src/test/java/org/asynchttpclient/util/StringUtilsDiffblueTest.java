@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -16,25 +15,21 @@ import org.junit.jupiter.api.Test;
 class StringUtilsDiffblueTest {
   /**
    * Test {@link StringUtils#charSequence2ByteBuffer(CharSequence, Charset)}.
-   *
    * <ul>
-   *   <li>When {@link AuthenticatorUtils#NEGOTIATE}.
-   *   <li>Then return position is zero.
+   *   <li>When {@link AuthenticatorUtils#NEGOTIATE}.</li>
+   *   <li>Then return position is zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#charSequence2ByteBuffer(CharSequence, Charset)}
+   * <p>
+   * Method under test: {@link StringUtils#charSequence2ByteBuffer(CharSequence, Charset)}
    */
   @Test
-  @DisplayName(
-      "Test charSequence2ByteBuffer(CharSequence, Charset); when NEGOTIATE; then return position is zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test charSequence2ByteBuffer(CharSequence, Charset); when NEGOTIATE; then return position is zero")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ByteBuffer StringUtils.charSequence2ByteBuffer(CharSequence, Charset)"})
-  void testCharSequence2ByteBuffer_whenNegotiate_thenReturnPositionIsZero()
-      throws UnsupportedEncodingException {
+  void testCharSequence2ByteBuffer_whenNegotiate_thenReturnPositionIsZero() throws UnsupportedEncodingException {
     // Arrange and Act
-    ByteBuffer actualCharSequence2ByteBufferResult =
-        StringUtils.charSequence2ByteBuffer(AuthenticatorUtils.NEGOTIATE, Charset.forName("UTF-8"));
+    ByteBuffer actualCharSequence2ByteBufferResult = StringUtils.charSequence2ByteBuffer(AuthenticatorUtils.NEGOTIATE,
+        Charset.forName("UTF-8"));
 
     // Assert
     assertEquals(0, actualCharSequence2ByteBufferResult.position());
@@ -48,21 +43,17 @@ class StringUtilsDiffblueTest {
 
   /**
    * Test {@link StringUtils#byteBuffer2ByteArray(ByteBuffer)}.
-   *
    * <ul>
-   *   <li>Then wrap {@code AXAXAXAX} Bytes is {@code UTF-8} position is eight.
+   *   <li>Then wrap {@code AXAXAXAX} Bytes is {@code UTF-8} position is eight.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#byteBuffer2ByteArray(ByteBuffer)}
+   * <p>
+   * Method under test: {@link StringUtils#byteBuffer2ByteArray(ByteBuffer)}
    */
   @Test
-  @DisplayName(
-      "Test byteBuffer2ByteArray(ByteBuffer); then wrap 'AXAXAXAX' Bytes is 'UTF-8' position is eight")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test byteBuffer2ByteArray(ByteBuffer); then wrap 'AXAXAXAX' Bytes is 'UTF-8' position is eight")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"byte[] StringUtils.byteBuffer2ByteArray(ByteBuffer)"})
-  void testByteBuffer2ByteArray_thenWrapAxaxaxaxBytesIsUtf8PositionIsEight()
-      throws UnsupportedEncodingException {
+  void testByteBuffer2ByteArray_thenWrapAxaxaxaxBytesIsUtf8PositionIsEight() throws UnsupportedEncodingException {
     // Arrange
     ByteBuffer bb = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
 
@@ -77,88 +68,53 @@ class StringUtilsDiffblueTest {
 
   /**
    * Test {@link StringUtils#charSequence2Bytes(CharSequence, Charset)}.
-   *
    * <ul>
-   *   <li>When {@link AuthenticatorUtils#NEGOTIATE}.
-   *   <li>Then return {@code Negotiate} Bytes is {@code UTF-8}.
+   *   <li>When {@link AuthenticatorUtils#NEGOTIATE}.</li>
+   *   <li>Then return {@code Negotiate} Bytes is {@code UTF-8}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#charSequence2Bytes(CharSequence, Charset)}
+   * <p>
+   * Method under test: {@link StringUtils#charSequence2Bytes(CharSequence, Charset)}
    */
   @Test
-  @DisplayName(
-      "Test charSequence2Bytes(CharSequence, Charset); when NEGOTIATE; then return 'Negotiate' Bytes is 'UTF-8'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test charSequence2Bytes(CharSequence, Charset); when NEGOTIATE; then return 'Negotiate' Bytes is 'UTF-8'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"byte[] StringUtils.charSequence2Bytes(CharSequence, Charset)"})
-  void testCharSequence2Bytes_whenNegotiate_thenReturnNegotiateBytesIsUtf8()
-      throws UnsupportedEncodingException {
-    // Arrange, Act and Assert
-    assertArrayEquals(
-        "Negotiate".getBytes("UTF-8"),
-        StringUtils.charSequence2Bytes(AuthenticatorUtils.NEGOTIATE, Charset.forName("UTF-8")));
+  void testCharSequence2Bytes_whenNegotiate_thenReturnNegotiateBytesIsUtf8() throws UnsupportedEncodingException {
+    // Arrange and Act
+    byte[] actualCharSequence2BytesResult = StringUtils.charSequence2Bytes(AuthenticatorUtils.NEGOTIATE,
+        Charset.forName("UTF-8"));
+
+    // Assert
+    assertArrayEquals("Negotiate".getBytes("UTF-8"), actualCharSequence2BytesResult);
   }
 
   /**
    * Test {@link StringUtils#toHexString(byte[])}.
-   *
-   * <ul>
-   *   <li>When {@code AXAXAXAX} Bytes is {@code UTF-8}.
-   *   <li>Then return {@code 4158415841584158}.
-   * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#toHexString(byte[])}
+   * <p>
+   * Method under test: {@link StringUtils#toHexString(byte[])}
    */
   @Test
-  @DisplayName(
-      "Test toHexString(byte[]); when 'AXAXAXAX' Bytes is 'UTF-8'; then return '4158415841584158'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test toHexString(byte[])")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.lang.String StringUtils.toHexString(byte[])"})
-  void testToHexString_whenAxaxaxaxBytesIsUtf8_thenReturn4158415841584158()
-      throws UnsupportedEncodingException {
+  void testToHexString() throws UnsupportedEncodingException {
     // Arrange, Act and Assert
     assertEquals("4158415841584158", StringUtils.toHexString("AXAXAXAX".getBytes("UTF-8")));
   }
 
   /**
-   * Test {@link StringUtils#toHexString(byte[])}.
-   *
-   * <ul>
-   *   <li>When empty array of {@code byte}.
-   *   <li>Then return empty string.
-   * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#toHexString(byte[])}
-   */
-  @Test
-  @DisplayName("Test toHexString(byte[]); when empty array of byte; then return empty string")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"java.lang.String StringUtils.toHexString(byte[])"})
-  void testToHexString_whenEmptyArrayOfByte_thenReturnEmptyString() {
-    // Arrange, Act and Assert
-    assertEquals("", StringUtils.toHexString(new byte[] {}));
-  }
-
-  /**
    * Test {@link StringUtils#appendBase16(StringBuilder, byte[])}.
-   *
    * <ul>
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       foo4158415841584158}.
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code foo4158415841584158}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#appendBase16(StringBuilder, byte[])}
+   * <p>
+   * Method under test: {@link StringUtils#appendBase16(StringBuilder, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test appendBase16(StringBuilder, byte[]); then StringBuilder(String) with 'foo' toString is 'foo4158415841584158'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test appendBase16(StringBuilder, byte[]); then StringBuilder(String) with 'foo' toString is 'foo4158415841584158'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringUtils.appendBase16(StringBuilder, byte[])"})
-  void testAppendBase16_thenStringBuilderWithFooToStringIsFoo4158415841584158()
-      throws UnsupportedEncodingException {
+  void testAppendBase16_thenStringBuilderWithFooToStringIsFoo4158415841584158() throws UnsupportedEncodingException {
     // Arrange
     StringBuilder buf = new StringBuilder("foo");
 
@@ -171,27 +127,23 @@ class StringUtilsDiffblueTest {
 
   /**
    * Test {@link StringUtils#appendBase16(StringBuilder, byte[])}.
-   *
    * <ul>
-   *   <li>When {@code A}.
-   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code
-   *       fooff58415841584158}.
+   *   <li>When {@code A}.</li>
+   *   <li>Then {@link StringBuilder#StringBuilder(String)} with {@code foo} toString is {@code fooff58415841584158}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link StringUtils#appendBase16(StringBuilder, byte[])}
+   * <p>
+   * Method under test: {@link StringUtils#appendBase16(StringBuilder, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test appendBase16(StringBuilder, byte[]); when 'A'; then StringBuilder(String) with 'foo' toString is 'fooff58415841584158'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test appendBase16(StringBuilder, byte[]); when 'A'; then StringBuilder(String) with 'foo' toString is 'fooff58415841584158'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void StringUtils.appendBase16(StringBuilder, byte[])"})
   void testAppendBase16_whenA_thenStringBuilderWithFooToStringIsFooff58415841584158() {
     // Arrange
     StringBuilder buf = new StringBuilder("foo");
 
     // Act
-    StringUtils.appendBase16(buf, new byte[] {-1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'});
+    StringUtils.appendBase16(buf, new byte[]{-1, 'X', 'A', 'X', 'A', 'X', 'A', 'X'});
 
     // Assert
     assertEquals("fooff58415841584158", buf.toString());

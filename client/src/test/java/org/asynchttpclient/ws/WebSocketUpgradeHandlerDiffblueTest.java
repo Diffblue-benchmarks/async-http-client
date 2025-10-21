@@ -8,12 +8,10 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
-import io.netty.buffer.ReadOnlyByteBuf;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
@@ -44,212 +42,183 @@ import org.mockito.Mockito;
 class WebSocketUpgradeHandlerDiffblueTest {
   /**
    * Test Builder {@link Builder#addWebSocketListener(WebSocketListener)}.
-   *
-   * <p>Method under test: {@link Builder#addWebSocketListener(WebSocketListener)}
+   * <p>
+   * Method under test: {@link Builder#addWebSocketListener(WebSocketListener)}
    */
   @Test
   @DisplayName("Test Builder addWebSocketListener(WebSocketListener)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.addWebSocketListener(WebSocketListener)"})
   void testBuilderAddWebSocketListener() {
     // Arrange
     Builder builder = new Builder();
 
-    // Act
-    Builder actualAddWebSocketListenerResult = builder.addWebSocketListener(null);
-
-    // Assert
-    assertSame(builder, actualAddWebSocketListenerResult);
+    // Act and Assert
+    assertSame(builder, builder.addWebSocketListener(null));
   }
 
   /**
    * Test Builder {@link Builder#removeWebSocketListener(WebSocketListener)}.
-   *
-   * <p>Method under test: {@link Builder#removeWebSocketListener(WebSocketListener)}
+   * <p>
+   * Method under test: {@link Builder#removeWebSocketListener(WebSocketListener)}
    */
   @Test
   @DisplayName("Test Builder removeWebSocketListener(WebSocketListener)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.removeWebSocketListener(WebSocketListener)"})
   void testBuilderRemoveWebSocketListener() {
     // Arrange
     Builder builder = new Builder();
 
-    // Act
-    Builder actualRemoveWebSocketListenerResult = builder.removeWebSocketListener(null);
-
-    // Assert
-    assertSame(builder, actualRemoveWebSocketListenerResult);
+    // Act and Assert
+    assertSame(builder, builder.removeWebSocketListener(null));
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onStatusReceived(HttpResponseStatus)}.
-   *
    * <ul>
-   *   <li>Then return {@code ABORT}.
+   *   <li>Then return {@code ABORT}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link
-   * WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
    */
   @Test
   @DisplayName("Test onStatusReceived(HttpResponseStatus); then return 'ABORT'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({
-    "AsyncHandler.State WebSocketUpgradeHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"
-  })
+      "AsyncHandler.State WebSocketUpgradeHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
   void testOnStatusReceived_thenReturnAbort() throws Exception {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
-    NettyResponseStatus responseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
-    // Act
-    State actualOnStatusReceivedResult = webSocketUpgradeHandler.onStatusReceived(responseStatus);
-
-    // Assert
-    assertEquals(State.ABORT, actualOnStatusReceivedResult);
+    // Act and Assert
+    assertEquals(State.ABORT,
+        webSocketUpgradeHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel())));
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onStatusReceived(HttpResponseStatus)}.
-   *
    * <ul>
-   *   <li>Then return {@code CONTINUE}.
+   *   <li>Then return {@code CONTINUE}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link
-   * WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
    */
   @Test
   @DisplayName("Test onStatusReceived(HttpResponseStatus); then return 'CONTINUE'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({
-    "AsyncHandler.State WebSocketUpgradeHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"
-  })
+      "AsyncHandler.State WebSocketUpgradeHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
   void testOnStatusReceived_thenReturnContinue() throws Exception {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(
-            version, HttpResponseStatus.valueOf(101, "https://example.org/example"));
 
-    NettyResponseStatus responseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(101));
 
-    // Act
-    State actualOnStatusReceivedResult = webSocketUpgradeHandler.onStatusReceived(responseStatus);
-
-    // Assert
-    assertEquals(State.CONTINUE, actualOnStatusReceivedResult);
+    // Act and Assert
+    assertEquals(State.CONTINUE,
+        webSocketUpgradeHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel())));
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}.
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}
    */
   @Test
   @DisplayName("Test onHeadersReceived(HttpHeaders)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"AsyncHandler.State WebSocketUpgradeHandler.onHeadersReceived(HttpHeaders)"})
   void testOnHeadersReceived() throws Exception {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
 
     // Act and Assert
-    assertEquals(
-        State.CONTINUE, webSocketUpgradeHandler.onHeadersReceived(new DefaultHttpHeaders()));
+    assertEquals(State.CONTINUE, webSocketUpgradeHandler.onHeadersReceived(new DefaultHttpHeaders()));
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}
    */
   @Test
   @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "AsyncHandler.State WebSocketUpgradeHandler.onBodyPartReceived(HttpResponseBodyPart)"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"AsyncHandler.State WebSocketUpgradeHandler.onBodyPartReceived(HttpResponseBodyPart)"})
   void testOnBodyPartReceived() throws Exception {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
-    DuplicatedByteBuf buf = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
 
-    // Act
-    State actualOnBodyPartReceivedResult =
-        webSocketUpgradeHandler.onBodyPartReceived(new EagerResponseBodyPart(buf, true));
-
-    // Assert
-    assertEquals(State.CONTINUE, actualOnBodyPartReceivedResult);
+    // Act and Assert
+    assertEquals(State.CONTINUE, webSocketUpgradeHandler.onBodyPartReceived(
+        new EagerResponseBodyPart(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true)));
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onCompleted()}.
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onCompleted()}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onCompleted()}
    */
   @Test
   @DisplayName("Test onCompleted()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"NettyWebSocket WebSocketUpgradeHandler.onCompleted()"})
   void testOnCompleted() throws Exception {
     // Arrange, Act and Assert
-    assertNull(new WebSocketUpgradeHandler(new ArrayList<>()).onCompleted());
+    assertNull((new WebSocketUpgradeHandler(new ArrayList<>())).onCompleted());
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onThrowable(Throwable)}.
-   *
-   * <ul>
-   *   <li>Given {@link WebSocketListener} {@link WebSocketListener#onError(Throwable)} does
-   *       nothing.
-   *   <li>Then calls {@link WebSocketListener#onError(Throwable)}.
-   * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
    */
   @Test
-  @DisplayName(
-      "Test onThrowable(Throwable); given WebSocketListener onError(Throwable) does nothing; then calls onError(Throwable)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test onThrowable(Throwable)")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void WebSocketUpgradeHandler.onThrowable(Throwable)"})
+  void testOnThrowable() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onError(Mockito.<Throwable>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    EmbeddedChannel channel = new EmbeddedChannel();
+    webSocketUpgradeHandler.setWebSocket(new NettyWebSocket(channel, new DefaultHttpHeaders()));
+
+    // Act
+    webSocketUpgradeHandler.onThrowable(ChannelClosedException.INSTANCE);
+
+    // Assert
+    verify(webSocketListener).onError(isA(Throwable.class));
+  }
+
+  /**
+   * Test {@link WebSocketUpgradeHandler#onThrowable(Throwable)}.
+   * <ul>
+   *   <li>Given {@link WebSocketListener} {@link WebSocketListener#onError(Throwable)} does nothing.</li>
+   *   <li>Then calls {@link WebSocketListener#onError(Throwable)}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
+   */
+  @Test
+  @DisplayName("Test onThrowable(Throwable); given WebSocketListener onError(Throwable) does nothing; then calls onError(Throwable)")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onThrowable(Throwable)"})
   void testOnThrowable_givenWebSocketListenerOnErrorDoesNothing_thenCallsOnError() {
     // Arrange
@@ -260,63 +229,46 @@ class WebSocketUpgradeHandlerDiffblueTest {
     listeners.add(webSocketListener);
 
     // Act
-    new WebSocketUpgradeHandler(listeners).onThrowable(ChannelClosedException.INSTANCE);
+    (new WebSocketUpgradeHandler(listeners)).onThrowable(ChannelClosedException.INSTANCE);
 
     // Assert
     verify(webSocketListener).onError(isA(Throwable.class));
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onThrowable(Throwable)}.
-   *
-   * <ul>
-   *   <li>Given {@link WebSocketListener} {@link WebSocketListener#onError(Throwable)} does
-   *       nothing.
-   *   <li>Then calls {@link WebSocketListener#onError(Throwable)}.
-   * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
+   * Test {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}.
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}
    */
   @Test
-  @DisplayName(
-      "Test onThrowable(Throwable); given WebSocketListener onError(Throwable) does nothing; then calls onError(Throwable)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onThrowable(Throwable)"})
-  void testOnThrowable_givenWebSocketListenerOnErrorDoesNothing_thenCallsOnError2() {
+  @DisplayName("Test setWebSocket(NettyWebSocket)")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void WebSocketUpgradeHandler.setWebSocket(NettyWebSocket)"})
+  void testSetWebSocket() throws Exception {
     // Arrange
-    WebSocketListener webSocketListener = mock(WebSocketListener.class);
-    doNothing().when(webSocketListener).onError(Mockito.<Throwable>any());
-
-    ArrayList<WebSocketListener> listeners = new ArrayList<>();
-    listeners.add(webSocketListener);
-
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocketUpgradeHandler.setWebSocket(webSocket);
 
     // Act
-    webSocketUpgradeHandler.onThrowable(ChannelClosedException.INSTANCE);
+    webSocketUpgradeHandler.setWebSocket(webSocket);
 
     // Assert
-    verify(webSocketListener).onError(isA(Throwable.class));
+    assertSame(webSocket, webSocketUpgradeHandler.onCompleted());
   }
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
 
@@ -329,22 +281,19 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link BinaryWebSocketFrame#BinaryWebSocketFrame()}.
+   *   <li>Given {@link BinaryWebSocketFrame#BinaryWebSocketFrame()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket); given BinaryWebSocketFrame()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenBinaryWebSocketFrame() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -359,88 +308,19 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link BinaryWebSocketFrame#BinaryWebSocketFrame(ByteBuf)} with binaryData is
-   *       {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)}.
+   *   <li>Given {@link CloseWebSocketFrame#CloseWebSocketFrame()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
-   */
-  @Test
-  @DisplayName(
-      "Test onOpen(NettyWebSocket); given BinaryWebSocketFrame(ByteBuf) with binaryData is DuplicatedByteBuf(ByteBuf)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenBinaryWebSocketFrameWithBinaryDataIsDuplicatedByteBuf() {
-    // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
-    EmbeddedChannel channel = new EmbeddedChannel();
-
-    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    DuplicatedByteBuf binaryData =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    webSocket.bufferFrame(new BinaryWebSocketFrame(binaryData));
-
-    // Act
-    webSocketUpgradeHandler.onOpen(webSocket);
-
-    // Assert
-    assertTrue(webSocket.isReady());
-  }
-
-  /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
-   * <ul>
-   *   <li>Given {@link Builder} (default constructor) build.
-   * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
-   */
-  @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given Builder (default constructor) build")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenBuilderBuild() {
-    // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new Builder().build();
-    EmbeddedChannel channel = new EmbeddedChannel();
-
-    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    DuplicatedByteBuf buffer =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    ReadOnlyByteBuf binaryData = new ReadOnlyByteBuf(buffer);
-    webSocket.bufferFrame(new PongWebSocketFrame(true, 1, binaryData));
-
-    // Act
-    webSocketUpgradeHandler.onOpen(webSocket);
-
-    // Assert
-    assertTrue(webSocket.isReady());
-  }
-
-  /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
-   * <ul>
-   *   <li>Given {@link CloseWebSocketFrame#CloseWebSocketFrame()}.
-   * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket); given CloseWebSocketFrame()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenCloseWebSocketFrame() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -455,24 +335,19 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link CloseWebSocketFrame#CloseWebSocketFrame(boolean, int)} with finalFragment is
-   *       {@code true} and rsv is one.
+   *   <li>Given {@link CloseWebSocketFrame#CloseWebSocketFrame(boolean, int)} with finalFragment is {@code true} and rsv is one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName(
-      "Test onOpen(NettyWebSocket); given CloseWebSocketFrame(boolean, int) with finalFragment is 'true' and rsv is one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test onOpen(NettyWebSocket); given CloseWebSocketFrame(boolean, int) with finalFragment is 'true' and rsv is one")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenCloseWebSocketFrameWithFinalFragmentIsTrueAndRsvIsOne() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -487,22 +362,19 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link ContinuationWebSocketFrame#ContinuationWebSocketFrame()}.
+   *   <li>Given {@link ContinuationWebSocketFrame#ContinuationWebSocketFrame()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket); given ContinuationWebSocketFrame()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenContinuationWebSocketFrame() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -517,22 +389,47 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link PingWebSocketFrame#PingWebSocketFrame()}.
+   *   <li>Given {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)} with buffer is {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  @DisplayName("Test onOpen(NettyWebSocket); given DuplicatedByteBuf(ByteBuf) with buffer is EmptyByteBuf(ByteBufAllocator)")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
+  void testOnOpen_givenDuplicatedByteBufWithBufferIsEmptyByteBuf() {
+    // Arrange
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    EmbeddedChannel channel = new EmbeddedChannel();
+
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+    webSocket
+        .bufferFrame(new BinaryWebSocketFrame(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
+   * <ul>
+   *   <li>Given {@link PingWebSocketFrame#PingWebSocketFrame()}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket); given PingWebSocketFrame()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenPingWebSocketFrame() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -547,22 +444,19 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link PongWebSocketFrame#PongWebSocketFrame()}.
+   *   <li>Given {@link PongWebSocketFrame#PongWebSocketFrame()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket); given PongWebSocketFrame()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenPongWebSocketFrame() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -577,22 +471,19 @@ class WebSocketUpgradeHandlerDiffblueTest {
 
   /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   *
    * <ul>
-   *   <li>Given {@link TextWebSocketFrame#TextWebSocketFrame()}.
+   *   <li>Given {@link TextWebSocketFrame#TextWebSocketFrame()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
   @DisplayName("Test onOpen(NettyWebSocket); given TextWebSocketFrame()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen_givenTextWebSocketFrame() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());

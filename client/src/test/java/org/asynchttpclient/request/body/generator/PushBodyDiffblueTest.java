@@ -1,15 +1,16 @@
 package org.asynchttpclient.request.body.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
-import io.netty.buffer.UnpooledDirectByteBuf;
+import io.netty.buffer.ReadOnlyByteBuf;
 import java.util.LinkedList;
 import java.util.Queue;
 import org.asynchttpclient.request.body.Body;
@@ -21,200 +22,124 @@ import org.junit.jupiter.api.Test;
 class PushBodyDiffblueTest {
   /**
    * Test {@link PushBody#PushBody(Queue)}.
-   *
    * <ul>
-   *   <li>Given {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)} with alloc is {@link
-   *       AdaptiveByteBufAllocator#AdaptiveByteBufAllocator()}.
+   *   <li>Given {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)} with alloc is {@link AdaptiveByteBufAllocator#AdaptiveByteBufAllocator()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link PushBody#PushBody(Queue)}
+   * <p>
+   * Method under test: {@link PushBody#PushBody(Queue)}
    */
   @Test
-  @DisplayName(
-      "Test new PushBody(Queue); given EmptyByteBuf(ByteBufAllocator) with alloc is AdaptiveByteBufAllocator()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new PushBody(Queue); given EmptyByteBuf(ByteBufAllocator) with alloc is AdaptiveByteBufAllocator()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PushBody.<init>(Queue)"})
   void testNewPushBody_givenEmptyByteBufWithAllocIsAdaptiveByteBufAllocator() {
     // Arrange
     LinkedList<BodyChunk> queue = new LinkedList<>();
-    DuplicatedByteBuf buffer =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    queue.add(new BodyChunk(buffer, true));
+    queue.add(new BodyChunk(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true));
 
     // Act and Assert
-    assertEquals(-1L, new PushBody(queue).getContentLength());
+    assertEquals(-1L, (new PushBody(queue)).getContentLength());
   }
 
   /**
    * Test {@link PushBody#PushBody(Queue)}.
-   *
    * <ul>
-   *   <li>Given {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)} with alloc is {@link
-   *       AdaptiveByteBufAllocator#AdaptiveByteBufAllocator()}.
+   *   <li>Given {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)} with alloc is {@link AdaptiveByteBufAllocator#AdaptiveByteBufAllocator()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link PushBody#PushBody(Queue)}
+   * <p>
+   * Method under test: {@link PushBody#PushBody(Queue)}
    */
   @Test
-  @DisplayName(
-      "Test new PushBody(Queue); given EmptyByteBuf(ByteBufAllocator) with alloc is AdaptiveByteBufAllocator()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new PushBody(Queue); given EmptyByteBuf(ByteBufAllocator) with alloc is AdaptiveByteBufAllocator()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PushBody.<init>(Queue)"})
   void testNewPushBody_givenEmptyByteBufWithAllocIsAdaptiveByteBufAllocator2() {
     // Arrange
     LinkedList<BodyChunk> queue = new LinkedList<>();
-    DuplicatedByteBuf buffer =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    queue.add(new BodyChunk(buffer, true));
-    DuplicatedByteBuf buffer2 =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    queue.add(new BodyChunk(buffer2, true));
+    queue.add(new BodyChunk(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true));
+    queue.add(new BodyChunk(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true));
 
     // Act and Assert
-    assertEquals(-1L, new PushBody(queue).getContentLength());
+    assertEquals(-1L, (new PushBody(queue)).getContentLength());
   }
 
   /**
    * Test {@link PushBody#PushBody(Queue)}.
-   *
    * <ul>
-   *   <li>When {@link LinkedList#LinkedList()}.
+   *   <li>When {@link LinkedList#LinkedList()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link PushBody#PushBody(Queue)}
+   * <p>
+   * Method under test: {@link PushBody#PushBody(Queue)}
    */
   @Test
   @DisplayName("Test new PushBody(Queue); when LinkedList()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PushBody.<init>(Queue)"})
   void testNewPushBody_whenLinkedList() {
     // Arrange, Act and Assert
-    assertEquals(-1L, new PushBody(new LinkedList<>()).getContentLength());
+    assertEquals(-1L, (new PushBody(new LinkedList<>())).getContentLength());
   }
 
   /**
    * Test {@link PushBody#transferTo(ByteBuf)}.
-   *
-   * <p>Method under test: {@link PushBody#transferTo(ByteBuf)}
-   */
-  @Test
-  @DisplayName("Test transferTo(ByteBuf)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BodyState PushBody.transferTo(ByteBuf)"})
-  void testTransferTo() {
-    // Arrange
-    PushBody pushBody = new PushBody(new LinkedList<>());
-    UnpooledDirectByteBuf target = new UnpooledDirectByteBuf(new AdaptiveByteBufAllocator(), 1, 3);
-
-    // Act
-    BodyState actualTransferToResult = pushBody.transferTo(target);
-
-    // Assert
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
-    assertEquals(BodyState.SUSPEND, actualTransferToResult);
-    assertTrue(target.isWritable());
-  }
-
-  /**
-   * Test {@link PushBody#transferTo(ByteBuf)}.
-   *
-   * <p>Method under test: {@link PushBody#transferTo(ByteBuf)}
-   */
-  @Test
-  @DisplayName("Test transferTo(ByteBuf)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BodyState PushBody.transferTo(ByteBuf)"})
-  void testTransferTo2() {
-    // Arrange
-    LinkedList<BodyChunk> queue = new LinkedList<>();
-    DuplicatedByteBuf buffer =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    queue.add(new BodyChunk(buffer, true));
-    PushBody pushBody = new PushBody(queue);
-    UnpooledDirectByteBuf target = new UnpooledDirectByteBuf(new AdaptiveByteBufAllocator(), 1, 3);
-
-    // Act
-    BodyState actualTransferToResult = pushBody.transferTo(target);
-
-    // Assert
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
-    assertEquals(BodyState.CONTINUE, actualTransferToResult);
-    assertTrue(target.isWritable());
-  }
-
-  /**
-   * Test {@link PushBody#transferTo(ByteBuf)}.
-   *
-   * <p>Method under test: {@link PushBody#transferTo(ByteBuf)}
-   */
-  @Test
-  @DisplayName("Test transferTo(ByteBuf)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"BodyState PushBody.transferTo(ByteBuf)"})
-  void testTransferTo3() {
-    // Arrange
-    LinkedList<BodyChunk> queue = new LinkedList<>();
-    DuplicatedByteBuf buffer =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-    queue.add(new BodyChunk(buffer, false));
-    PushBody pushBody = new PushBody(queue);
-    UnpooledDirectByteBuf target = new UnpooledDirectByteBuf(new AdaptiveByteBufAllocator(), 1, 3);
-
-    // Act
-    BodyState actualTransferToResult = pushBody.transferTo(target);
-
-    // Assert
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
-    assertEquals(BodyState.SUSPEND, actualTransferToResult);
-    assertTrue(target.isWritable());
-  }
-
-  /**
-   * Test {@link PushBody#transferTo(ByteBuf)}.
-   *
    * <ul>
-   *   <li>Then {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)} with buffer is {@link
-   *       EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)} readerIndex is zero.
+   *   <li>Given three.</li>
+   *   <li>When {@link ByteBuf} {@link ByteBuf#capacity()} return three.</li>
+   *   <li>Then calls {@link ByteBuf#capacity()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link PushBody#transferTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link PushBody#transferTo(ByteBuf)}
    */
   @Test
-  @DisplayName(
-      "Test transferTo(ByteBuf); then DuplicatedByteBuf(ByteBuf) with buffer is EmptyByteBuf(ByteBufAllocator) readerIndex is zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferTo(ByteBuf); given three; when ByteBuf capacity() return three; then calls capacity()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"BodyState PushBody.transferTo(ByteBuf)"})
-  void testTransferTo_thenDuplicatedByteBufWithBufferIsEmptyByteBufReaderIndexIsZero() {
+  void testTransferTo_givenThree_whenByteBufCapacityReturnThree_thenCallsCapacity() {
     // Arrange
     PushBody pushBody = new PushBody(new LinkedList<>());
-    DuplicatedByteBuf target =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
 
     // Act
-    BodyState actualTransferToResult = pushBody.transferTo(target);
+    BodyState actualTransferToResult = pushBody
+        .transferTo(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))));
 
     // Assert
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
     assertEquals(BodyState.SUSPEND, actualTransferToResult);
-    assertFalse(target.isWritable());
+  }
+
+  /**
+   * Test {@link PushBody#transferTo(ByteBuf)}.
+   * <ul>
+   *   <li>When {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)} with alloc is {@link AdaptiveByteBufAllocator#AdaptiveByteBufAllocator()}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link PushBody#transferTo(ByteBuf)}
+   */
+  @Test
+  @DisplayName("Test transferTo(ByteBuf); when EmptyByteBuf(ByteBufAllocator) with alloc is AdaptiveByteBufAllocator()")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"BodyState PushBody.transferTo(ByteBuf)"})
+  void testTransferTo_whenEmptyByteBufWithAllocIsAdaptiveByteBufAllocator() {
+    // Arrange
+    PushBody pushBody = new PushBody(new LinkedList<>());
+
+    // Act and Assert
+    assertEquals(BodyState.SUSPEND,
+        pushBody.transferTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
   }
 
   /**
    * Test getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link PushBody#close()}
    *   <li>{@link PushBody#getContentLength()}
@@ -222,8 +147,7 @@ class PushBodyDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PushBody.close()", "long PushBody.getContentLength()"})
   void testGettersAndSetters() {
     // Arrange

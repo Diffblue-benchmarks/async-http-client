@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
@@ -19,17 +18,16 @@ import org.junit.jupiter.api.Test;
 class QueueBasedFeedableBodyGeneratorDiffblueTest {
   /**
    * Test {@link QueueBasedFeedableBodyGenerator#createBody()}.
-   *
-   * <p>Method under test: {@link QueueBasedFeedableBodyGenerator#createBody()}
+   * <p>
+   * Method under test: {@link QueueBasedFeedableBodyGenerator#createBody()}
    */
   @Test
   @DisplayName("Test createBody()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Body QueueBasedFeedableBodyGenerator.createBody()"})
   void testCreateBody() {
     // Arrange and Act
-    Body actualCreateBodyResult = new UnboundedQueueFeedableBodyGenerator().createBody();
+    Body actualCreateBodyResult = (new UnboundedQueueFeedableBodyGenerator()).createBody();
 
     // Assert
     assertTrue(actualCreateBodyResult instanceof PushBody);
@@ -38,34 +36,28 @@ class QueueBasedFeedableBodyGeneratorDiffblueTest {
 
   /**
    * Test {@link QueueBasedFeedableBodyGenerator#feed(ByteBuf, boolean)}.
-   *
    * <ul>
-   *   <li>Given {@link FeedListener} {@link FeedListener#onContentAdded()} does nothing.
-   *   <li>Then calls {@link FeedListener#onContentAdded()}.
+   *   <li>Given {@link FeedListener} {@link FeedListener#onContentAdded()} does nothing.</li>
+   *   <li>Then calls {@link FeedListener#onContentAdded()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link QueueBasedFeedableBodyGenerator#feed(ByteBuf, boolean)}
+   * <p>
+   * Method under test: {@link QueueBasedFeedableBodyGenerator#feed(ByteBuf, boolean)}
    */
   @Test
-  @DisplayName(
-      "Test feed(ByteBuf, boolean); given FeedListener onContentAdded() does nothing; then calls onContentAdded()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test feed(ByteBuf, boolean); given FeedListener onContentAdded() does nothing; then calls onContentAdded()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean QueueBasedFeedableBodyGenerator.feed(ByteBuf, boolean)"})
-  void testFeed_givenFeedListenerOnContentAddedDoesNothing_thenCallsOnContentAdded()
-      throws Exception {
+  void testFeed_givenFeedListenerOnContentAddedDoesNothing_thenCallsOnContentAdded() throws Exception {
     // Arrange
     FeedListener listener = mock(FeedListener.class);
     doNothing().when(listener).onContentAdded();
 
-    UnboundedQueueFeedableBodyGenerator unboundedQueueFeedableBodyGenerator =
-        new UnboundedQueueFeedableBodyGenerator();
+    UnboundedQueueFeedableBodyGenerator unboundedQueueFeedableBodyGenerator = new UnboundedQueueFeedableBodyGenerator();
     unboundedQueueFeedableBodyGenerator.setListener(listener);
 
     // Act
-    boolean actualFeedResult =
-        unboundedQueueFeedableBodyGenerator.feed(
-            new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true);
+    boolean actualFeedResult = unboundedQueueFeedableBodyGenerator
+        .feed(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true);
 
     // Assert
     verify(listener).onContentAdded();
@@ -75,28 +67,23 @@ class QueueBasedFeedableBodyGeneratorDiffblueTest {
 
   /**
    * Test {@link QueueBasedFeedableBodyGenerator#feed(ByteBuf, boolean)}.
-   *
    * <ul>
-   *   <li>Given {@link UnboundedQueueFeedableBodyGenerator} (default constructor).
+   *   <li>Given {@link UnboundedQueueFeedableBodyGenerator} (default constructor).</li>
    * </ul>
-   *
-   * <p>Method under test: {@link QueueBasedFeedableBodyGenerator#feed(ByteBuf, boolean)}
+   * <p>
+   * Method under test: {@link QueueBasedFeedableBodyGenerator#feed(ByteBuf, boolean)}
    */
   @Test
-  @DisplayName(
-      "Test feed(ByteBuf, boolean); given UnboundedQueueFeedableBodyGenerator (default constructor)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test feed(ByteBuf, boolean); given UnboundedQueueFeedableBodyGenerator (default constructor)")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean QueueBasedFeedableBodyGenerator.feed(ByteBuf, boolean)"})
   void testFeed_givenUnboundedQueueFeedableBodyGenerator() throws Exception {
     // Arrange
-    UnboundedQueueFeedableBodyGenerator unboundedQueueFeedableBodyGenerator =
-        new UnboundedQueueFeedableBodyGenerator();
+    UnboundedQueueFeedableBodyGenerator unboundedQueueFeedableBodyGenerator = new UnboundedQueueFeedableBodyGenerator();
 
     // Act
-    boolean actualFeedResult =
-        unboundedQueueFeedableBodyGenerator.feed(
-            new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true);
+    boolean actualFeedResult = unboundedQueueFeedableBodyGenerator
+        .feed(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true);
 
     // Assert
     assertEquals(1, unboundedQueueFeedableBodyGenerator.queue.size());

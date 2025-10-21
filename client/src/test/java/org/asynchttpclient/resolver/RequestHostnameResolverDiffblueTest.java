@@ -1,172 +1,157 @@
 package org.asynchttpclient.resolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
-import io.netty.channel.DefaultEventLoop;
 import io.netty.resolver.NameResolver;
-import io.netty.util.concurrent.DefaultProgressivePromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import org.asynchttpclient.AbstractBasicTest;
 import org.asynchttpclient.AbstractBasicTest.AsyncCompletionHandlerAdapter;
 import org.asynchttpclient.AsyncHandler;
+import org.asynchttpclient.RequestBuilderBase;
+import org.asynchttpclient.test.EventCollectingHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class RequestHostnameResolverDiffblueTest {
   /**
    * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
-   *
    * <ul>
-   *   <li>Given {@link DefaultProgressivePromise#DefaultProgressivePromise(EventExecutor)} with
-   *       executor is {@link DefaultEventLoop#DefaultEventLoop()}.
+   *   <li>Then {@link EventCollectingHandler} (default constructor) {@link EventCollectingHandler#firedEvents} size is two.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress,
-   * AsyncHandler)}
+   * <p>
+   * Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}
    */
   @Test
-  @DisplayName(
-      "Test resolve(NameResolver, InetSocketAddress, AsyncHandler); given DefaultProgressivePromise(EventExecutor) with executor is DefaultEventLoop()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test resolve(NameResolver, InetSocketAddress, AsyncHandler); then EventCollectingHandler (default constructor) firedEvents size is two")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({
-    "Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"
-  })
-  void testResolve_givenDefaultProgressivePromiseWithExecutorIsDefaultEventLoop() {
+      "io.netty.util.concurrent.Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"})
+  void testResolve_thenEventCollectingHandlerFiredEventsSizeIsTwo() {
     // Arrange
-    NameResolver<InetAddress> nameResolver = mock(NameResolver.class);
-    when(nameResolver.resolveAll(Mockito.<String>any()))
-        .thenReturn(new DefaultProgressivePromise<>(new DefaultEventLoop()));
     InetSocketAddress unresolvedAddress = InetSocketAddress.createUnresolved("foo", 1);
+    EventCollectingHandler asyncHandler = new EventCollectingHandler();
 
     // Act
-    RequestHostnameResolver.INSTANCE.resolve(
-        nameResolver, unresolvedAddress, new AsyncCompletionHandlerAdapter());
+    io.netty.util.concurrent.Future<List<InetSocketAddress>> actualResolveResult = RequestHostnameResolver.INSTANCE
+        .resolve(RequestBuilderBase.DEFAULT_NAME_RESOLVER, unresolvedAddress, asyncHandler);
 
     // Assert
-    verify(nameResolver).resolveAll("foo");
+    assertEquals(2, asyncHandler.firedEvents.size());
+    assertTrue(actualResolveResult.isDone());
   }
 
   /**
    * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
-   *
    * <ul>
-   *   <li>Then calls {@link DefaultProgressivePromise#addListener(GenericFutureListener)}.
+   *   <li>When createUnresolved {@code 42} and one.</li>
+   *   <li>Then return {@link Future#get()} size is one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress,
-   * AsyncHandler)}
+   * <p>
+   * Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}
    */
   @Test
-  @DisplayName(
-      "Test resolve(NameResolver, InetSocketAddress, AsyncHandler); then calls addListener(GenericFutureListener)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test resolve(NameResolver, InetSocketAddress, AsyncHandler); when createUnresolved '42' and one; then return get() size is one")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({
-    "Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"
-  })
-  void testResolve_thenCallsAddListener() {
+      "io.netty.util.concurrent.Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"})
+  void testResolve_whenCreateUnresolved42AndOne_thenReturnGetSizeIsOne()
+      throws InterruptedException, ExecutionException {
     // Arrange
-    DefaultProgressivePromise<List<InetAddress>> defaultProgressivePromise =
-        mock(DefaultProgressivePromise.class);
-    when(defaultProgressivePromise.addListener(
-            Mockito.<GenericFutureListener<Future<List<InetAddress>>>>any()))
-        .thenReturn(new DefaultProgressivePromise<>(new DefaultEventLoop()));
-
-    NameResolver<InetAddress> nameResolver = mock(NameResolver.class);
-    when(nameResolver.resolveAll(Mockito.<String>any())).thenReturn(defaultProgressivePromise);
-    InetSocketAddress unresolvedAddress = InetSocketAddress.createUnresolved("foo", 1);
-
-    // Act
-    RequestHostnameResolver.INSTANCE.resolve(
-        nameResolver, unresolvedAddress, new AsyncCompletionHandlerAdapter());
-
-    // Assert
-    verify(nameResolver).resolveAll("foo");
-    verify(defaultProgressivePromise).addListener(isA(GenericFutureListener.class));
-  }
-
-  /**
-   * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
-   *
-   * <ul>
-   *   <li>Then calls {@link AsyncCompletionHandlerAdapter#onHostnameResolutionAttempt(String)}.
-   * </ul>
-   *
-   * <p>Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress,
-   * AsyncHandler)}
-   */
-  @Test
-  @DisplayName(
-      "Test resolve(NameResolver, InetSocketAddress, AsyncHandler); then calls onHostnameResolutionAttempt(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"
-  })
-  void testResolve_thenCallsOnHostnameResolutionAttempt() {
-    // Arrange
-    DefaultProgressivePromise<List<InetAddress>> defaultProgressivePromise =
-        mock(DefaultProgressivePromise.class);
-    when(defaultProgressivePromise.addListener(
-            Mockito.<GenericFutureListener<Future<List<InetAddress>>>>any()))
-        .thenReturn(new DefaultProgressivePromise<>(new DefaultEventLoop()));
-
-    NameResolver<InetAddress> nameResolver = mock(NameResolver.class);
-    when(nameResolver.resolveAll(Mockito.<String>any())).thenReturn(defaultProgressivePromise);
-    InetSocketAddress unresolvedAddress = InetSocketAddress.createUnresolved("foo", 1);
-
-    AsyncCompletionHandlerAdapter asyncHandler = mock(AsyncCompletionHandlerAdapter.class);
-    doNothing().when(asyncHandler).onHostnameResolutionAttempt(Mockito.<String>any());
-
-    // Act
-    RequestHostnameResolver.INSTANCE.resolve(nameResolver, unresolvedAddress, asyncHandler);
-
-    // Assert
-    verify(nameResolver).resolveAll("foo");
-    verify(defaultProgressivePromise).addListener(isA(GenericFutureListener.class));
-    verify(asyncHandler).onHostnameResolutionAttempt("foo");
-  }
-
-  /**
-   * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
-   *
-   * <ul>
-   *   <li>When {@link NameResolver}.
-   *   <li>Then return Done.
-   * </ul>
-   *
-   * <p>Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress,
-   * AsyncHandler)}
-   */
-  @Test
-  @DisplayName(
-      "Test resolve(NameResolver, InetSocketAddress, AsyncHandler); when NameResolver; then return Done")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"
-  })
-  void testResolve_whenNameResolver_thenReturnDone() {
-    // Arrange
-    NameResolver<InetAddress> nameResolver = mock(NameResolver.class);
+    InetSocketAddress unresolvedAddress = InetSocketAddress.createUnresolved("42", 1);
 
     // Act and Assert
-    assertTrue(
-        RequestHostnameResolver.INSTANCE
-            .resolve(nameResolver, InetSocketAddress.createUnresolved("foo", 1), null)
-            .isDone());
+    List<InetSocketAddress> getResult = RequestHostnameResolver.INSTANCE
+        .resolve(RequestBuilderBase.DEFAULT_NAME_RESOLVER, unresolvedAddress, new AsyncCompletionHandlerAdapter())
+        .get();
+    assertEquals(1, getResult.size());
+    InetSocketAddress getResult2 = getResult.get(0);
+    assertEquals("0.0.0.42", getResult2.getHostName());
+    assertEquals("0.0.0.42", getResult2.getHostString());
+    assertEquals(1, getResult2.getPort());
+    assertFalse(getResult2.isUnresolved());
+  }
+
+  /**
+   * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
+   * <ul>
+   *   <li>When createUnresolved {@code 42} and one.</li>
+   *   <li>Then return {@link Future#get()} size is one.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}
+   */
+  @Test
+  @DisplayName("Test resolve(NameResolver, InetSocketAddress, AsyncHandler); when createUnresolved '42' and one; then return get() size is one")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({
+      "io.netty.util.concurrent.Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"})
+  void testResolve_whenCreateUnresolved42AndOne_thenReturnGetSizeIsOne2()
+      throws InterruptedException, ExecutionException {
+    // Arrange
+    InetSocketAddress unresolvedAddress = InetSocketAddress.createUnresolved("42", 1);
+    EventCollectingHandler asyncHandler = new EventCollectingHandler();
+
+    // Act and Assert
+    List<InetSocketAddress> getResult = RequestHostnameResolver.INSTANCE
+        .resolve(RequestBuilderBase.DEFAULT_NAME_RESOLVER, unresolvedAddress, asyncHandler)
+        .get();
+    assertEquals(1, getResult.size());
+    InetSocketAddress getResult2 = getResult.get(0);
+    assertEquals("0.0.0.42", getResult2.getHostName());
+    assertEquals("0.0.0.42", getResult2.getHostString());
+    assertEquals(1, getResult2.getPort());
+    assertEquals(2, asyncHandler.firedEvents.size());
+    assertFalse(getResult2.isUnresolved());
+  }
+
+  /**
+   * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
+   * <ul>
+   *   <li>When {@link RequestBuilderBase#DEFAULT_NAME_RESOLVER}.</li>
+   *   <li>Then return Done.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}
+   */
+  @Test
+  @DisplayName("Test resolve(NameResolver, InetSocketAddress, AsyncHandler); when DEFAULT_NAME_RESOLVER; then return Done")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({
+      "io.netty.util.concurrent.Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"})
+  void testResolve_whenDefault_name_resolver_thenReturnDone() {
+    // Arrange
+    InetSocketAddress unresolvedAddress = InetSocketAddress.createUnresolved("foo", 1);
+
+    // Act and Assert
+    assertTrue(RequestHostnameResolver.INSTANCE
+        .resolve(RequestBuilderBase.DEFAULT_NAME_RESOLVER, unresolvedAddress, new AsyncCompletionHandlerAdapter())
+        .isDone());
+  }
+
+  /**
+   * Test {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}.
+   * <ul>
+   *   <li>When {@code null}.</li>
+   *   <li>Then return Done.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link RequestHostnameResolver#resolve(NameResolver, InetSocketAddress, AsyncHandler)}
+   */
+  @Test
+  @DisplayName("Test resolve(NameResolver, InetSocketAddress, AsyncHandler); when 'null'; then return Done")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({
+      "io.netty.util.concurrent.Future RequestHostnameResolver.resolve(NameResolver, InetSocketAddress, AsyncHandler)"})
+  void testResolve_whenNull_thenReturnDone() {
+    // Arrange, Act and Assert
+    assertTrue(RequestHostnameResolver.INSTANCE
+        .resolve(RequestBuilderBase.DEFAULT_NAME_RESOLVER, InetSocketAddress.createUnresolved("foo", 1), null)
+        .isDone());
   }
 }

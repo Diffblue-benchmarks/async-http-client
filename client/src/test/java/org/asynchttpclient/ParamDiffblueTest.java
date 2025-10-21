@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +16,8 @@ import org.junit.jupiter.api.Test;
 class ParamDiffblueTest {
   /**
    * Test getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link Param#Param(String, String)}
    *   <li>{@link Param#getName()}
@@ -28,13 +26,8 @@ class ParamDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void Param.<init>(String, String)",
-    "String Param.getName()",
-    "String Param.getValue()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void Param.<init>(String, String)", "String Param.getName()", "String Param.getValue()"})
   void testGettersAndSetters() {
     // Arrange and Act
     Param actualParam = new Param("https://example.org/example", "https://example.org/example");
@@ -47,18 +40,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#map2ParamList(Map)}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()} add {@code foo}.
-   *   <li>Then return size is one.
+   *   <li>Given {@link ArrayList#ArrayList()} add {@code foo}.</li>
+   *   <li>Then return size is one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#map2ParamList(Map)}
+   * <p>
+   * Method under test: {@link Param#map2ParamList(Map)}
    */
   @Test
   @DisplayName("Test map2ParamList(Map); given ArrayList() add 'foo'; then return size is one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"List Param.map2ParamList(Map)"})
   void testMap2ParamList_givenArrayListAddFoo_thenReturnSizeIsOne() {
     // Arrange
@@ -80,20 +71,17 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#map2ParamList(Map)}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()}.
-   *   <li>When {@link HashMap#HashMap()} {@code foo} is {@link ArrayList#ArrayList()}.
-   *   <li>Then return Empty.
+   *   <li>Given {@link ArrayList#ArrayList()}.</li>
+   *   <li>When {@link HashMap#HashMap()} {@code foo} is {@link ArrayList#ArrayList()}.</li>
+   *   <li>Then return Empty.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#map2ParamList(Map)}
+   * <p>
+   * Method under test: {@link Param#map2ParamList(Map)}
    */
   @Test
-  @DisplayName(
-      "Test map2ParamList(Map); given ArrayList(); when HashMap() 'foo' is ArrayList(); then return Empty")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test map2ParamList(Map); given ArrayList(); when HashMap() 'foo' is ArrayList(); then return Empty")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"List Param.map2ParamList(Map)"})
   void testMap2ParamList_givenArrayList_whenHashMapFooIsArrayList_thenReturnEmpty() {
     // Arrange
@@ -109,18 +97,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#map2ParamList(Map)}.
-   *
    * <ul>
-   *   <li>When {@link HashMap#HashMap()}.
-   *   <li>Then return Empty.
+   *   <li>When {@link HashMap#HashMap()}.</li>
+   *   <li>Then return Empty.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#map2ParamList(Map)}
+   * <p>
+   * Method under test: {@link Param#map2ParamList(Map)}
    */
   @Test
   @DisplayName("Test map2ParamList(Map); when HashMap(); then return Empty")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"List Param.map2ParamList(Map)"})
   void testMap2ParamList_whenHashMap_thenReturnEmpty() {
     // Arrange and Act
@@ -132,18 +118,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#map2ParamList(Map)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code null}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#map2ParamList(Map)}
+   * <p>
+   * Method under test: {@link Param#map2ParamList(Map)}
    */
   @Test
   @DisplayName("Test map2ParamList(Map); when 'null'; then return 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"List Param.map2ParamList(Map)"})
   void testMap2ParamList_whenNull_thenReturnNull() {
     // Arrange and Act
@@ -155,14 +139,12 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#equals(Object)}, and {@link Param#hashCode()}.
-   *
    * <ul>
-   *   <li>When other is equal.
-   *   <li>Then return equal.
+   *   <li>When other is equal.</li>
+   *   <li>Then return equal.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link Param#equals(Object)}
    *   <li>{@link Param#hashCode()}
@@ -170,8 +152,7 @@ class ParamDiffblueTest {
    */
   @Test
   @DisplayName("Test equals(Object), and hashCode(); when other is equal; then return equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual() {
     // Arrange
@@ -180,19 +161,18 @@ class ParamDiffblueTest {
 
     // Act and Assert
     assertEquals(param, param2);
-    assertEquals(param.hashCode(), param2.hashCode());
+    int expectedHashCodeResult = param.hashCode();
+    assertEquals(expectedHashCodeResult, param2.hashCode());
   }
 
   /**
    * Test {@link Param#equals(Object)}, and {@link Param#hashCode()}.
-   *
    * <ul>
-   *   <li>When other is equal.
-   *   <li>Then return equal.
+   *   <li>When other is equal.</li>
+   *   <li>Then return equal.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link Param#equals(Object)}
    *   <li>{@link Param#hashCode()}
@@ -200,8 +180,7 @@ class ParamDiffblueTest {
    */
   @Test
   @DisplayName("Test equals(Object), and hashCode(); when other is equal; then return equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual2() {
     // Arrange
@@ -210,19 +189,18 @@ class ParamDiffblueTest {
 
     // Act and Assert
     assertEquals(param, param2);
-    assertEquals(param.hashCode(), param2.hashCode());
+    int expectedHashCodeResult = param.hashCode();
+    assertEquals(expectedHashCodeResult, param2.hashCode());
   }
 
   /**
    * Test {@link Param#equals(Object)}, and {@link Param#hashCode()}.
-   *
    * <ul>
-   *   <li>When other is equal.
-   *   <li>Then return equal.
+   *   <li>When other is equal.</li>
+   *   <li>Then return equal.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link Param#equals(Object)}
    *   <li>{@link Param#hashCode()}
@@ -230,8 +208,7 @@ class ParamDiffblueTest {
    */
   @Test
   @DisplayName("Test equals(Object), and hashCode(); when other is equal; then return equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual3() {
     // Arrange
@@ -240,19 +217,18 @@ class ParamDiffblueTest {
 
     // Act and Assert
     assertEquals(param, param2);
-    assertEquals(param.hashCode(), param2.hashCode());
+    int expectedHashCodeResult = param.hashCode();
+    assertEquals(expectedHashCodeResult, param2.hashCode());
   }
 
   /**
    * Test {@link Param#equals(Object)}, and {@link Param#hashCode()}.
-   *
    * <ul>
-   *   <li>When other is same.
-   *   <li>Then return equal.
+   *   <li>When other is same.</li>
+   *   <li>Then return equal.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link Param#equals(Object)}
    *   <li>{@link Param#hashCode()}
@@ -260,8 +236,7 @@ class ParamDiffblueTest {
    */
   @Test
   @DisplayName("Test equals(Object), and hashCode(); when other is same; then return equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEqualsAndHashCode_whenOtherIsSame_thenReturnEqual() {
     // Arrange
@@ -275,18 +250,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is different.
-   *   <li>Then return not equal.
+   *   <li>When other is different.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#equals(Object)}
+   * <p>
+   * Method under test: {@link Param#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEquals_whenOtherIsDifferent_thenReturnNotEqual() {
     // Arrange
@@ -298,18 +271,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is different.
-   *   <li>Then return not equal.
+   *   <li>When other is different.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#equals(Object)}
+   * <p>
+   * Method under test: {@link Param#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEquals_whenOtherIsDifferent_thenReturnNotEqual2() {
     // Arrange
@@ -321,18 +292,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is different.
-   *   <li>Then return not equal.
+   *   <li>When other is different.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#equals(Object)}
+   * <p>
+   * Method under test: {@link Param#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEquals_whenOtherIsDifferent_thenReturnNotEqual3() {
     // Arrange
@@ -344,18 +313,16 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is {@code null}.
-   *   <li>Then return not equal.
+   *   <li>When other is {@code null}.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#equals(Object)}
+   * <p>
+   * Method under test: {@link Param#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is 'null'; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEquals_whenOtherIsNull_thenReturnNotEqual() {
     // Arrange, Act and Assert
@@ -364,23 +331,19 @@ class ParamDiffblueTest {
 
   /**
    * Test {@link Param#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is wrong type.
-   *   <li>Then return not equal.
+   *   <li>When other is wrong type.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Param#equals(Object)}
+   * <p>
+   * Method under test: {@link Param#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is wrong type; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean Param.equals(Object)", "int Param.hashCode()"})
   void testEquals_whenOtherIsWrongType_thenReturnNotEqual() {
     // Arrange, Act and Assert
-    assertNotEquals(
-        new Param("https://example.org/example", "https://example.org/example"),
-        "Different type to Param");
+    assertNotEquals(new Param("https://example.org/example", "https://example.org/example"), "Different type to Param");
   }
 }

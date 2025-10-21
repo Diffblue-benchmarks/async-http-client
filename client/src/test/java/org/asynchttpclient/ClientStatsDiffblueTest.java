@@ -3,7 +3,6 @@ package org.asynchttpclient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +13,12 @@ import org.junit.jupiter.api.Test;
 class ClientStatsDiffblueTest {
   /**
    * Test {@link ClientStats#ClientStats(Map)}.
-   *
-   * <p>Method under test: {@link ClientStats#ClientStats(Map)}
+   * <p>
+   * Method under test: {@link ClientStats#ClientStats(Map)}
    */
   @Test
   @DisplayName("Test new ClientStats(Map)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void ClientStats.<init>(Map)"})
   void testNewClientStats() {
     // Arrange and Act
@@ -35,9 +33,8 @@ class ClientStatsDiffblueTest {
 
   /**
    * Test getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link ClientStats#toString()}
    *   <li>{@link ClientStats#getStatsPerHost()}
@@ -45,8 +42,7 @@ class ClientStatsDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Map ClientStats.getStatsPerHost()", "String ClientStats.toString()"})
   void testGettersAndSetters() {
     // Arrange
@@ -56,78 +52,69 @@ class ClientStatsDiffblueTest {
     String actualToStringResult = clientStats.toString();
 
     // Assert
-    assertEquals(
-        "There are 0 total connections, 0 are active and 0 are idle.", actualToStringResult);
+    assertEquals("There are 0 total connections, 0 are active and 0 are idle.", actualToStringResult);
     assertTrue(clientStats.getStatsPerHost().isEmpty());
   }
 
   /**
    * Test {@link ClientStats#getTotalConnectionCount()}.
-   *
    * <ul>
-   *   <li>Then return zero.
+   *   <li>Then return zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ClientStats#getTotalConnectionCount()}
+   * <p>
+   * Method under test: {@link ClientStats#getTotalConnectionCount()}
    */
   @Test
   @DisplayName("Test getTotalConnectionCount(); then return zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long ClientStats.getTotalConnectionCount()"})
   void testGetTotalConnectionCount_thenReturnZero() {
     // Arrange, Act and Assert
-    assertEquals(0L, new ClientStats(new HashMap<>()).getTotalConnectionCount());
+    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalConnectionCount());
   }
 
   /**
    * Test {@link ClientStats#getTotalActiveConnectionCount()}.
-   *
    * <ul>
-   *   <li>Then return zero.
+   *   <li>Then return zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ClientStats#getTotalActiveConnectionCount()}
+   * <p>
+   * Method under test: {@link ClientStats#getTotalActiveConnectionCount()}
    */
   @Test
   @DisplayName("Test getTotalActiveConnectionCount(); then return zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long ClientStats.getTotalActiveConnectionCount()"})
   void testGetTotalActiveConnectionCount_thenReturnZero() {
     // Arrange, Act and Assert
-    assertEquals(0L, new ClientStats(new HashMap<>()).getTotalActiveConnectionCount());
+    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalActiveConnectionCount());
   }
 
   /**
    * Test {@link ClientStats#getTotalIdleConnectionCount()}.
-   *
    * <ul>
-   *   <li>Then return zero.
+   *   <li>Then return zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ClientStats#getTotalIdleConnectionCount()}
+   * <p>
+   * Method under test: {@link ClientStats#getTotalIdleConnectionCount()}
    */
   @Test
   @DisplayName("Test getTotalIdleConnectionCount(); then return zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long ClientStats.getTotalIdleConnectionCount()"})
   void testGetTotalIdleConnectionCount_thenReturnZero() {
     // Arrange, Act and Assert
-    assertEquals(0L, new ClientStats(new HashMap<>()).getTotalIdleConnectionCount());
+    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalIdleConnectionCount());
   }
 
   /**
    * Test {@link ClientStats#equals(Object)}, and {@link ClientStats#hashCode()}.
-   *
    * <ul>
-   *   <li>When other is equal.
-   *   <li>Then return equal.
+   *   <li>When other is equal.</li>
+   *   <li>Then return equal.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link ClientStats#equals(Object)}
    *   <li>{@link ClientStats#hashCode()}
@@ -135,8 +122,7 @@ class ClientStatsDiffblueTest {
    */
   @Test
   @DisplayName("Test equals(Object), and hashCode(); when other is equal; then return equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
   void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual() {
     // Arrange
@@ -145,19 +131,18 @@ class ClientStatsDiffblueTest {
 
     // Act and Assert
     assertEquals(clientStats, clientStats2);
-    assertEquals(clientStats.hashCode(), clientStats2.hashCode());
+    int expectedHashCodeResult = clientStats.hashCode();
+    assertEquals(expectedHashCodeResult, clientStats2.hashCode());
   }
 
   /**
    * Test {@link ClientStats#equals(Object)}, and {@link ClientStats#hashCode()}.
-   *
    * <ul>
-   *   <li>When other is same.
-   *   <li>Then return equal.
+   *   <li>When other is same.</li>
+   *   <li>Then return equal.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link ClientStats#equals(Object)}
    *   <li>{@link ClientStats#hashCode()}
@@ -165,8 +150,7 @@ class ClientStatsDiffblueTest {
    */
   @Test
   @DisplayName("Test equals(Object), and hashCode(); when other is same; then return equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
   void testEqualsAndHashCode_whenOtherIsSame_thenReturnEqual() {
     // Arrange
@@ -180,38 +164,39 @@ class ClientStatsDiffblueTest {
 
   /**
    * Test {@link ClientStats#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is different.
-   *   <li>Then return not equal.
+   *   <li>When other is different.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ClientStats#equals(Object)}
+   * <p>
+   * Method under test: {@link ClientStats#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
   void testEquals_whenOtherIsDifferent_thenReturnNotEqual() {
-    // Arrange, Act and Assert
-    assertNotEquals(new ClientStats(new HashMap<>()), "https://example.org/example");
+    // Arrange
+    HashMap<String, HostStats> statsPerHost = new HashMap<>();
+    statsPerHost.put("foo", new HostStats(3L, 1L));
+    ClientStats clientStats = new ClientStats(statsPerHost);
+
+    // Act and Assert
+    assertNotEquals(clientStats, new ClientStats(new HashMap<>()));
   }
 
   /**
    * Test {@link ClientStats#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is {@code null}.
-   *   <li>Then return not equal.
+   *   <li>When other is {@code null}.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ClientStats#equals(Object)}
+   * <p>
+   * Method under test: {@link ClientStats#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is 'null'; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
   void testEquals_whenOtherIsNull_thenReturnNotEqual() {
     // Arrange, Act and Assert
@@ -220,18 +205,16 @@ class ClientStatsDiffblueTest {
 
   /**
    * Test {@link ClientStats#equals(Object)}.
-   *
    * <ul>
-   *   <li>When other is wrong type.
-   *   <li>Then return not equal.
+   *   <li>When other is wrong type.</li>
+   *   <li>Then return not equal.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ClientStats#equals(Object)}
+   * <p>
+   * Method under test: {@link ClientStats#equals(Object)}
    */
   @Test
   @DisplayName("Test equals(Object); when other is wrong type; then return not equal")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
   void testEquals_whenOtherIsWrongType_thenReturnNotEqual() {
     // Arrange, Act and Assert

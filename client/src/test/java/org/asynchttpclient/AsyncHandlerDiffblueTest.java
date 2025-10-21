@@ -1,7 +1,6 @@
 package org.asynchttpclient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
@@ -15,22 +14,18 @@ import org.junit.jupiter.api.Test;
 class AsyncHandlerDiffblueTest {
   /**
    * Test {@link AsyncHandler#onTrailingHeadersReceived(HttpHeaders)}.
-   *
-   * <p>Method under test: {@link AsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
+   * <p>
+   * Method under test: {@link AsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
    */
   @Test
   @DisplayName("Test onTrailingHeadersReceived(HttpHeaders)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"State AsyncHandler.onTrailingHeadersReceived(HttpHeaders)"})
   void testOnTrailingHeadersReceived() throws Exception {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler =
-        new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
 
     // Act and Assert
-    assertEquals(
-        State.CONTINUE,
-        webSocketUpgradeHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
+    assertEquals(State.CONTINUE, webSocketUpgradeHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
   }
 }

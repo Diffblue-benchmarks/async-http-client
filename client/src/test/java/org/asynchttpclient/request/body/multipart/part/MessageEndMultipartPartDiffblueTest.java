@@ -11,11 +11,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import com.aayushatharva.brotli4j.encoder.BrotliEncoderChannel;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
 import io.netty.buffer.Unpooled;
@@ -31,18 +29,16 @@ import org.mockito.Mockito;
 class MessageEndMultipartPartDiffblueTest {
   /**
    * Test {@link MessageEndMultipartPart#MessageEndMultipartPart(byte[])}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#MessageEndMultipartPart(byte[])}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#MessageEndMultipartPart(byte[])}
    */
   @Test
   @DisplayName("Test new MessageEndMultipartPart(byte[])")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void MessageEndMultipartPart.<init>(byte[])"})
   void testNewMessageEndMultipartPart() throws UnsupportedEncodingException {
     // Arrange and Act
-    MessageEndMultipartPart actualMessageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
+    MessageEndMultipartPart actualMessageEndMultipartPart = new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     assertNull(actualMessageEndMultipartPart.part);
@@ -55,124 +51,80 @@ class MessageEndMultipartPartDiffblueTest {
 
   /**
    * Test {@link MessageEndMultipartPart#transferTo(ByteBuf)} with {@code ByteBuf}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
    */
   @Test
   @DisplayName("Test transferTo(ByteBuf) with 'ByteBuf'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(ByteBuf)"})
   void testTransferToWithByteBuf() throws UnsupportedEncodingException {
     // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-    DuplicatedByteBuf target =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    MessageEndMultipartPart messageEndMultipartPart = new MessageEndMultipartPart("XXAXAXAX".getBytes("UTF-8"));
 
-    // Act
-    long actualTransferToResult = messageEndMultipartPart.transferTo(target);
-
-    // Assert
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
-    assertEquals(0L, actualTransferToResult);
-    assertEquals(MultipartState.PRE_CONTENT, messageEndMultipartPart.getState());
+    // Act and Assert
+    assertEquals(0L,
+        messageEndMultipartPart.transferTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
   }
 
   /**
    * Test {@link MessageEndMultipartPart#transferTo(ByteBuf)} with {@code ByteBuf}.
-   *
    * <ul>
-   *   <li>Then compositeBuffer three writerIndex is fifteen.
+   *   <li>Then return zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
    */
   @Test
-  @DisplayName(
-      "Test transferTo(ByteBuf) with 'ByteBuf'; then compositeBuffer three writerIndex is fifteen")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferTo(ByteBuf) with 'ByteBuf'; then return zero")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(ByteBuf)"})
-  void testTransferToWithByteBuf_thenCompositeBufferThreeWriterIndexIsFifteen()
-      throws UnsupportedEncodingException {
+  void testTransferToWithByteBuf_thenReturnZero() throws UnsupportedEncodingException {
     // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
+    MessageEndMultipartPart messageEndMultipartPart = new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
 
-    CompositeByteBuf target = Unpooled.compositeBuffer(3);
-    target.writeByte(42);
-
-    // Act
-    messageEndMultipartPart.transferTo(target);
-
-    // Assert
-    assertEquals(15, target.writerIndex());
-    assertTrue(target.readBoolean());
-    assertArrayEquals(
-        new byte[] {
-          '*', '-', '-', 'A', 'X', 'A', 'X', 'A', 'X', 'A', 'X', '-', '-', '\r', '\n', 0, 0, 0, 0,
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        },
-        target.array());
+    // Act and Assert
+    assertEquals(0L,
+        messageEndMultipartPart.transferTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
   }
 
   /**
    * Test {@link MessageEndMultipartPart#transferTo(ByteBuf)} with {@code ByteBuf}.
-   *
    * <ul>
-   *   <li>Then compositeBuffer three writerIndex is zero.
+   *   <li>When {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)} with buffer is compositeBuffer three.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferTo(ByteBuf)}
    */
   @Test
-  @DisplayName(
-      "Test transferTo(ByteBuf) with 'ByteBuf'; then compositeBuffer three writerIndex is zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferTo(ByteBuf) with 'ByteBuf'; when DuplicatedByteBuf(ByteBuf) with buffer is compositeBuffer three")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(ByteBuf)"})
-  void testTransferToWithByteBuf_thenCompositeBufferThreeWriterIndexIsZero()
+  void testTransferToWithByteBuf_whenDuplicatedByteBufWithBufferIsCompositeBufferThree()
       throws UnsupportedEncodingException {
     // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-    CompositeByteBuf target = Unpooled.compositeBuffer(3);
+    MessageEndMultipartPart messageEndMultipartPart = new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
 
-    // Act
-    long actualTransferToResult = messageEndMultipartPart.transferTo(target);
-
-    // Assert
-    assertEquals(0, target.writerIndex());
-    assertEquals(0L, actualTransferToResult);
-    assertEquals(MultipartState.PRE_CONTENT, messageEndMultipartPart.getState());
-    assertArrayEquals(new byte[] {}, target.array());
+    // Act and Assert
+    assertEquals(0L, messageEndMultipartPart.transferTo(new DuplicatedByteBuf(Unpooled.compositeBuffer(3))));
   }
 
   /**
-   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
+   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
    * <ul>
-   *   <li>Given fourteen.
-   *   <li>Then return fourteen.
+   *   <li>Given fourteen.</li>
+   *   <li>Then return fourteen.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(WritableByteChannel)}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferTo(WritableByteChannel)}
    */
   @Test
-  @DisplayName(
-      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given fourteen; then return fourteen")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given fourteen; then return fourteen")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(WritableByteChannel)"})
   void testTransferToWithWritableByteChannel_givenFourteen_thenReturnFourteen() throws IOException {
     // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-
+    MessageEndMultipartPart messageEndMultipartPart = new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(14);
 
@@ -187,27 +139,21 @@ class MessageEndMultipartPartDiffblueTest {
   }
 
   /**
-   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
+   * Test {@link MessageEndMultipartPart#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
    * <ul>
-   *   <li>Given one.
-   *   <li>Then return one.
+   *   <li>Given one.</li>
+   *   <li>Then return one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferTo(WritableByteChannel)}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferTo(WritableByteChannel)}
    */
   @Test
-  @DisplayName(
-      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given one; then return one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given one; then return one")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferTo(WritableByteChannel)"})
   void testTransferToWithWritableByteChannel_givenOne_thenReturnOne() throws IOException {
     // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
-
+    MessageEndMultipartPart messageEndMultipartPart = new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
     BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
     when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
 
@@ -223,122 +169,76 @@ class MessageEndMultipartPartDiffblueTest {
 
   /**
    * Test {@link MessageEndMultipartPart#computePreContentLength()}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#computePreContentLength()}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#computePreContentLength()}
    */
   @Test
   @DisplayName("Test computePreContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int MessageEndMultipartPart.computePreContentLength()"})
   void testComputePreContentLength() throws UnsupportedEncodingException {
     // Arrange, Act and Assert
-    assertEquals(
-        0, new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8")).computePreContentLength());
+    assertEquals(0, (new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"))).computePreContentLength());
   }
 
   /**
    * Test {@link MessageEndMultipartPart#computePostContentLength()}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#computePostContentLength()}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#computePostContentLength()}
    */
   @Test
   @DisplayName("Test computePostContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int MessageEndMultipartPart.computePostContentLength()"})
   void testComputePostContentLength() throws UnsupportedEncodingException {
     // Arrange, Act and Assert
-    assertEquals(
-        0, new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8")).computePostContentLength());
+    assertEquals(0, (new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"))).computePostContentLength());
   }
 
   /**
    * Test {@link MessageEndMultipartPart#getContentLength()}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#getContentLength()}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#getContentLength()}
    */
   @Test
   @DisplayName("Test getContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.getContentLength()"})
   void testGetContentLength() throws UnsupportedEncodingException {
     // Arrange, Act and Assert
-    assertEquals(14L, new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8")).getContentLength());
+    assertEquals(14L, (new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"))).getContentLength());
   }
 
   /**
    * Test {@link MessageEndMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferContentTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferContentTo(ByteBuf)}
    */
   @Test
   @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferContentTo(ByteBuf)"})
   void testTransferContentToWithByteBuf() throws UnsupportedEncodingException {
     // Arrange
-    MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
+    MessageEndMultipartPart messageEndMultipartPart = new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"));
 
     // Act and Assert
-    assertThrows(
-        UnsupportedOperationException.class,
-        () ->
-            messageEndMultipartPart.transferContentTo(
-                new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
+    assertThrows(UnsupportedOperationException.class, () -> messageEndMultipartPart
+        .transferContentTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
   }
 
   /**
-   * Test {@link MessageEndMultipartPart#transferContentTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#transferContentTo(WritableByteChannel)}
+   * Test {@link MessageEndMultipartPart#transferContentTo(WritableByteChannel)} with {@code WritableByteChannel}.
+   * <p>
+   * Method under test: {@link MessageEndMultipartPart#transferContentTo(WritableByteChannel)}
    */
   @Test
   @DisplayName("Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long MessageEndMultipartPart.transferContentTo(WritableByteChannel)"})
   void testTransferContentToWithWritableByteChannel() throws UnsupportedEncodingException {
     // Arrange, Act and Assert
-    assertThrows(
-        UnsupportedOperationException.class,
-        () ->
-            new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"))
-                .transferContentTo((WritableByteChannel) null));
-  }
-
-  /**
-   * Test {@link MessageEndMultipartPart#close()}.
-   *
-   * <ul>
-   *   <li>Given {@link BrotliEncoderChannel} {@link BrotliEncoderChannel#write(ByteBuffer)} return
-   *       one.
-   *   <li>Then calls {@link BrotliEncoderChannel#write(ByteBuffer)}.
-   * </ul>
-   *
-   * <p>Method under test: {@link MessageEndMultipartPart#close()}
-   */
-  @Test
-  @DisplayName(
-      "Test close(); given BrotliEncoderChannel write(ByteBuffer) return one; then calls write(ByteBuffer)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void MessageEndMultipartPart.close()"})
-  void testClose_givenBrotliEncoderChannelWriteReturnOne_thenCallsWrite() throws IOException {
-    // Arrange
-    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
-    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
-
-    try (MessageEndMultipartPart messageEndMultipartPart =
-        new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8"))) {
-      messageEndMultipartPart.transferTo(target);
-    }
-
-    // Act and Assert
-    verify(target).write(isA(ByteBuffer.class));
+    assertThrows(UnsupportedOperationException.class, () -> (new MessageEndMultipartPart("AXAXAXAX".getBytes("UTF-8")))
+        .transferContentTo((WritableByteChannel) null));
   }
 }

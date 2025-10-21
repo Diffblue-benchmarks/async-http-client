@@ -2,8 +2,8 @@ package org.asynchttpclient.spnego;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,89 +15,59 @@ import org.junit.jupiter.api.Test;
 class SpnegoEngineDiffblueTest {
   /**
    * Test {@link SpnegoEngine#SpnegoEngine()}.
-   *
-   * <p>Method under test: {@link SpnegoEngine#SpnegoEngine()}
+   * <p>
+   * Method under test: {@link SpnegoEngine#SpnegoEngine()}
    */
   @Test
   @DisplayName("Test new SpnegoEngine()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void SpnegoEngine.<init>()"})
   void testNewSpnegoEngine() {
     // Arrange, Act and Assert
-    assertNull(new SpnegoEngine().getLoginConfiguration());
+    assertNull((new SpnegoEngine()).getLoginConfiguration());
   }
 
   /**
-   * Test {@link SpnegoEngine#SpnegoEngine(String, String, String, String, boolean, Map, String,
-   * SpnegoTokenGenerator)}.
-   *
-   * <p>Method under test: {@link SpnegoEngine#SpnegoEngine(String, String, String, String, boolean,
-   * Map, String, SpnegoTokenGenerator)}
+   * Test {@link SpnegoEngine#SpnegoEngine(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)}.
+   * <p>
+   * Method under test: {@link SpnegoEngine#SpnegoEngine(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)}
    */
   @Test
-  @DisplayName(
-      "Test new SpnegoEngine(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new SpnegoEngine(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({
-    "void SpnegoEngine.<init>(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)"
-  })
+      "void SpnegoEngine.<init>(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)"})
   void testNewSpnegoEngine2() {
-    // Arrange and Act
-    SpnegoEngine actualSpnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            new HashMap<>(),
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
-
-    // Assert
-    assertNull(actualSpnegoEngine.getLoginConfiguration());
+    // Arrange, Act and Assert
+    assertNull((new SpnegoEngine("janedoe", "https://example.org/example", "https://example.org/example",
+        "https://example.org/example", true, new HashMap<>(), "https://example.org/example",
+        mock(SpnegoTokenGenerator.class))).getLoginConfiguration());
   }
 
   /**
    * Test {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}.
-   *
    * <ul>
-   *   <li>Given {@code foo}.
-   *   <li>When {@link HashMap#HashMap()} {@code foo} is {@code foo}.
-   *   <li>Then return LoginConfiguration Type is {@code null}.
+   *   <li>Given {@code foo}.</li>
+   *   <li>When {@link HashMap#HashMap()} {@code foo} is {@code foo}.</li>
+   *   <li>Then return LoginConfiguration Type is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean,
-   * Map, String)}
+   * <p>
+   * Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}
    */
   @Test
-  @DisplayName(
-      "Test instance(String, String, String, String, boolean, Map, String); given 'foo'; when HashMap() 'foo' is 'foo'; then return LoginConfiguration Type is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"
-  })
+  @DisplayName("Test instance(String, String, String, String, boolean, Map, String); given 'foo'; when HashMap() 'foo' is 'foo'; then return LoginConfiguration Type is 'null'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"})
   void testInstance_givenFoo_whenHashMapFooIsFoo_thenReturnLoginConfigurationTypeIsNull() {
     // Arrange
     HashMap<String, String> customLoginConfig = new HashMap<>();
     customLoginConfig.put("foo", "foo");
 
-    // Act
-    SpnegoEngine actualInstanceResult =
-        SpnegoEngine.instance(
-            "janedoe",
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            customLoginConfig,
-            "https://example.org/example");
-
-    // Assert
-    Configuration loginConfiguration = actualInstanceResult.getLoginConfiguration();
+    // Act and Assert
+    Configuration loginConfiguration = SpnegoEngine
+        .instance("janedoe", "https://example.org/example", "https://example.org/example",
+            "https://example.org/example", true, customLoginConfig, "https://example.org/example")
+        .getLoginConfiguration();
     assertNull(loginConfiguration.getType());
     assertNull(loginConfiguration.getProvider());
     assertNull(loginConfiguration.getParameters());
@@ -105,259 +75,203 @@ class SpnegoEngineDiffblueTest {
 
   /**
    * Test {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}.
-   *
    * <ul>
-   *   <li>When {@code janedoe}.
-   *   <li>Then return LoginConfiguration is {@code null}.
+   *   <li>When {@code janedoe}.</li>
+   *   <li>Then return LoginConfiguration is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean,
-   * Map, String)}
+   * <p>
+   * Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}
    */
   @Test
-  @DisplayName(
-      "Test instance(String, String, String, String, boolean, Map, String); when 'janedoe'; then return LoginConfiguration is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"
-  })
+  @DisplayName("Test instance(String, String, String, String, boolean, Map, String); when 'janedoe'; then return LoginConfiguration is 'null'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"})
   void testInstance_whenJanedoe_thenReturnLoginConfigurationIsNull() {
-    // Arrange and Act
-    SpnegoEngine actualInstanceResult =
-        SpnegoEngine.instance(
-            "janedoe",
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            new HashMap<>(),
-            "https://example.org/example");
-
-    // Assert
-    assertNull(actualInstanceResult.getLoginConfiguration());
+    // Arrange, Act and Assert
+    assertNull(SpnegoEngine
+        .instance("janedoe", "https://example.org/example", "https://example.org/example",
+            "https://example.org/example", true, new HashMap<>(), "https://example.org/example")
+        .getLoginConfiguration());
   }
 
   /**
    * Test {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return LoginConfiguration is {@code null}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return LoginConfiguration is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean,
-   * Map, String)}
+   * <p>
+   * Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}
    */
   @Test
-  @DisplayName(
-      "Test instance(String, String, String, String, boolean, Map, String); when 'null'; then return LoginConfiguration is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"
-  })
+  @DisplayName("Test instance(String, String, String, String, boolean, Map, String); when 'null'; then return LoginConfiguration is 'null'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"})
   void testInstance_whenNull_thenReturnLoginConfigurationIsNull() {
-    // Arrange and Act
-    SpnegoEngine actualInstanceResult =
-        SpnegoEngine.instance(
-            null,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            null,
-            null);
-
-    // Assert
-    assertNull(actualInstanceResult.getLoginConfiguration());
+    // Arrange, Act and Assert
+    assertNull(SpnegoEngine
+        .instance(null, "https://example.org/example", "https://example.org/example", "https://example.org/example",
+            true, new HashMap<>(), "https://example.org/example")
+        .getLoginConfiguration());
   }
 
   /**
    * Test {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return LoginConfiguration is {@code null}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return LoginConfiguration is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean,
-   * Map, String)}
+   * <p>
+   * Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}
    */
   @Test
-  @DisplayName(
-      "Test instance(String, String, String, String, boolean, Map, String); when 'null'; then return LoginConfiguration is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"
-  })
+  @DisplayName("Test instance(String, String, String, String, boolean, Map, String); when 'null'; then return LoginConfiguration is 'null'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"})
   void testInstance_whenNull_thenReturnLoginConfigurationIsNull2() {
-    // Arrange and Act
-    SpnegoEngine actualInstanceResult =
-        SpnegoEngine.instance(
-            null,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            new HashMap<>(),
-            null);
+    // Arrange, Act and Assert
+    assertNull(
+        SpnegoEngine
+            .instance("janedoe", "https://example.org/example", "https://example.org/example",
+                "https://example.org/example", true, new HashMap<>(), null)
+            .getLoginConfiguration());
+  }
 
-    // Assert
-    assertNull(actualInstanceResult.getLoginConfiguration());
+  /**
+   * Test {@link SpnegoEngine#generateToken(String)}.
+   * <ul>
+   *   <li>Given {@link SpnegoEngine#SpnegoEngine()}.</li>
+   *   <li>When {@code localhost}.</li>
+   *   <li>Then throw {@link SpnegoEngineException}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link SpnegoEngine#generateToken(String)}
+   */
+  @Test
+  @DisplayName("Test generateToken(String); given SpnegoEngine(); when 'localhost'; then throw SpnegoEngineException")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"String SpnegoEngine.generateToken(String)"})
+  void testGenerateToken_givenSpnegoEngine_whenLocalhost_thenThrowSpnegoEngineException() throws SpnegoEngineException {
+    // Arrange, Act and Assert
+    assertThrows(SpnegoEngineException.class, () -> (new SpnegoEngine()).generateToken("localhost"));
+  }
+
+  /**
+   * Test {@link SpnegoEngine#generateToken(String)}.
+   * <ul>
+   *   <li>Given {@link SpnegoEngine#SpnegoEngine()}.</li>
+   *   <li>When {@code null}.</li>
+   *   <li>Then throw {@link SpnegoEngineException}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link SpnegoEngine#generateToken(String)}
+   */
+  @Test
+  @DisplayName("Test generateToken(String); given SpnegoEngine(); when 'null'; then throw SpnegoEngineException")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"String SpnegoEngine.generateToken(String)"})
+  void testGenerateToken_givenSpnegoEngine_whenNull_thenThrowSpnegoEngineException() throws SpnegoEngineException {
+    // Arrange, Act and Assert
+    assertThrows(SpnegoEngineException.class, () -> (new SpnegoEngine()).generateToken(null));
   }
 
   /**
    * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
-   *
-   * <p>Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
+   * <p>
+   * Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
    */
   @Test
   @DisplayName("Test getCompleteServicePrincipalName(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
   void testGetCompleteServicePrincipalName() {
-    // Arrange
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            "@",
-            null,
-            false,
-            new HashMap<>(),
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
-
-    // Act and Assert
-    assertEquals("@", spnegoEngine.getCompleteServicePrincipalName("https://example.org/example"));
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example@https://example.org/example",
+        (new SpnegoEngine("janedoe", "https://example.org/example", "https://example.org/example",
+            "https://example.org/example", true, new HashMap<>(), "https://example.org/example",
+            mock(SpnegoTokenGenerator.class))).getCompleteServicePrincipalName("https://example.org/example"));
   }
 
   /**
    * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
-   *
-   * <p>Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
-   */
-  @Test
-  @DisplayName("Test getCompleteServicePrincipalName(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
-  void testGetCompleteServicePrincipalName2() {
-    // Arrange
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            "@",
-            "https://example.org/example",
-            false,
-            new HashMap<>(),
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
-
-    // Act and Assert
-    assertEquals("@", spnegoEngine.getCompleteServicePrincipalName("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
-   *
-   * <p>Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
-   */
-  @Test
-  @DisplayName("Test getCompleteServicePrincipalName(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
-  void testGetCompleteServicePrincipalName3() {
-    // Arrange
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            false,
-            new HashMap<>(),
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
-
-    // Act and Assert
-    assertEquals(
-        "https://example.org/example@https://example.org/example",
-        spnegoEngine.getCompleteServicePrincipalName("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
-   *
    * <ul>
-   *   <li>Then return {@code HTTP@https://example.org/example}.
+   *   <li>Then return {@code @}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
+   * <p>
+   * Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
    */
   @Test
-  @DisplayName(
-      "Test getCompleteServicePrincipalName(String); then return 'HTTP@https://example.org/example'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test getCompleteServicePrincipalName(String); then return '@'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
+  void testGetCompleteServicePrincipalName_thenReturnCommercialAt() {
+    // Arrange, Act and Assert
+    assertEquals("@",
+        (new SpnegoEngine("janedoe", "https://example.org/example", "@", "https://example.org/example", true,
+            new HashMap<>(), "https://example.org/example", mock(SpnegoTokenGenerator.class)))
+                .getCompleteServicePrincipalName("https://example.org/example"));
+  }
+
+  /**
+   * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
+   * <ul>
+   *   <li>Then return {@code HTTP@https://example.org/example}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
+   */
+  @Test
+  @DisplayName("Test getCompleteServicePrincipalName(String); then return 'HTTP@https://example.org/example'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
   void testGetCompleteServicePrincipalName_thenReturnHttpHttpsExampleOrgExample() {
-    // Arrange
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            null,
-            null,
-            false,
-            new HashMap<>(),
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
+    // Arrange, Act and Assert
+    assertEquals("HTTP@https://example.org/example",
+        (new SpnegoEngine()).getCompleteServicePrincipalName("https://example.org/example"));
+  }
 
-    // Act and Assert
-    assertEquals(
-        "HTTP@https://example.org/example",
-        spnegoEngine.getCompleteServicePrincipalName("https://example.org/example"));
+  /**
+   * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
+   * <ul>
+   *   <li>Then return {@code https://example.org/example}.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
+   */
+  @Test
+  @DisplayName("Test getCompleteServicePrincipalName(String); then return 'https://example.org/example'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
+  void testGetCompleteServicePrincipalName_thenReturnHttpsExampleOrgExample() {
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example",
+        (new SpnegoEngine("janedoe", "https://example.org/example", "https://example.org/example", null, true,
+            new HashMap<>(), "https://example.org/example", mock(SpnegoTokenGenerator.class)))
+                .getCompleteServicePrincipalName("https://example.org/example"));
   }
 
   /**
    * Test {@link SpnegoEngine#getLoginConfiguration()}.
-   *
    * <ul>
-   *   <li>Given {@link HashMap#HashMap()} {@code foo} is {@code foo}.
-   *   <li>Then return Type is {@code null}.
+   *   <li>Given {@link HashMap#HashMap()} {@code foo} is {@code foo}.</li>
+   *   <li>Then return Type is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#getLoginConfiguration()}
+   * <p>
+   * Method under test: {@link SpnegoEngine#getLoginConfiguration()}
    */
   @Test
-  @DisplayName(
-      "Test getLoginConfiguration(); given HashMap() 'foo' is 'foo'; then return Type is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test getLoginConfiguration(); given HashMap() 'foo' is 'foo'; then return Type is 'null'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Configuration SpnegoEngine.getLoginConfiguration()"})
   void testGetLoginConfiguration_givenHashMapFooIsFoo_thenReturnTypeIsNull() {
     // Arrange
     HashMap<String, String> customLoginConfig = new HashMap<>();
     customLoginConfig.put("foo", "foo");
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            customLoginConfig,
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
 
     // Act
-    Configuration actualLoginConfiguration = spnegoEngine.getLoginConfiguration();
+    Configuration actualLoginConfiguration = (new SpnegoEngine("janedoe", "https://example.org/example",
+        "https://example.org/example", "https://example.org/example", true, customLoginConfig,
+        "https://example.org/example", mock(SpnegoTokenGenerator.class))).getLoginConfiguration();
 
     // Assert
     assertNull(actualLoginConfiguration.getType());
@@ -367,52 +281,38 @@ class SpnegoEngineDiffblueTest {
 
   /**
    * Test {@link SpnegoEngine#getLoginConfiguration()}.
-   *
    * <ul>
-   *   <li>Given {@link SpnegoEngine#SpnegoEngine()}.
-   *   <li>Then return {@code null}.
+   *   <li>Given {@link SpnegoEngine#SpnegoEngine()}.</li>
+   *   <li>Then return {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#getLoginConfiguration()}
+   * <p>
+   * Method under test: {@link SpnegoEngine#getLoginConfiguration()}
    */
   @Test
   @DisplayName("Test getLoginConfiguration(); given SpnegoEngine(); then return 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Configuration SpnegoEngine.getLoginConfiguration()"})
   void testGetLoginConfiguration_givenSpnegoEngine_thenReturnNull() {
     // Arrange, Act and Assert
-    assertNull(new SpnegoEngine().getLoginConfiguration());
+    assertNull((new SpnegoEngine()).getLoginConfiguration());
   }
 
   /**
    * Test {@link SpnegoEngine#getLoginConfiguration()}.
-   *
    * <ul>
-   *   <li>Then return {@code null}.
+   *   <li>Then return {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#getLoginConfiguration()}
+   * <p>
+   * Method under test: {@link SpnegoEngine#getLoginConfiguration()}
    */
   @Test
   @DisplayName("Test getLoginConfiguration(); then return 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Configuration SpnegoEngine.getLoginConfiguration()"})
   void testGetLoginConfiguration_thenReturnNull() {
-    // Arrange
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            "janedoe",
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            true,
-            new HashMap<>(),
-            "https://example.org/example",
-            mock(SpnegoTokenGenerator.class));
-
-    // Act and Assert
-    assertNull(spnegoEngine.getLoginConfiguration());
+    // Arrange, Act and Assert
+    assertNull((new SpnegoEngine("janedoe", "https://example.org/example", "https://example.org/example",
+        "https://example.org/example", true, new HashMap<>(), "https://example.org/example",
+        mock(SpnegoTokenGenerator.class))).getLoginConfiguration());
   }
 }

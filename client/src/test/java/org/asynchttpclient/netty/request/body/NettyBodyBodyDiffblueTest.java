@@ -1,39 +1,60 @@
 package org.asynchttpclient.netty.request.body;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
+import java.util.LinkedList;
 import org.asynchttpclient.AsyncHttpClientConfig;
 import org.asynchttpclient.request.body.Body;
+import org.asynchttpclient.request.body.generator.PushBody;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class NettyBodyBodyDiffblueTest {
   /**
-   * Test {@link NettyBodyBody#getContentLength()}.
-   *
-   * <p>Method under test: {@link NettyBodyBody#getContentLength()}
+   * Test getters and setters.
+   * <p>
+   * Methods under test:
+   * <ul>
+   *   <li>{@link NettyBodyBody#NettyBodyBody(Body, AsyncHttpClientConfig)}
+   *   <li>{@link NettyBodyBody#getBody()}
+   * </ul>
    */
   @Test
-  @DisplayName("Test getContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long NettyBodyBody.getContentLength()"})
-  void testGetContentLength() {
+  @DisplayName("Test getters and setters")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void NettyBodyBody.<init>(Body, AsyncHttpClientConfig)", "Body NettyBodyBody.getBody()"})
+  void testGettersAndSetters() {
     // Arrange
-    Body body = mock(Body.class);
-    when(body.getContentLength()).thenReturn(3L);
-    NettyBodyBody nettyBodyBody = new NettyBodyBody(body, mock(AsyncHttpClientConfig.class));
+    PushBody body = new PushBody(new LinkedList<>());
 
     // Act
-    long actualContentLength = nettyBodyBody.getContentLength();
+    Body actualBody = (new NettyBodyBody(body, mock(AsyncHttpClientConfig.class))).getBody();
 
     // Assert
-    verify(body).getContentLength();
-    assertEquals(3L, actualContentLength);
+    assertTrue(actualBody instanceof PushBody);
+    assertSame(body, actualBody);
+  }
+
+  /**
+   * Test {@link NettyBodyBody#getContentLength()}.
+   * <ul>
+   *   <li>Given {@link PushBody#PushBody(Queue)} with queue is {@link LinkedList#LinkedList()}.</li>
+   *   <li>Then return minus one.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link NettyBodyBody#getContentLength()}
+   */
+  @Test
+  @DisplayName("Test getContentLength(); given PushBody(Queue) with queue is LinkedList(); then return minus one")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"long NettyBodyBody.getContentLength()"})
+  void testGetContentLength_givenPushBodyWithQueueIsLinkedList_thenReturnMinusOne() {
+    // Arrange, Act and Assert
+    assertEquals(-1L,
+        (new NettyBodyBody(new PushBody(new LinkedList<>()), mock(AsyncHttpClientConfig.class))).getContentLength());
   }
 }

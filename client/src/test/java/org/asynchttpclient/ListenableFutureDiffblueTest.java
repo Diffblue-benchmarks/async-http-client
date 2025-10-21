@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -23,25 +22,20 @@ import org.mockito.Mockito;
 class ListenableFutureDiffblueTest {
   /**
    * Test CompletedFailure {@link CompletedFailure#addListener(Runnable, Executor)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then calls {@link Runnable#run()}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then calls {@link Runnable#run()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link CompletedFailure#addListener(Runnable, Executor)}
+   * <p>
+   * Method under test: {@link CompletedFailure#addListener(Runnable, Executor)}
    */
   @Test
-  @DisplayName(
-      "Test CompletedFailure addListener(Runnable, Executor); when 'null'; then calls run()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test CompletedFailure addListener(Runnable, Executor); when 'null'; then calls run()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ListenableFuture CompletedFailure.addListener(Runnable, Executor)"})
   void testCompletedFailureAddListener_whenNull_thenCallsRun() {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
-
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
     Runnable listener = mock(Runnable.class);
     doNothing().when(listener).run();
 
@@ -57,26 +51,21 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure {@link CompletedFailure#addListener(Runnable, Executor)}.
-   *
    * <ul>
-   *   <li>When {@link Runnable}.
-   *   <li>Then calls {@link Executor#execute(Runnable)}.
+   *   <li>When {@link Runnable}.</li>
+   *   <li>Then calls {@link Executor#execute(Runnable)}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link CompletedFailure#addListener(Runnable, Executor)}
+   * <p>
+   * Method under test: {@link CompletedFailure#addListener(Runnable, Executor)}
    */
   @Test
-  @DisplayName(
-      "Test CompletedFailure addListener(Runnable, Executor); when Runnable; then calls execute(Runnable)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test CompletedFailure addListener(Runnable, Executor); when Runnable; then calls execute(Runnable)")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"ListenableFuture CompletedFailure.addListener(Runnable, Executor)"})
   void testCompletedFailureAddListener_whenRunnable_thenCallsExecute() {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
     Runnable listener = mock(Runnable.class);
-
     Executor exec = mock(Executor.class);
     doNothing().when(exec).execute(Mockito.<Runnable>any());
 
@@ -92,18 +81,16 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure {@link CompletedFailure#cancel(boolean)}.
-   *
-   * <p>Method under test: {@link CompletedFailure#cancel(boolean)}
+   * <p>
+   * Method under test: {@link CompletedFailure#cancel(boolean)}
    */
   @Test
   @DisplayName("Test CompletedFailure cancel(boolean)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean CompletedFailure.cancel(boolean)"})
   void testCompletedFailureCancel() {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
 
     // Act and Assert
     assertTrue(completedFailure.cancel(true));
@@ -111,38 +98,33 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure {@link CompletedFailure#get()}.
-   *
-   * <p>Method under test: {@link CompletedFailure#get()}
+   * <p>
+   * Method under test: {@link CompletedFailure#get()}
    */
   @Test
   @DisplayName("Test CompletedFailure get()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Object CompletedFailure.get()"})
   void testCompletedFailureGet() throws ExecutionException {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
 
     // Act and Assert
     assertThrows(ExecutionException.class, () -> completedFailure.get());
   }
 
   /**
-   * Test CompletedFailure {@link CompletedFailure#get(long, TimeUnit)} with {@code long}, {@code
-   * TimeUnit}.
-   *
-   * <p>Method under test: {@link CompletedFailure#get(long, TimeUnit)}
+   * Test CompletedFailure {@link CompletedFailure#get(long, TimeUnit)} with {@code long}, {@code TimeUnit}.
+   * <p>
+   * Method under test: {@link CompletedFailure#get(long, TimeUnit)}
    */
   @Test
   @DisplayName("Test CompletedFailure get(long, TimeUnit) with 'long', 'TimeUnit'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Object CompletedFailure.get(long, TimeUnit)"})
   void testCompletedFailureGetWithLongTimeUnit() throws ExecutionException {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
 
     // Act and Assert
     assertThrows(ExecutionException.class, () -> completedFailure.get(10L, TimeUnit.NANOSECONDS));
@@ -150,9 +132,8 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link CompletedFailure#abort(Throwable)}
    *   <li>{@link CompletedFailure#done()}
@@ -163,19 +144,12 @@ class ListenableFutureDiffblueTest {
    */
   @Test
   @DisplayName("Test CompletedFailure getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void CompletedFailure.abort(Throwable)",
-    "void CompletedFailure.done()",
-    "boolean CompletedFailure.isCancelled()",
-    "boolean CompletedFailure.isDone()",
-    "void CompletedFailure.touch()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void CompletedFailure.abort(Throwable)", "void CompletedFailure.done()",
+      "boolean CompletedFailure.isCancelled()", "boolean CompletedFailure.isDone()", "void CompletedFailure.touch()"})
   void testCompletedFailureGettersAndSetters() {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
 
     // Act
     completedFailure.abort(ChannelClosedException.INSTANCE);
@@ -190,18 +164,17 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure {@link CompletedFailure#CompletedFailure(String, Throwable)}.
-   *
-   * <p>Method under test: {@link CompletedFailure#CompletedFailure(String, Throwable)}
+   * <p>
+   * Method under test: {@link CompletedFailure#CompletedFailure(String, Throwable)}
    */
   @Test
   @DisplayName("Test CompletedFailure new CompletedFailure(String, Throwable)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CompletedFailure.<init>(String, Throwable)"})
   void testCompletedFailureNewCompletedFailure() {
     // Arrange and Act
-    CompletedFailure<Object> actualCompletedFailure =
-        new CompletedFailure<>("https://example.org/example", ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> actualCompletedFailure = new CompletedFailure<>("https://example.org/example",
+        ChannelClosedException.INSTANCE);
 
     // Assert
     assertTrue(actualCompletedFailure.isDone());
@@ -209,18 +182,16 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure {@link CompletedFailure#CompletedFailure(Throwable)}.
-   *
-   * <p>Method under test: {@link CompletedFailure#CompletedFailure(Throwable)}
+   * <p>
+   * Method under test: {@link CompletedFailure#CompletedFailure(Throwable)}
    */
   @Test
   @DisplayName("Test CompletedFailure new CompletedFailure(Throwable)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CompletedFailure.<init>(Throwable)"})
   void testCompletedFailureNewCompletedFailure2() {
     // Arrange and Act
-    CompletedFailure<Object> actualCompletedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> actualCompletedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
 
     // Assert
     assertTrue(actualCompletedFailure.isDone());
@@ -228,20 +199,16 @@ class ListenableFutureDiffblueTest {
 
   /**
    * Test CompletedFailure {@link CompletedFailure#toCompletableFuture()}.
-   *
-   * <p>Method under test: {@link CompletedFailure#toCompletableFuture()}
+   * <p>
+   * Method under test: {@link CompletedFailure#toCompletableFuture()}
    */
   @Test
   @DisplayName("Test CompletedFailure toCompletableFuture()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "java.util.concurrent.CompletableFuture CompletedFailure.toCompletableFuture()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"java.util.concurrent.CompletableFuture CompletedFailure.toCompletableFuture()"})
   void testCompletedFailureToCompletableFuture() {
     // Arrange
-    CompletedFailure<Object> completedFailure =
-        new CompletedFailure<>(ChannelClosedException.INSTANCE);
+    CompletedFailure<Object> completedFailure = new CompletedFailure<>(ChannelClosedException.INSTANCE);
 
     // Act and Assert
     assertTrue(completedFailure.toCompletableFuture().isDone());

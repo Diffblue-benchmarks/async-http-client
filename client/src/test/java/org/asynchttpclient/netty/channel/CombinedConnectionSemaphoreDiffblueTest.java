@@ -3,7 +3,6 @@ package org.asynchttpclient.netty.channel;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.IOException;
 import java.util.Collection;
@@ -18,19 +17,17 @@ import org.junit.jupiter.api.Test;
 class CombinedConnectionSemaphoreDiffblueTest {
   /**
    * Test {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}.
-   *
-   * <p>Method under test: {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int,
-   * int)}
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}
    */
   @Test
   @DisplayName("Test new CombinedConnectionSemaphore(int, int, int)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CombinedConnectionSemaphore.<init>(int, int, int)"})
   void testNewCombinedConnectionSemaphore() {
     // Arrange, Act and Assert
-    MaxConnectionSemaphore maxConnectionSemaphore =
-        new CombinedConnectionSemaphore(3, 3, 10).globalMaxConnectionSemaphore;
+    MaxConnectionSemaphore maxConnectionSemaphore = (new CombinedConnectionSemaphore(3, 3,
+        10)).globalMaxConnectionSemaphore;
     IOException ioException = maxConnectionSemaphore.tooManyConnections;
     assertTrue(ioException instanceof TooManyConnectionsException);
     assertEquals("Too many connections: 3", ioException.getLocalizedMessage());
@@ -40,19 +37,17 @@ class CombinedConnectionSemaphoreDiffblueTest {
 
   /**
    * Test {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}.
-   *
-   * <p>Method under test: {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int,
-   * int)}
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}
    */
   @Test
   @DisplayName("Test new CombinedConnectionSemaphore(int, int, int)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CombinedConnectionSemaphore.<init>(int, int, int)"})
   void testNewCombinedConnectionSemaphore2() {
     // Arrange, Act and Assert
-    MaxConnectionSemaphore maxConnectionSemaphore =
-        new CombinedConnectionSemaphore(0, 3, 10).globalMaxConnectionSemaphore;
+    MaxConnectionSemaphore maxConnectionSemaphore = (new CombinedConnectionSemaphore(0, 3,
+        10)).globalMaxConnectionSemaphore;
     Semaphore semaphore = maxConnectionSemaphore.freeChannels;
     Collection<Thread> queuedThreads = ((InfiniteSemaphore) semaphore).getQueuedThreads();
     assertTrue(queuedThreads instanceof List);
@@ -67,25 +62,42 @@ class CombinedConnectionSemaphoreDiffblueTest {
 
   /**
    * Test {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}.
-   *
-   * <p>Method under test: {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}
    */
   @Test
   @DisplayName("Test acquireChannelLock(Object)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CombinedConnectionSemaphore.acquireChannelLock(Object)"})
   void testAcquireChannelLock() throws IOException {
     // Arrange
-    CombinedConnectionSemaphore combinedConnectionSemaphore =
-        new CombinedConnectionSemaphore(3, 3, 0);
+    CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 0, 10);
+
+    // Act
+    combinedConnectionSemaphore.acquireChannelLock("Partition Key");
+
+    // Assert that nothing has changed
+    assertTrue(combinedConnectionSemaphore.freeChannelsPerHost.isEmpty());
+  }
+
+  /**
+   * Test {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}.
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}
+   */
+  @Test
+  @DisplayName("Test acquireChannelLock(Object)")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void CombinedConnectionSemaphore.acquireChannelLock(Object)"})
+  void testAcquireChannelLock2() throws IOException {
+    // Arrange
+    CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 3, 0);
 
     // Act
     combinedConnectionSemaphore.acquireChannelLock("Partition Key");
 
     // Assert
-    ConcurrentHashMap<Object, Semaphore> objectSemaphoreMap =
-        combinedConnectionSemaphore.freeChannelsPerHost;
+    ConcurrentHashMap<Object, Semaphore> objectSemaphoreMap = combinedConnectionSemaphore.freeChannelsPerHost;
     assertEquals(1, objectSemaphoreMap.size());
     Semaphore getResult = objectSemaphoreMap.get("Partition Key");
     assertEquals(0, getResult.getQueueLength());
@@ -95,40 +107,36 @@ class CombinedConnectionSemaphoreDiffblueTest {
 
   /**
    * Test {@link CombinedConnectionSemaphore#acquireGlobal(Object)}.
-   *
-   * <p>Method under test: {@link CombinedConnectionSemaphore#acquireGlobal(Object)}
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#acquireGlobal(Object)}
    */
   @Test
   @DisplayName("Test acquireGlobal(Object)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long CombinedConnectionSemaphore.acquireGlobal(Object)"})
   void testAcquireGlobal() throws IOException {
     // Arrange, Act and Assert
-    assertEquals(0L, new CombinedConnectionSemaphore(3, 3, 10).acquireGlobal("Partition Key"));
+    assertEquals(0L, (new CombinedConnectionSemaphore(3, 3, 10)).acquireGlobal("Partition Key"));
   }
 
   /**
    * Test {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}.
-   *
-   * <p>Method under test: {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
    */
   @Test
   @DisplayName("Test releaseChannelLock(Object)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CombinedConnectionSemaphore.releaseChannelLock(Object)"})
   void testReleaseChannelLock() {
     // Arrange
-    CombinedConnectionSemaphore combinedConnectionSemaphore =
-        new CombinedConnectionSemaphore(3, 3, 10);
+    CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 3, 10);
 
     // Act
     combinedConnectionSemaphore.releaseChannelLock("Partition Key");
 
     // Assert
-    ConcurrentHashMap<Object, Semaphore> objectSemaphoreMap =
-        combinedConnectionSemaphore.freeChannelsPerHost;
+    ConcurrentHashMap<Object, Semaphore> objectSemaphoreMap = combinedConnectionSemaphore.freeChannelsPerHost;
     assertEquals(1, objectSemaphoreMap.size());
     Semaphore getResult = objectSemaphoreMap.get("Partition Key");
     assertEquals(0, getResult.getQueueLength());
@@ -138,18 +146,16 @@ class CombinedConnectionSemaphoreDiffblueTest {
 
   /**
    * Test {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}.
-   *
-   * <p>Method under test: {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
+   * <p>
+   * Method under test: {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
    */
   @Test
   @DisplayName("Test releaseChannelLock(Object)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void CombinedConnectionSemaphore.releaseChannelLock(Object)"})
   void testReleaseChannelLock2() {
     // Arrange
-    CombinedConnectionSemaphore combinedConnectionSemaphore =
-        new CombinedConnectionSemaphore(3, 0, 10);
+    CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 0, 10);
 
     // Act
     combinedConnectionSemaphore.releaseChannelLock("Partition Key");

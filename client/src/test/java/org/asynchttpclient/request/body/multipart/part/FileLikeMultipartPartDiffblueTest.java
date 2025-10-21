@@ -1,7 +1,6 @@
 package org.asynchttpclient.request.body.multipart.part;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.UnsupportedEncodingException;
 import org.asynchttpclient.request.body.multipart.ByteArrayPart;
@@ -13,27 +12,21 @@ import org.junit.jupiter.api.Test;
 class FileLikeMultipartPartDiffblueTest {
   /**
    * Test {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}.
-   *
    * <ul>
-   *   <li>Then {@link CounterPartVisitor} (default constructor) Count is eighty-six.
+   *   <li>Then {@link CounterPartVisitor} (default constructor) Count is eighty-six.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}
+   * <p>
+   * Method under test: {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}
    */
   @Test
-  @DisplayName(
-      "Test visitDispositionHeader(PartVisitor); then CounterPartVisitor (default constructor) Count is eighty-six")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test visitDispositionHeader(PartVisitor); then CounterPartVisitor (default constructor) Count is eighty-six")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void FileLikeMultipartPart.visitDispositionHeader(PartVisitor)"})
-  void testVisitDispositionHeader_thenCounterPartVisitorCountIsEightySix()
-      throws UnsupportedEncodingException {
+  void testVisitDispositionHeader_thenCounterPartVisitorCountIsEightySix() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart part =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart part = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
     part.setDispositionType("https://example.org/example");
-    ByteArrayMultipartPart byteArrayMultipartPart =
-        new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayMultipartPart byteArrayMultipartPart = new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
     CounterPartVisitor visitor = new CounterPartVisitor();
 
     // Act
@@ -45,26 +38,21 @@ class FileLikeMultipartPartDiffblueTest {
 
   /**
    * Test {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}.
-   *
    * <ul>
-   *   <li>Then {@link CounterPartVisitor} (default constructor) Count is sixty-eight.
+   *   <li>Then {@link CounterPartVisitor} (default constructor) Count is sixty-eight.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}
+   * <p>
+   * Method under test: {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}
    */
   @Test
-  @DisplayName(
-      "Test visitDispositionHeader(PartVisitor); then CounterPartVisitor (default constructor) Count is sixty-eight")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test visitDispositionHeader(PartVisitor); then CounterPartVisitor (default constructor) Count is sixty-eight")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void FileLikeMultipartPart.visitDispositionHeader(PartVisitor)"})
-  void testVisitDispositionHeader_thenCounterPartVisitorCountIsSixtyEight()
-      throws UnsupportedEncodingException {
+  void testVisitDispositionHeader_thenCounterPartVisitorCountIsSixtyEight() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart part =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-    ByteArrayMultipartPart byteArrayMultipartPart =
-        new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart part = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+
+    ByteArrayMultipartPart byteArrayMultipartPart = new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
     CounterPartVisitor visitor = new CounterPartVisitor();
 
     // Act
@@ -76,25 +64,21 @@ class FileLikeMultipartPartDiffblueTest {
 
   /**
    * Test {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}.
-   *
    * <ul>
-   *   <li>Then {@link CounterPartVisitor} (default constructor) Count is {@link Integer#SIZE}.
+   *   <li>Then {@link CounterPartVisitor} (default constructor) Count is {@link Integer#SIZE}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}
+   * <p>
+   * Method under test: {@link FileLikeMultipartPart#visitDispositionHeader(PartVisitor)}
    */
   @Test
-  @DisplayName(
-      "Test visitDispositionHeader(PartVisitor); then CounterPartVisitor (default constructor) Count is SIZE")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test visitDispositionHeader(PartVisitor); then CounterPartVisitor (default constructor) Count is SIZE")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void FileLikeMultipartPart.visitDispositionHeader(PartVisitor)"})
-  void testVisitDispositionHeader_thenCounterPartVisitorCountIsSize()
-      throws UnsupportedEncodingException {
+  void testVisitDispositionHeader_thenCounterPartVisitorCountIsSize() throws UnsupportedEncodingException {
     // Arrange
     ByteArrayPart part = new ByteArrayPart(null, "AXAXAXAX".getBytes("UTF-8"));
-    ByteArrayMultipartPart byteArrayMultipartPart =
-        new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+
+    ByteArrayMultipartPart byteArrayMultipartPart = new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
     CounterPartVisitor visitor = new CounterPartVisitor();
 
     // Act

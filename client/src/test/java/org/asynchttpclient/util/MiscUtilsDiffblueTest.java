@@ -9,7 +9,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.Closeable;
 import java.io.IOException;
@@ -26,61 +25,52 @@ import org.junit.jupiter.api.Test;
 class MiscUtilsDiffblueTest {
   /**
    * Test {@link MiscUtils#isNonEmpty(byte[])} with {@code byte[]}.
-   *
    * <ul>
-   *   <li>When {@code AXAXAXAX} Bytes is {@code UTF-8}.
-   *   <li>Then return {@code true}.
+   *   <li>When {@code AXAXAXAX} Bytes is {@code UTF-8}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(byte[])}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(byte[])}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(byte[]) with 'byte[]'; when 'AXAXAXAX' Bytes is 'UTF-8'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(byte[]) with 'byte[]'; when 'AXAXAXAX' Bytes is 'UTF-8'; then return 'true'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(byte[])"})
-  void testIsNonEmptyWithByte_whenAxaxaxaxBytesIsUtf8_thenReturnTrue()
-      throws UnsupportedEncodingException {
+  void testIsNonEmptyWithByte_whenAxaxaxaxBytesIsUtf8_thenReturnTrue() throws UnsupportedEncodingException {
     // Arrange, Act and Assert
     assertTrue(MiscUtils.isNonEmpty("AXAXAXAX".getBytes("UTF-8")));
   }
 
   /**
    * Test {@link MiscUtils#isNonEmpty(byte[])} with {@code byte[]}.
-   *
    * <ul>
-   *   <li>When empty array of {@code byte}.
-   *   <li>Then return {@code false}.
+   *   <li>When empty array of {@code byte}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(byte[])}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(byte[])}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(byte[]) with 'byte[]'; when empty array of byte; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(byte[]) with 'byte[]'; when empty array of byte; then return 'false'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(byte[])"})
   void testIsNonEmptyWithByte_whenEmptyArrayOfByte_thenReturnFalse() {
     // Arrange, Act and Assert
-    assertFalse(MiscUtils.isNonEmpty(new byte[] {}));
+    assertFalse(MiscUtils.isNonEmpty(new byte[]{}));
   }
 
   /**
    * Test {@link MiscUtils#isNonEmpty(byte[])} with {@code byte[]}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(byte[])}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(byte[])}
    */
   @Test
   @DisplayName("Test isNonEmpty(byte[]) with 'byte[]'; when 'null'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(byte[])"})
   void testIsNonEmptyWithByte_whenNull_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -89,20 +79,17 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Collection)} with {@code Collection}.
-   *
    * <ul>
-   *   <li>Given {@code 42}.
-   *   <li>When {@link ArrayList#ArrayList()} add {@code 42}.
-   *   <li>Then return {@code true}.
+   *   <li>Given {@code 42}.</li>
+   *   <li>When {@link ArrayList#ArrayList()} add {@code 42}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Collection)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Collection)}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(Collection) with 'Collection'; given '42'; when ArrayList() add '42'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(Collection) with 'Collection'; given '42'; when ArrayList() add '42'; then return 'true'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Collection)"})
   void testIsNonEmptyWithCollection_given42_whenArrayListAdd42_thenReturnTrue() {
     // Arrange
@@ -115,20 +102,17 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Collection)} with {@code Collection}.
-   *
    * <ul>
-   *   <li>Given {@code 42}.
-   *   <li>When {@link ArrayList#ArrayList()} add {@code 42}.
-   *   <li>Then return {@code true}.
+   *   <li>Given {@code 42}.</li>
+   *   <li>When {@link ArrayList#ArrayList()} add {@code 42}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Collection)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Collection)}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(Collection) with 'Collection'; given '42'; when ArrayList() add '42'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(Collection) with 'Collection'; given '42'; when ArrayList() add '42'; then return 'true'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Collection)"})
   void testIsNonEmptyWithCollection_given42_whenArrayListAdd42_thenReturnTrue2() {
     // Arrange
@@ -142,19 +126,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Collection)} with {@code Collection}.
-   *
    * <ul>
-   *   <li>When {@link ArrayList#ArrayList()}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@link ArrayList#ArrayList()}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Collection)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Collection)}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(Collection) with 'Collection'; when ArrayList(); then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(Collection) with 'Collection'; when ArrayList(); then return 'false'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Collection)"})
   void testIsNonEmptyWithCollection_whenArrayList_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -163,18 +144,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Collection)} with {@code Collection}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Collection)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Collection)}
    */
   @Test
   @DisplayName("Test isNonEmpty(Collection) with 'Collection'; when 'null'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Collection)"})
   void testIsNonEmptyWithCollection_whenNull_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -183,20 +162,17 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Map)} with {@code Map}.
-   *
    * <ul>
-   *   <li>Given {@code 42}.
-   *   <li>When {@link HashMap#HashMap()} {@code 42} is {@code 42}.
-   *   <li>Then return {@code true}.
+   *   <li>Given {@code 42}.</li>
+   *   <li>When {@link HashMap#HashMap()} {@code 42} is {@code 42}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Map)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Map)}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(Map) with 'Map'; given '42'; when HashMap() '42' is '42'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(Map) with 'Map'; given '42'; when HashMap() '42' is '42'; then return 'true'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Map)"})
   void testIsNonEmptyWithMap_given42_whenHashMap42Is42_thenReturnTrue() {
     // Arrange
@@ -209,18 +185,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Map)} with {@code Map}.
-   *
    * <ul>
-   *   <li>When {@link HashMap#HashMap()}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@link HashMap#HashMap()}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Map)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Map)}
    */
   @Test
   @DisplayName("Test isNonEmpty(Map) with 'Map'; when HashMap(); then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Map)"})
   void testIsNonEmptyWithMap_whenHashMap_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -229,18 +203,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Map)} with {@code Map}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Map)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Map)}
    */
   @Test
   @DisplayName("Test isNonEmpty(Map) with 'Map'; when 'null'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Map)"})
   void testIsNonEmptyWithMap_whenNull_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -249,60 +221,52 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Object[])} with {@code Object[]}.
-   *
    * <ul>
-   *   <li>When array of {@link Object} with {@code Array}.
-   *   <li>Then return {@code true}.
+   *   <li>When array of {@link Object} with {@code Array}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Object[])}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Object[])}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(Object[]) with 'Object[]'; when array of Object with 'Array'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(Object[]) with 'Object[]'; when array of Object with 'Array'; then return 'true'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Object[])"})
   void testIsNonEmptyWithObject_whenArrayOfObjectWithArray_thenReturnTrue() {
     // Arrange, Act and Assert
-    assertTrue(MiscUtils.isNonEmpty(new Object[] {"Array"}));
+    assertTrue(MiscUtils.isNonEmpty(new Object[]{"Array"}));
   }
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Object[])} with {@code Object[]}.
-   *
    * <ul>
-   *   <li>When empty array of {@link Object}.
-   *   <li>Then return {@code false}.
+   *   <li>When empty array of {@link Object}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Object[])}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Object[])}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(Object[]) with 'Object[]'; when empty array of Object; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(Object[]) with 'Object[]'; when empty array of Object; then return 'false'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Object[])"})
   void testIsNonEmptyWithObject_whenEmptyArrayOfObject_thenReturnFalse() {
     // Arrange, Act and Assert
-    assertFalse(MiscUtils.isNonEmpty(new Object[] {}));
+    assertFalse(MiscUtils.isNonEmpty(new Object[]{}));
   }
 
   /**
    * Test {@link MiscUtils#isNonEmpty(Object[])} with {@code Object[]}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(Object[])}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(Object[])}
    */
   @Test
   @DisplayName("Test isNonEmpty(Object[]) with 'Object[]'; when 'null'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(Object[])"})
   void testIsNonEmptyWithObject_whenNull_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -311,18 +275,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(String)} with {@code String}.
-   *
    * <ul>
-   *   <li>When empty string.
-   *   <li>Then return {@code false}.
+   *   <li>When empty string.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(String)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(String)}
    */
   @Test
   @DisplayName("Test isNonEmpty(String) with 'String'; when empty string; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(String)"})
   void testIsNonEmptyWithString_whenEmptyString_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -331,19 +293,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(String)} with {@code String}.
-   *
    * <ul>
-   *   <li>When {@code https://example.org/example}.
-   *   <li>Then return {@code true}.
+   *   <li>When {@code https://example.org/example}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(String)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(String)}
    */
   @Test
-  @DisplayName(
-      "Test isNonEmpty(String) with 'String'; when 'https://example.org/example'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test isNonEmpty(String) with 'String'; when 'https://example.org/example'; then return 'true'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(String)"})
   void testIsNonEmptyWithString_whenHttpsExampleOrgExample_thenReturnTrue() {
     // Arrange, Act and Assert
@@ -352,18 +311,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isNonEmpty(String)} with {@code String}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isNonEmpty(String)}
+   * <p>
+   * Method under test: {@link MiscUtils#isNonEmpty(String)}
    */
   @Test
   @DisplayName("Test isNonEmpty(String) with 'String'; when 'null'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isNonEmpty(String)"})
   void testIsNonEmptyWithString_whenNull_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -372,18 +329,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#withDefault(Object, Object)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code Def}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code Def}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#withDefault(Object, Object)}
+   * <p>
+   * Method under test: {@link MiscUtils#withDefault(Object, Object)}
    */
   @Test
   @DisplayName("Test withDefault(Object, Object); when 'null'; then return 'Def'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Object MiscUtils.withDefault(Object, Object)"})
   void testWithDefault_whenNull_thenReturnDef() {
     // Arrange, Act and Assert
@@ -392,18 +347,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#withDefault(Object, Object)}.
-   *
    * <ul>
-   *   <li>When {@code Value}.
-   *   <li>Then return {@code Value}.
+   *   <li>When {@code Value}.</li>
+   *   <li>Then return {@code Value}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#withDefault(Object, Object)}
+   * <p>
+   * Method under test: {@link MiscUtils#withDefault(Object, Object)}
    */
   @Test
   @DisplayName("Test withDefault(Object, Object); when 'Value'; then return 'Value'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Object MiscUtils.withDefault(Object, Object)"})
   void testWithDefault_whenValue_thenReturnValue() {
     // Arrange, Act and Assert
@@ -412,18 +365,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isEmpty(String)}.
-   *
    * <ul>
-   *   <li>When empty string.
-   *   <li>Then return {@code true}.
+   *   <li>When empty string.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isEmpty(String)}
+   * <p>
+   * Method under test: {@link MiscUtils#isEmpty(String)}
    */
   @Test
   @DisplayName("Test isEmpty(String); when empty string; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isEmpty(String)"})
   void testIsEmpty_whenEmptyString_thenReturnTrue() {
     // Arrange, Act and Assert
@@ -432,18 +383,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isEmpty(String)}.
-   *
    * <ul>
-   *   <li>When {@code https://example.org/example}.
-   *   <li>Then return {@code false}.
+   *   <li>When {@code https://example.org/example}.</li>
+   *   <li>Then return {@code false}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isEmpty(String)}
+   * <p>
+   * Method under test: {@link MiscUtils#isEmpty(String)}
    */
   @Test
   @DisplayName("Test isEmpty(String); when 'https://example.org/example'; then return 'false'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isEmpty(String)"})
   void testIsEmpty_whenHttpsExampleOrgExample_thenReturnFalse() {
     // Arrange, Act and Assert
@@ -452,18 +401,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#isEmpty(String)}.
-   *
    * <ul>
-   *   <li>When {@code null}.
-   *   <li>Then return {@code true}.
+   *   <li>When {@code null}.</li>
+   *   <li>Then return {@code true}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#isEmpty(String)}
+   * <p>
+   * Method under test: {@link MiscUtils#isEmpty(String)}
    */
   @Test
   @DisplayName("Test isEmpty(String); when 'null'; then return 'true'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean MiscUtils.isEmpty(String)"})
   void testIsEmpty_whenNull_thenReturnTrue() {
     // Arrange, Act and Assert
@@ -472,24 +419,19 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#closeSilently(Closeable)}.
-   *
    * <ul>
-   *   <li>Given {@link ChannelClosedException#INSTANCE}.
-   *   <li>When {@link Closeable} {@link Closeable#close()} throw {@link
-   *       ChannelClosedException#INSTANCE}.
-   *   <li>Then calls {@link Closeable#close()}.
+   *   <li>Given {@link ChannelClosedException#INSTANCE}.</li>
+   *   <li>When {@link Closeable} {@link Closeable#close()} throw {@link ChannelClosedException#INSTANCE}.</li>
+   *   <li>Then calls {@link Closeable#close()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#closeSilently(Closeable)}
+   * <p>
+   * Method under test: {@link MiscUtils#closeSilently(Closeable)}
    */
   @Test
-  @DisplayName(
-      "Test closeSilently(Closeable); given INSTANCE; when Closeable close() throw INSTANCE; then calls close()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test closeSilently(Closeable); given INSTANCE; when Closeable close() throw INSTANCE; then calls close()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void MiscUtils.closeSilently(Closeable)"})
-  void testCloseSilently_givenInstance_whenCloseableCloseThrowInstance_thenCallsClose()
-      throws IOException {
+  void testCloseSilently_givenInstance_whenCloseableCloseThrowInstance_thenCallsClose() throws IOException {
     // Arrange
     Closeable closeable = mock(Closeable.class);
     doThrow(ChannelClosedException.INSTANCE).when(closeable).close();
@@ -503,19 +445,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#closeSilently(Closeable)}.
-   *
    * <ul>
-   *   <li>When {@link Closeable} {@link Closeable#close()} does nothing.
-   *   <li>Then calls {@link Closeable#close()}.
+   *   <li>When {@link Closeable} {@link Closeable#close()} does nothing.</li>
+   *   <li>Then calls {@link Closeable#close()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#closeSilently(Closeable)}
+   * <p>
+   * Method under test: {@link MiscUtils#closeSilently(Closeable)}
    */
   @Test
-  @DisplayName(
-      "Test closeSilently(Closeable); when Closeable close() does nothing; then calls close()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test closeSilently(Closeable); when Closeable close() does nothing; then calls close()")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void MiscUtils.closeSilently(Closeable)"})
   void testCloseSilently_whenCloseableCloseDoesNothing_thenCallsClose() throws IOException {
     // Arrange
@@ -531,19 +470,15 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#getCause(Throwable)}.
-   *
    * <ul>
-   *   <li>Then {@link IOException#IOException(String, Throwable)} with {@code foo} and {@link
-   *       ChannelClosedException#INSTANCE} Cause is {@link ChannelClosedException#INSTANCE}.
+   *   <li>Then {@link IOException#IOException(String, Throwable)} with {@code foo} and {@link ChannelClosedException#INSTANCE} Cause is {@link ChannelClosedException#INSTANCE}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#getCause(Throwable)}
+   * <p>
+   * Method under test: {@link MiscUtils#getCause(Throwable)}
    */
   @Test
-  @DisplayName(
-      "Test getCause(Throwable); then IOException(String, Throwable) with 'foo' and INSTANCE Cause is INSTANCE")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test getCause(Throwable); then IOException(String, Throwable) with 'foo' and INSTANCE Cause is INSTANCE")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Throwable MiscUtils.getCause(Throwable)"})
   void testGetCause_thenIOExceptionWithFooAndInstanceCauseIsInstance() {
     // Arrange
@@ -563,18 +498,16 @@ class MiscUtilsDiffblueTest {
 
   /**
    * Test {@link MiscUtils#getCause(Throwable)}.
-   *
    * <ul>
-   *   <li>When {@link ChannelClosedException#INSTANCE}.
-   *   <li>Then {@link ChannelClosedException#INSTANCE} Cause is {@code null}.
+   *   <li>When {@link ChannelClosedException#INSTANCE}.</li>
+   *   <li>Then {@link ChannelClosedException#INSTANCE} Cause is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link MiscUtils#getCause(Throwable)}
+   * <p>
+   * Method under test: {@link MiscUtils#getCause(Throwable)}
    */
   @Test
   @DisplayName("Test getCause(Throwable); when INSTANCE; then INSTANCE Cause is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Throwable MiscUtils.getCause(Throwable)"})
   void testGetCause_whenInstance_thenInstanceCauseIsNull() {
     // Arrange

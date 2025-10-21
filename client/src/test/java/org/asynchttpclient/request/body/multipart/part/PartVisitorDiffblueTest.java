@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.Unpooled;
@@ -20,25 +19,24 @@ import org.mockito.Mockito;
 class PartVisitorDiffblueTest {
   /**
    * Test ByteBufVisitor {@link ByteBufVisitor#withBytes(byte[])}.
-   *
    * <ul>
-   *   <li>Then calls {@link CompositeByteBuf#writeBytes(byte[])}.
+   *   <li>Then calls {@link CompositeByteBuf#writeBytes(byte[])}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link ByteBufVisitor#withBytes(byte[])}
+   * <p>
+   * Method under test: {@link ByteBufVisitor#withBytes(byte[])}
    */
   @Test
   @DisplayName("Test ByteBufVisitor withBytes(byte[]); then calls writeBytes(byte[])")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void ByteBufVisitor.withBytes(byte[])"})
   void testByteBufVisitorWithBytes_thenCallsWriteBytes() throws UnsupportedEncodingException {
     // Arrange
     CompositeByteBuf target = mock(CompositeByteBuf.class);
     when(target.writeBytes(Mockito.<byte[]>any())).thenReturn(Unpooled.compositeBuffer(3));
+    ByteBufVisitor byteBufVisitor = new ByteBufVisitor(target);
 
     // Act
-    new ByteBufVisitor(target).withBytes("AXAXAXAX".getBytes("UTF-8"));
+    byteBufVisitor.withBytes("AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     verify(target).writeBytes(isA(byte[].class));
@@ -46,9 +44,8 @@ class PartVisitorDiffblueTest {
 
   /**
    * Test CounterPartVisitor getters and setters.
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>default or parameterless constructor of {@link CounterPartVisitor}
    *   <li>{@link CounterPartVisitor#withByte(byte)}
@@ -58,14 +55,9 @@ class PartVisitorDiffblueTest {
    */
   @Test
   @DisplayName("Test CounterPartVisitor getters and setters")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void CounterPartVisitor.<init>()",
-    "int CounterPartVisitor.getCount()",
-    "void CounterPartVisitor.withByte(byte)",
-    "void CounterPartVisitor.withBytes(byte[])"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void CounterPartVisitor.<init>()", "int CounterPartVisitor.getCount()",
+      "void CounterPartVisitor.withByte(byte)", "void CounterPartVisitor.withBytes(byte[])"})
   void testCounterPartVisitorGettersAndSetters() throws UnsupportedEncodingException {
     // Arrange and Act
     CounterPartVisitor actualCounterPartVisitor = new CounterPartVisitor();

@@ -3,7 +3,6 @@ package org.asynchttpclient.request.body.multipart;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -16,132 +15,102 @@ import org.junit.jupiter.api.Test;
 class PartBaseDiffblueTest {
   /**
    * Test {@link PartBase#getName()}.
-   *
-   * <p>Method under test: {@link PartBase#getName()}
+   * <p>
+   * Method under test: {@link PartBase#getName()}
    */
   @Test
   @DisplayName("Test getName()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String PartBase.getName()"})
   void testGetName() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertEquals("https://example.org/example", byteArrayPart.getName());
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example",
+        (new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getName());
   }
 
   /**
    * Test {@link PartBase#getContentType()}.
-   *
-   * <p>Method under test: {@link PartBase#getContentType()}
+   * <p>
+   * Method under test: {@link PartBase#getContentType()}
    */
   @Test
   @DisplayName("Test getContentType()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String PartBase.getContentType()"})
   void testGetContentType() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertEquals("application/octet-stream", byteArrayPart.getContentType());
+    // Arrange, Act and Assert
+    assertEquals("application/octet-stream",
+        (new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getContentType());
   }
 
   /**
    * Test {@link PartBase#getCharset()}.
-   *
-   * <p>Method under test: {@link PartBase#getCharset()}
+   * <p>
+   * Method under test: {@link PartBase#getCharset()}
    */
   @Test
   @DisplayName("Test getCharset()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.nio.charset.Charset PartBase.getCharset()"})
   void testGetCharset() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertNull(byteArrayPart.getCharset());
+    // Arrange, Act and Assert
+    assertNull((new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getCharset());
   }
 
   /**
    * Test {@link PartBase#getTransferEncoding()}.
-   *
-   * <p>Method under test: {@link PartBase#getTransferEncoding()}
+   * <p>
+   * Method under test: {@link PartBase#getTransferEncoding()}
    */
   @Test
   @DisplayName("Test getTransferEncoding()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String PartBase.getTransferEncoding()"})
   void testGetTransferEncoding() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertNull(byteArrayPart.getTransferEncoding());
+    // Arrange, Act and Assert
+    assertNull((new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getTransferEncoding());
   }
 
   /**
    * Test {@link PartBase#getContentId()}.
-   *
-   * <p>Method under test: {@link PartBase#getContentId()}
+   * <p>
+   * Method under test: {@link PartBase#getContentId()}
    */
   @Test
   @DisplayName("Test getContentId()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String PartBase.getContentId()"})
   void testGetContentId() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertNull(byteArrayPart.getContentId());
+    // Arrange, Act and Assert
+    assertNull((new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getContentId());
   }
 
   /**
    * Test {@link PartBase#getDispositionType()}.
-   *
-   * <p>Method under test: {@link PartBase#getDispositionType()}
+   * <p>
+   * Method under test: {@link PartBase#getDispositionType()}
    */
   @Test
   @DisplayName("Test getDispositionType()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String PartBase.getDispositionType()"})
   void testGetDispositionType() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertNull(byteArrayPart.getDispositionType());
+    // Arrange, Act and Assert
+    assertNull((new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getDispositionType());
   }
 
   /**
    * Test {@link PartBase#setDispositionType(String)}.
-   *
-   * <p>Method under test: {@link PartBase#setDispositionType(String)}
+   * <p>
+   * Method under test: {@link PartBase#setDispositionType(String)}
    */
   @Test
   @DisplayName("Test setDispositionType(String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PartBase.setDispositionType(String)"})
   void testSetDispositionType() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart byteArrayPart = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
 
     // Act
     byteArrayPart.setDispositionType("https://example.org/example");
@@ -152,37 +121,30 @@ class PartBaseDiffblueTest {
 
   /**
    * Test {@link PartBase#getCustomHeaders()}.
-   *
-   * <p>Method under test: {@link PartBase#getCustomHeaders()}
+   * <p>
+   * Method under test: {@link PartBase#getCustomHeaders()}
    */
   @Test
   @DisplayName("Test getCustomHeaders()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"List PartBase.getCustomHeaders()"})
   void testGetCustomHeaders() throws UnsupportedEncodingException {
-    // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    // Act and Assert
-    assertNull(byteArrayPart.getCustomHeaders());
+    // Arrange, Act and Assert
+    assertNull((new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"))).getCustomHeaders());
   }
 
   /**
    * Test {@link PartBase#setCustomHeaders(List)}.
-   *
-   * <p>Method under test: {@link PartBase#setCustomHeaders(List)}
+   * <p>
+   * Method under test: {@link PartBase#setCustomHeaders(List)}
    */
   @Test
   @DisplayName("Test setCustomHeaders(List)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PartBase.setCustomHeaders(List)"})
   void testSetCustomHeaders() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart byteArrayPart = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
 
     ArrayList<Param> customHeaders = new ArrayList<>();
     customHeaders.add(new Param("https://example.org/example", "https://example.org/example"));
@@ -196,18 +158,16 @@ class PartBaseDiffblueTest {
 
   /**
    * Test {@link PartBase#setCustomHeaders(List)}.
-   *
-   * <p>Method under test: {@link PartBase#setCustomHeaders(List)}
+   * <p>
+   * Method under test: {@link PartBase#setCustomHeaders(List)}
    */
   @Test
   @DisplayName("Test setCustomHeaders(List)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PartBase.setCustomHeaders(List)"})
   void testSetCustomHeaders2() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart byteArrayPart = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
 
     ArrayList<Param> customHeaders = new ArrayList<>();
     customHeaders.add(new Param("https://example.org/example", "https://example.org/example"));
@@ -222,22 +182,19 @@ class PartBaseDiffblueTest {
 
   /**
    * Test {@link PartBase#setCustomHeaders(List)}.
-   *
    * <ul>
-   *   <li>When {@link ArrayList#ArrayList()}.
+   *   <li>When {@link ArrayList#ArrayList()}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link PartBase#setCustomHeaders(List)}
+   * <p>
+   * Method under test: {@link PartBase#setCustomHeaders(List)}
    */
   @Test
   @DisplayName("Test setCustomHeaders(List); when ArrayList()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PartBase.setCustomHeaders(List)"})
   void testSetCustomHeaders_whenArrayList() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart byteArrayPart = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
     ArrayList<Param> customHeaders = new ArrayList<>();
 
     // Act
@@ -249,18 +206,16 @@ class PartBaseDiffblueTest {
 
   /**
    * Test {@link PartBase#addCustomHeader(String, String)}.
-   *
-   * <p>Method under test: {@link PartBase#addCustomHeader(String, String)}
+   * <p>
+   * Method under test: {@link PartBase#addCustomHeader(String, String)}
    */
   @Test
   @DisplayName("Test addCustomHeader(String, String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PartBase.addCustomHeader(String, String)"})
   void testAddCustomHeader() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart byteArrayPart = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
 
     // Act
     byteArrayPart.addCustomHeader("https://example.org/example", "https://example.org/example");
@@ -275,18 +230,16 @@ class PartBaseDiffblueTest {
 
   /**
    * Test {@link PartBase#addCustomHeader(String, String)}.
-   *
-   * <p>Method under test: {@link PartBase#addCustomHeader(String, String)}
+   * <p>
+   * Method under test: {@link PartBase#addCustomHeader(String, String)}
    */
   @Test
   @DisplayName("Test addCustomHeader(String, String)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void PartBase.addCustomHeader(String, String)"})
   void testAddCustomHeader2() throws UnsupportedEncodingException {
     // Arrange
-    ByteArrayPart byteArrayPart =
-        new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+    ByteArrayPart byteArrayPart = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
     ArrayList<Param> customHeaders = new ArrayList<>();
     byteArrayPart.setCustomHeaders(customHeaders);
 
@@ -299,19 +252,18 @@ class PartBaseDiffblueTest {
 
   /**
    * Test {@link PartBase#toString()}.
-   *
-   * <p>Method under test: {@link PartBase#toString()}
+   * <p>
+   * Method under test: {@link PartBase#toString()}
    */
   @Test
   @DisplayName("Test toString()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String PartBase.toString()"})
   void testToString() {
     // Arrange, Act and Assert
     assertEquals(
         "StringPart name=https://example.org/example contentType=null charset=UTF-8 transferEncoding=null"
             + " contentId=null dispositionType=null",
-        new StringPart("https://example.org/example", "https://example.org/example").toString());
+        (new StringPart("https://example.org/example", "https://example.org/example")).toString());
   }
 }

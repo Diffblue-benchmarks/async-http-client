@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
@@ -18,12 +17,14 @@ import io.netty.resolver.NameResolver;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.asynchttpclient.channel.ChannelPoolPartitioning;
@@ -39,13 +40,12 @@ import org.junit.jupiter.api.Test;
 class RequestDiffblueTest {
   /**
    * Test {@link Request#toBuilder()}.
-   *
-   * <p>Method under test: {@link Request#toBuilder()}
+   * <p>
+   * Method under test: {@link Request#toBuilder()}
    */
   @Test
   @DisplayName("Test toBuilder()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"RequestBuilder Request.toBuilder()"})
   void testToBuilder() throws IOException {
     // Arrange
@@ -68,37 +68,10 @@ class RequestDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
-
-    DefaultRequest defaultRequest =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
+    DefaultRequest defaultRequest = new DefaultRequest("https://example.org/example", uri, address, localAddress,
+        headers, cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData,
+        streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true,
+        null, null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class));
 
     // Act
     RequestBuilder actualToBuilderResult = defaultRequest.toBuilder();
@@ -120,24 +93,39 @@ class RequestDiffblueTest {
     assertEquals(UriEncoder.FIXING, actualToBuilderResult.uriEncoder);
     assertTrue(actualToBuilderResult.compositeByteData.isEmpty());
     assertTrue(actualToBuilderResult.followRedirect);
-    assertSame(actualToBuilderResult.address, defaultRequest.getAddress());
-    assertSame(actualToBuilderResult.bodyGenerator, defaultRequest.getBodyGenerator());
-    assertSame(actualToBuilderResult.byteBufData, defaultRequest.getByteBufData());
-    assertSame(actualToBuilderResult.byteBufferData, defaultRequest.getByteBufferData());
-    assertSame(actualToBuilderResult.byteData, defaultRequest.getByteData());
-    assertSame(
-        actualToBuilderResult.channelPoolPartitioning, defaultRequest.getChannelPoolPartitioning());
-    assertSame(actualToBuilderResult.charset, defaultRequest.getCharset());
-    assertSame(actualToBuilderResult.compositeByteData, defaultRequest.getCompositeByteData());
-    assertSame(actualToBuilderResult.file, defaultRequest.getFile());
-    assertSame(actualToBuilderResult.localAddress, defaultRequest.getLocalAddress());
-    assertSame(actualToBuilderResult.nameResolver, defaultRequest.getNameResolver());
-    assertSame(actualToBuilderResult.proxyServer, defaultRequest.getProxyServer());
-    assertSame(actualToBuilderResult.readTimeout, defaultRequest.getReadTimeout());
-    assertSame(actualToBuilderResult.realm, defaultRequest.getRealm());
-    assertSame(actualToBuilderResult.requestTimeout, defaultRequest.getRequestTimeout());
-    assertSame(actualToBuilderResult.streamData, defaultRequest.getStreamData());
-    assertSame(actualToBuilderResult.uri, defaultRequest.getUri());
+    InetAddress expectedAddress = actualToBuilderResult.address;
+    assertSame(expectedAddress, defaultRequest.getAddress());
+    BodyGenerator expectedBodyGenerator = actualToBuilderResult.bodyGenerator;
+    assertSame(expectedBodyGenerator, defaultRequest.getBodyGenerator());
+    ByteBuf expectedByteBufData = actualToBuilderResult.byteBufData;
+    assertSame(expectedByteBufData, defaultRequest.getByteBufData());
+    ByteBuffer expectedByteBufferData = actualToBuilderResult.byteBufferData;
+    assertSame(expectedByteBufferData, defaultRequest.getByteBufferData());
+    byte[] expectedByteData = actualToBuilderResult.byteData;
+    assertSame(expectedByteData, defaultRequest.getByteData());
+    ChannelPoolPartitioning expectedChannelPoolPartitioning = actualToBuilderResult.channelPoolPartitioning;
+    assertSame(expectedChannelPoolPartitioning, defaultRequest.getChannelPoolPartitioning());
+    Charset expectedCharset = actualToBuilderResult.charset;
+    assertSame(expectedCharset, defaultRequest.getCharset());
+    List<byte[]> expectedCompositeByteData = actualToBuilderResult.compositeByteData;
+    assertSame(expectedCompositeByteData, defaultRequest.getCompositeByteData());
+    File expectedFile = actualToBuilderResult.file;
+    assertSame(expectedFile, defaultRequest.getFile());
+    InetAddress expectedLocalAddress = actualToBuilderResult.localAddress;
+    assertSame(expectedLocalAddress, defaultRequest.getLocalAddress());
+    NameResolver<InetAddress> expectedNameResolver = actualToBuilderResult.nameResolver;
+    assertSame(expectedNameResolver, defaultRequest.getNameResolver());
+    ProxyServer expectedProxyServer = actualToBuilderResult.proxyServer;
+    assertSame(expectedProxyServer, defaultRequest.getProxyServer());
+    Realm expectedRealm = actualToBuilderResult.realm;
+    assertSame(expectedRealm, defaultRequest.getRealm());
+    Duration duration = actualToBuilderResult.requestTimeout;
+    assertSame(duration, defaultRequest.getReadTimeout());
+    assertSame(duration, defaultRequest.getRequestTimeout());
+    InputStream expectedStreamData = actualToBuilderResult.streamData;
+    assertSame(expectedStreamData, defaultRequest.getStreamData());
+    Uri expectedUri = actualToBuilderResult.uri;
+    assertSame(expectedUri, defaultRequest.getUri());
     assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
     assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), actualToBuilderResult.byteData);
   }

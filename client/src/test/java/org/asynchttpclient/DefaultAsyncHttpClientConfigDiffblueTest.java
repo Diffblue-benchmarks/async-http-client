@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBufAllocator;
@@ -19,7 +18,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timer;
 import java.nio.charset.Charset;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,21 +47,19 @@ import org.junit.jupiter.api.Test;
 class DefaultAsyncHttpClientConfigDiffblueTest {
   /**
    * Test Builder {@link Builder#addChannelOption(ChannelOption, Object)}.
-   *
-   * <p>Method under test: {@link Builder#addChannelOption(ChannelOption, Object)}
+   * <p>
+   * Method under test: {@link Builder#addChannelOption(ChannelOption, Object)}
    */
   @Test
   @DisplayName("Test Builder addChannelOption(ChannelOption, Object)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.addChannelOption(ChannelOption, Object)"})
   void testBuilderAddChannelOption() {
     // Arrange
     Builder configResult = Dsl.config();
 
     // Act
-    Builder actualAddChannelOptionResult =
-        configResult.addChannelOption(mock(ChannelOption.class), "Value");
+    Builder actualAddChannelOptionResult = configResult.addChannelOption(mock(ChannelOption.class), "Value");
 
     // Assert
     assertEquals(1, configResult.build().getChannelOptions().size());
@@ -72,21 +68,19 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
 
   /**
    * Test Builder {@link Builder#addIOExceptionFilter(IOExceptionFilter)}.
-   *
-   * <p>Method under test: {@link Builder#addIOExceptionFilter(IOExceptionFilter)}
+   * <p>
+   * Method under test: {@link Builder#addIOExceptionFilter(IOExceptionFilter)}
    */
   @Test
   @DisplayName("Test Builder addIOExceptionFilter(IOExceptionFilter)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.addIOExceptionFilter(IOExceptionFilter)"})
   void testBuilderAddIOExceptionFilter() {
     // Arrange
     Builder configResult = Dsl.config();
 
     // Act
-    Builder actualAddIOExceptionFilterResult =
-        configResult.addIOExceptionFilter(mock(IOExceptionFilter.class));
+    Builder actualAddIOExceptionFilterResult = configResult.addIOExceptionFilter(mock(IOExceptionFilter.class));
 
     // Assert
     assertEquals(1, configResult.build().getIoExceptionFilters().size());
@@ -95,13 +89,12 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
 
   /**
    * Test Builder {@link Builder#addRequestFilter(RequestFilter)}.
-   *
-   * <p>Method under test: {@link Builder#addRequestFilter(RequestFilter)}
+   * <p>
+   * Method under test: {@link Builder#addRequestFilter(RequestFilter)}
    */
   @Test
   @DisplayName("Test Builder addRequestFilter(RequestFilter)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.addRequestFilter(RequestFilter)"})
   void testBuilderAddRequestFilter() {
     // Arrange
@@ -117,21 +110,19 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
 
   /**
    * Test Builder {@link Builder#addResponseFilter(ResponseFilter)}.
-   *
-   * <p>Method under test: {@link Builder#addResponseFilter(ResponseFilter)}
+   * <p>
+   * Method under test: {@link Builder#addResponseFilter(ResponseFilter)}
    */
   @Test
   @DisplayName("Test Builder addResponseFilter(ResponseFilter)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.addResponseFilter(ResponseFilter)"})
   void testBuilderAddResponseFilter() {
     // Arrange
     Builder configResult = Dsl.config();
 
     // Act
-    Builder actualAddResponseFilterResult =
-        configResult.addResponseFilter(mock(ResponseFilter.class));
+    Builder actualAddResponseFilterResult = configResult.addResponseFilter(mock(ResponseFilter.class));
 
     // Assert
     assertEquals(1, configResult.build().getResponseFilters().size());
@@ -140,13 +131,12 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
 
   /**
    * Test Builder {@link Builder#Builder(AsyncHttpClientConfig)}.
-   *
-   * <p>Method under test: {@link Builder#Builder(AsyncHttpClientConfig)}
+   * <p>
+   * Method under test: {@link Builder#Builder(AsyncHttpClientConfig)}
    */
   @Test
   @DisplayName("Test Builder new Builder(AsyncHttpClientConfig)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void Builder.<init>(AsyncHttpClientConfig)"})
   void testBuilderNewBuilder() throws SSLException {
     // Arrange
@@ -203,24 +193,16 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
     when(config.getNettyTimer()).thenReturn(hashedWheelTimer);
     when(config.getThreadPoolName()).thenReturn("https://example.org/example");
     when(config.getUserAgent()).thenReturn("https://example.org/example");
-    when(config.getEnabledCipherSuites()).thenReturn(new String[] {"https://example.org/example"});
-    when(config.getEnabledProtocols()).thenReturn(new String[] {"https://example.org/example"});
-    Duration ofSecondsResult = Duration.ofSeconds(1L);
-    when(config.getConnectTimeout()).thenReturn(ofSecondsResult);
-    Duration ofSecondsResult2 = Duration.ofSeconds(1L);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(ofSecondsResult2);
-    Duration ofSecondsResult3 = Duration.ofSeconds(1L);
-    when(config.getConnectionTtl()).thenReturn(ofSecondsResult3);
-    Duration ofSecondsResult4 = Duration.ofSeconds(1L);
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult4);
-    Duration ofSecondsResult5 = Duration.ofSeconds(1L);
-    when(config.getReadTimeout()).thenReturn(ofSecondsResult5);
-    Duration ofSecondsResult6 = Duration.ofSeconds(1L);
-    when(config.getRequestTimeout()).thenReturn(ofSecondsResult6);
-    Duration ofSecondsResult7 = Duration.ofSeconds(1L);
-    when(config.getShutdownQuietPeriod()).thenReturn(ofSecondsResult7);
-    Duration ofSecondsResult8 = Duration.ofSeconds(1L);
-    when(config.getShutdownTimeout()).thenReturn(ofSecondsResult8);
+    when(config.getEnabledCipherSuites()).thenReturn(new String[]{"https://example.org/example"});
+    when(config.getEnabledProtocols()).thenReturn(new String[]{"https://example.org/example"});
+    when(config.getConnectTimeout()).thenReturn(null);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(null);
+    when(config.getConnectionTtl()).thenReturn(null);
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(null);
+    when(config.getReadTimeout()).thenReturn(null);
+    when(config.getRequestTimeout()).thenReturn(null);
+    when(config.getShutdownQuietPeriod()).thenReturn(null);
+    when(config.getShutdownTimeout()).thenReturn(null);
     when(config.getIoExceptionFilters()).thenReturn(new ArrayList<>());
     when(config.getRequestFilters()).thenReturn(new ArrayList<>());
     when(config.getResponseFilters()).thenReturn(new ArrayList<>());
@@ -230,45 +212,30 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
     when(config.getWsAdditionalChannelInitializer()).thenReturn(mock(Consumer.class));
     when(config.getHashedWheelTimerTickDuration()).thenReturn(81985529216486895L);
     when(config.getResponseBodyPartFactory()).thenReturn(ResponseBodyPartFactory.EAGER);
-
-    Realm.Builder setAlgorithmResult =
-        new Realm.Builder().setAlgorithm("https://example.org/example");
-
+    Realm.Builder setAlgorithmResult = (new Realm.Builder()).setAlgorithm("https://example.org/example");
     Realm.Builder setCharsetResult = setAlgorithmResult.setCharset(Charset.forName("UTF-8"));
-
-    Realm.Builder setServicePrincipalNameResult =
-        setCharsetResult
-            .setCustomLoginConfig(new HashMap<>())
-            .setLoginContextName("https://example.org/example")
-            .setMethodName("https://example.org/example")
-            .setNc("https://example.org/example")
-            .setNonce("")
-            .setNtlmDomain("https://example.org/example")
-            .setNtlmHost("https://example.org/example")
-            .setOmitQuery(true)
-            .setOpaque("https://example.org/example")
-            .setQop("https://example.org/example")
-            .setRealmName("https://example.org/example")
-            .setResponse("https://example.org/example")
-            .setScheme(AuthScheme.BASIC)
-            .setServicePrincipalName("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    when(config.getRealm())
-        .thenReturn(
-            setServicePrincipalNameResult
-                .setUri(uri)
-                .setUseAbsoluteURI(true)
-                .setUseCanonicalHostname(true)
-                .setUsePreemptiveAuth(true)
-                .build());
+    Realm.Builder setServicePrincipalNameResult = setCharsetResult.setCustomLoginConfig(new HashMap<>())
+        .setLoginContextName("https://example.org/example")
+        .setMethodName("https://example.org/example")
+        .setNc("https://example.org/example")
+        .setNonce("")
+        .setNtlmDomain("https://example.org/example")
+        .setNtlmHost("https://example.org/example")
+        .setOmitQuery(true)
+        .setOpaque("https://example.org/example")
+        .setQop("https://example.org/example")
+        .setRealmName("https://example.org/example")
+        .setResponse("https://example.org/example")
+        .setScheme(AuthScheme.BASIC)
+        .setServicePrincipalName("https://example.org/example");
+    Realm buildResult = setServicePrincipalNameResult
+        .setUri(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+        .setUseAbsoluteURI(true)
+        .setUseCanonicalHostname(true)
+        .setUsePreemptiveAuth(true)
+        .build();
+    when(config.getRealm()).thenReturn(buildResult);
     when(config.getSslEngineFactory()).thenReturn(mock(SslEngineFactory.class));
     when(config.getChannelPool()).thenReturn(NoopChannelPool.INSTANCE);
     when(config.getKeepAliveStrategy()).thenReturn(mock(KeepAliveStrategy.class));
@@ -355,656 +322,258 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
     verify(config).isUseOnlyEpollNativeTransport();
     verify(config).isUseOpenSsl();
     verify(config).isValidateResponseHeaders();
-    DefaultAsyncHttpClientConfig defaultAsyncHttpClientConfig = actualBuilder.build();
-    ByteBufAllocator allocator = defaultAsyncHttpClientConfig.getAllocator();
+    DefaultAsyncHttpClientConfig buildResult2 = actualBuilder.build();
+    ByteBufAllocator allocator = buildResult2.getAllocator();
     assertTrue(allocator instanceof AdaptiveByteBufAllocator);
-    EventLoopGroup eventLoopGroup = defaultAsyncHttpClientConfig.getEventLoopGroup();
+    EventLoopGroup eventLoopGroup = buildResult2.getEventLoopGroup();
     assertTrue(eventLoopGroup instanceof DefaultEventLoop);
-    SslContext sslContext = defaultAsyncHttpClientConfig.getSslContext();
+    SslContext sslContext = buildResult2.getSslContext();
     assertTrue(sslContext instanceof JdkSslClientContext);
-    Timer nettyTimer = defaultAsyncHttpClientConfig.getNettyTimer();
+    Timer nettyTimer = buildResult2.getNettyTimer();
     assertTrue(nettyTimer instanceof HashedWheelTimer);
-    ChannelPool channelPool = defaultAsyncHttpClientConfig.getChannelPool();
+    ChannelPool channelPool = buildResult2.getChannelPool();
     assertTrue(channelPool instanceof NoopChannelPool);
-    CookieStore cookieStore = defaultAsyncHttpClientConfig.getCookieStore();
+    CookieStore cookieStore = buildResult2.getCookieStore();
     assertTrue(cookieStore instanceof ThreadSafeCookieStore);
-    assertEquals("${pom.version}", defaultAsyncHttpClientConfig.getAhcVersion());
-    assertEquals("https://example.org/example", defaultAsyncHttpClientConfig.getThreadPoolName());
-    assertEquals("https://example.org/example", defaultAsyncHttpClientConfig.getUserAgent());
-    assertEquals(1, defaultAsyncHttpClientConfig.expiredCookieEvictionDelay());
-    assertEquals(1, defaultAsyncHttpClientConfig.getSoLinger());
-    assertEquals(1, defaultAsyncHttpClientConfig.getSoRcvBuf());
-    assertEquals(1, defaultAsyncHttpClientConfig.getSoSndBuf());
-    assertEquals(1, defaultAsyncHttpClientConfig.getEnabledCipherSuites().length);
-    assertEquals(1, defaultAsyncHttpClientConfig.getEnabledProtocols().length);
-    assertEquals(10, defaultAsyncHttpClientConfig.getAcquireFreeChannelTimeout());
-    assertEquals(10, defaultAsyncHttpClientConfig.getHandshakeTimeout());
-    assertEquals(10, defaultAsyncHttpClientConfig.getSslSessionTimeout());
-    assertEquals(19088743, defaultAsyncHttpClientConfig.getHashedWheelTimerSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getChunkedFileChunkSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getHttpClientCodecInitialBufferSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getHttpClientCodecMaxChunkSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getHttpClientCodecMaxHeaderSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getHttpClientCodecMaxInitialLineLength());
-    assertEquals(3, defaultAsyncHttpClientConfig.getIoThreadsCount());
-    assertEquals(3, defaultAsyncHttpClientConfig.getMaxConnections());
-    assertEquals(3, defaultAsyncHttpClientConfig.getMaxConnectionsPerHost());
-    assertEquals(3, defaultAsyncHttpClientConfig.getMaxRedirects());
-    assertEquals(3, defaultAsyncHttpClientConfig.getMaxRequestRetry());
-    assertEquals(3, defaultAsyncHttpClientConfig.getSslSessionCacheSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getWebSocketMaxBufferSize());
-    assertEquals(3, defaultAsyncHttpClientConfig.getWebSocketMaxFrameSize());
-    assertEquals(
-        81985529216486895L, defaultAsyncHttpClientConfig.getHashedWheelTimerTickDuration());
-    assertEquals(
-        ResponseBodyPartFactory.EAGER, defaultAsyncHttpClientConfig.getResponseBodyPartFactory());
+    assertEquals("${pom.version}", buildResult2.getAhcVersion());
+    assertEquals("https://example.org/example", buildResult2.getThreadPoolName());
+    assertEquals("https://example.org/example", buildResult2.getUserAgent());
+    assertNull(buildResult2.getConnectTimeout());
+    assertNull(buildResult2.getConnectionPoolCleanerPeriod());
+    assertNull(buildResult2.getConnectionTtl());
+    assertNull(buildResult2.getPooledConnectionIdleTimeout());
+    assertNull(buildResult2.getReadTimeout());
+    assertNull(buildResult2.getRequestTimeout());
+    assertNull(buildResult2.getShutdownQuietPeriod());
+    assertNull(buildResult2.getShutdownTimeout());
+    assertEquals(1, buildResult2.expiredCookieEvictionDelay());
+    assertEquals(1, buildResult2.getSoLinger());
+    assertEquals(1, buildResult2.getSoRcvBuf());
+    assertEquals(1, buildResult2.getSoSndBuf());
+    assertEquals(1, buildResult2.getEnabledCipherSuites().length);
+    assertEquals(1, buildResult2.getEnabledProtocols().length);
+    assertEquals(10, buildResult2.getAcquireFreeChannelTimeout());
+    assertEquals(10, buildResult2.getHandshakeTimeout());
+    assertEquals(10, buildResult2.getSslSessionTimeout());
+    assertEquals(19088743, buildResult2.getHashedWheelTimerSize());
+    assertEquals(3, buildResult2.getChunkedFileChunkSize());
+    assertEquals(3, buildResult2.getHttpClientCodecInitialBufferSize());
+    assertEquals(3, buildResult2.getHttpClientCodecMaxChunkSize());
+    assertEquals(3, buildResult2.getHttpClientCodecMaxHeaderSize());
+    assertEquals(3, buildResult2.getHttpClientCodecMaxInitialLineLength());
+    assertEquals(3, buildResult2.getIoThreadsCount());
+    assertEquals(3, buildResult2.getMaxConnections());
+    assertEquals(3, buildResult2.getMaxConnectionsPerHost());
+    assertEquals(3, buildResult2.getMaxRedirects());
+    assertEquals(3, buildResult2.getMaxRequestRetry());
+    assertEquals(3, buildResult2.getSslSessionCacheSize());
+    assertEquals(3, buildResult2.getWebSocketMaxBufferSize());
+    assertEquals(3, buildResult2.getWebSocketMaxFrameSize());
+    assertEquals(81985529216486895L, buildResult2.getHashedWheelTimerTickDuration());
+    assertEquals(ResponseBodyPartFactory.EAGER, buildResult2.getResponseBodyPartFactory());
     assertEquals(NoopChannelPool.INSTANCE, channelPool);
-    List<IOExceptionFilter> ioExceptionFilters =
-        defaultAsyncHttpClientConfig.getIoExceptionFilters();
+    List<IOExceptionFilter> ioExceptionFilters = buildResult2.getIoExceptionFilters();
     assertTrue(ioExceptionFilters.isEmpty());
-    assertTrue(defaultAsyncHttpClientConfig.getChannelOptions().isEmpty());
-    assertTrue(defaultAsyncHttpClientConfig.isAggregateWebSocketFrameFragments());
-    assertTrue(defaultAsyncHttpClientConfig.isCompressionEnforced());
-    assertTrue(defaultAsyncHttpClientConfig.isDisableHttpsEndpointIdentificationAlgorithm());
-    assertTrue(defaultAsyncHttpClientConfig.isDisableUrlEncodingForBoundRequests());
-    assertTrue(defaultAsyncHttpClientConfig.isDisableZeroCopy());
-    assertTrue(defaultAsyncHttpClientConfig.isEnableAutomaticDecompression());
-    assertTrue(defaultAsyncHttpClientConfig.isEnableWebSocketCompression());
-    assertTrue(defaultAsyncHttpClientConfig.isFilterInsecureCipherSuites());
-    assertTrue(defaultAsyncHttpClientConfig.isFollowRedirect());
-    assertTrue(defaultAsyncHttpClientConfig.isKeepAlive());
-    assertTrue(defaultAsyncHttpClientConfig.isKeepEncodingHeader());
-    assertTrue(defaultAsyncHttpClientConfig.isSoKeepAlive());
-    assertTrue(defaultAsyncHttpClientConfig.isSoReuseAddress());
-    assertTrue(defaultAsyncHttpClientConfig.isStrict302Handling());
-    assertTrue(defaultAsyncHttpClientConfig.isTcpNoDelay());
-    assertTrue(defaultAsyncHttpClientConfig.isUseInsecureTrustManager());
-    assertTrue(defaultAsyncHttpClientConfig.isUseLaxCookieEncoder());
-    assertTrue(defaultAsyncHttpClientConfig.isUseNativeTransport());
-    assertTrue(defaultAsyncHttpClientConfig.isUseOnlyEpollNativeTransport());
-    assertTrue(defaultAsyncHttpClientConfig.isUseOpenSsl());
-    assertTrue(defaultAsyncHttpClientConfig.isValidateResponseHeaders());
+    assertTrue(buildResult2.getChannelOptions().isEmpty());
+    assertTrue(buildResult2.isAggregateWebSocketFrameFragments());
+    assertTrue(buildResult2.isCompressionEnforced());
+    assertTrue(buildResult2.isDisableHttpsEndpointIdentificationAlgorithm());
+    assertTrue(buildResult2.isDisableUrlEncodingForBoundRequests());
+    assertTrue(buildResult2.isDisableZeroCopy());
+    assertTrue(buildResult2.isEnableAutomaticDecompression());
+    assertTrue(buildResult2.isEnableWebSocketCompression());
+    assertTrue(buildResult2.isFilterInsecureCipherSuites());
+    assertTrue(buildResult2.isFollowRedirect());
+    assertTrue(buildResult2.isKeepAlive());
+    assertTrue(buildResult2.isKeepEncodingHeader());
+    assertTrue(buildResult2.isSoKeepAlive());
+    assertTrue(buildResult2.isSoReuseAddress());
+    assertTrue(buildResult2.isStrict302Handling());
+    assertTrue(buildResult2.isTcpNoDelay());
+    assertTrue(buildResult2.isUseInsecureTrustManager());
+    assertTrue(buildResult2.isUseLaxCookieEncoder());
+    assertTrue(buildResult2.isUseNativeTransport());
+    assertTrue(buildResult2.isUseOnlyEpollNativeTransport());
+    assertTrue(buildResult2.isUseOpenSsl());
+    assertTrue(buildResult2.isValidateResponseHeaders());
     assertSame(adaptiveByteBufAllocator, allocator);
     assertSame(defaultEventLoop, eventLoopGroup);
     assertSame(jdkSslClientContext, sslContext);
     assertSame(hashedWheelTimer, nettyTimer);
     assertSame(threadSafeCookieStore, cookieStore);
-    assertSame(ioExceptionFilters, defaultAsyncHttpClientConfig.getRequestFilters());
-    assertSame(ioExceptionFilters, defaultAsyncHttpClientConfig.getResponseFilters());
-    assertSame(ofSecondsResult, defaultAsyncHttpClientConfig.getConnectTimeout());
-    assertSame(ofSecondsResult2, defaultAsyncHttpClientConfig.getConnectionPoolCleanerPeriod());
-    assertSame(ofSecondsResult3, defaultAsyncHttpClientConfig.getConnectionTtl());
-    assertSame(ofSecondsResult4, defaultAsyncHttpClientConfig.getPooledConnectionIdleTimeout());
-    assertSame(ofSecondsResult5, defaultAsyncHttpClientConfig.getReadTimeout());
-    assertSame(ofSecondsResult6, defaultAsyncHttpClientConfig.getRequestTimeout());
-    assertSame(ofSecondsResult7, defaultAsyncHttpClientConfig.getShutdownQuietPeriod());
-    assertSame(ofSecondsResult8, defaultAsyncHttpClientConfig.getShutdownTimeout());
+    assertSame(ioExceptionFilters, buildResult2.getRequestFilters());
+    assertSame(ioExceptionFilters, buildResult2.getResponseFilters());
   }
 
   /**
    * Test Builder {@link Builder#removeIOExceptionFilter(IOExceptionFilter)}.
-   *
-   * <p>Method under test: {@link Builder#removeIOExceptionFilter(IOExceptionFilter)}
+   * <p>
+   * Method under test: {@link Builder#removeIOExceptionFilter(IOExceptionFilter)}
    */
   @Test
   @DisplayName("Test Builder removeIOExceptionFilter(IOExceptionFilter)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.removeIOExceptionFilter(IOExceptionFilter)"})
   void testBuilderRemoveIOExceptionFilter() {
     // Arrange
     Builder configResult = Dsl.config();
 
-    // Act
-    Builder actualRemoveIOExceptionFilterResult =
-        configResult.removeIOExceptionFilter(mock(IOExceptionFilter.class));
-
-    // Assert
-    assertSame(configResult, actualRemoveIOExceptionFilterResult);
+    // Act and Assert
+    assertSame(configResult, configResult.removeIOExceptionFilter(mock(IOExceptionFilter.class)));
   }
 
   /**
    * Test Builder {@link Builder#removeRequestFilter(RequestFilter)}.
-   *
-   * <p>Method under test: {@link Builder#removeRequestFilter(RequestFilter)}
+   * <p>
+   * Method under test: {@link Builder#removeRequestFilter(RequestFilter)}
    */
   @Test
   @DisplayName("Test Builder removeRequestFilter(RequestFilter)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.removeRequestFilter(RequestFilter)"})
   void testBuilderRemoveRequestFilter() {
     // Arrange
     Builder configResult = Dsl.config();
 
-    // Act
-    Builder actualRemoveRequestFilterResult =
-        configResult.removeRequestFilter(mock(RequestFilter.class));
-
-    // Assert
-    assertSame(configResult, actualRemoveRequestFilterResult);
+    // Act and Assert
+    assertSame(configResult, configResult.removeRequestFilter(mock(RequestFilter.class)));
   }
 
   /**
    * Test Builder {@link Builder#removeResponseFilter(ResponseFilter)}.
-   *
-   * <p>Method under test: {@link Builder#removeResponseFilter(ResponseFilter)}
+   * <p>
+   * Method under test: {@link Builder#removeResponseFilter(ResponseFilter)}
    */
   @Test
   @DisplayName("Test Builder removeResponseFilter(ResponseFilter)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.removeResponseFilter(ResponseFilter)"})
   void testBuilderRemoveResponseFilter() {
     // Arrange
     Builder configResult = Dsl.config();
 
-    // Act
-    Builder actualRemoveResponseFilterResult =
-        configResult.removeResponseFilter(mock(ResponseFilter.class));
-
-    // Assert
-    assertSame(configResult, actualRemoveResponseFilterResult);
+    // Act and Assert
+    assertSame(configResult, configResult.removeResponseFilter(mock(ResponseFilter.class)));
   }
 
   /**
    * Test Builder {@link Builder#setProxyServer(Builder)} with {@code proxyServerBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setProxyServer(ProxyServer.Builder)}
+   * <p>
+   * Method under test: {@link Builder#setProxyServer(ProxyServer.Builder)}
    */
   @Test
   @DisplayName("Test Builder setProxyServer(Builder) with 'proxyServerBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setProxyServer(ProxyServer.Builder)"})
   void testBuilderSetProxyServerWithProxyServerBuilder() {
     // Arrange
     Builder configResult = Dsl.config();
 
-    // Act
-    Builder actualSetProxyServerResult =
-        configResult.setProxyServer(Dsl.proxyServer("https://example.org/example", 8080));
-
-    // Assert
-    assertSame(configResult, actualSetProxyServerResult);
+    // Act and Assert
+    assertSame(configResult, configResult.setProxyServer(Dsl.proxyServer("https://example.org/example", 8080)));
   }
 
   /**
    * Test Builder {@link Builder#setProxyServer(Builder)} with {@code proxyServerBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setProxyServer(ProxyServer.Builder)}
+   * <p>
+   * Method under test: {@link Builder#setProxyServer(ProxyServer.Builder)}
    */
   @Test
   @DisplayName("Test Builder setProxyServer(Builder) with 'proxyServerBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setProxyServer(ProxyServer.Builder)"})
   void testBuilderSetProxyServerWithProxyServerBuilder2() {
     // Arrange
     Builder configResult = Dsl.config();
-
-    ProxyServer.Builder proxyServerBuilder =
-        new ProxyServer.Builder("https://example.org/example", 8080);
+    ProxyServer.Builder proxyServerBuilder = Dsl.proxyServer("https://example.org/example", 8080);
     proxyServerBuilder.setNonProxyHost(null);
     proxyServerBuilder.setProxyType(null);
 
-    // Act
-    Builder actualSetProxyServerResult = configResult.setProxyServer(proxyServerBuilder);
-
-    // Assert
-    assertSame(configResult, actualSetProxyServerResult);
+    // Act and Assert
+    assertSame(configResult, configResult.setProxyServer(proxyServerBuilder));
   }
 
   /**
    * Test Builder {@link Builder#setProxyServer(Builder)} with {@code proxyServerBuilder}.
-   *
    * <ul>
-   *   <li>Given {@code HTTP}.
+   *   <li>Given {@code HTTP}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Builder#setProxyServer(ProxyServer.Builder)}
+   * <p>
+   * Method under test: {@link Builder#setProxyServer(ProxyServer.Builder)}
    */
   @Test
   @DisplayName("Test Builder setProxyServer(Builder) with 'proxyServerBuilder'; given 'HTTP'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setProxyServer(ProxyServer.Builder)"})
   void testBuilderSetProxyServerWithProxyServerBuilder_givenHttp() {
     // Arrange
     Builder configResult = Dsl.config();
-
-    ProxyServer.Builder proxyServerBuilder =
-        new ProxyServer.Builder("https://example.org/example", 8080);
+    ProxyServer.Builder proxyServerBuilder = Dsl.proxyServer("https://example.org/example", 8080);
     proxyServerBuilder.setNonProxyHost(null);
     proxyServerBuilder.setProxyType(ProxyType.HTTP);
 
-    // Act
-    Builder actualSetProxyServerResult = configResult.setProxyServer(proxyServerBuilder);
-
-    // Assert
-    assertSame(configResult, actualSetProxyServerResult);
+    // Act and Assert
+    assertSame(configResult, configResult.setProxyServer(proxyServerBuilder));
   }
 
   /**
    * Test Builder {@link Builder#setProxyServer(ProxyServer)} with {@code proxyServer}.
-   *
    * <ul>
-   *   <li>Then return config.
+   *   <li>Then return config.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Builder#setProxyServer(ProxyServer)}
+   * <p>
+   * Method under test: {@link Builder#setProxyServer(ProxyServer)}
    */
   @Test
   @DisplayName("Test Builder setProxyServer(ProxyServer) with 'proxyServer'; then return config")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setProxyServer(ProxyServer)"})
   void testBuilderSetProxyServerWithProxyServer_thenReturnConfig() {
     // Arrange
     Builder configResult = Dsl.config();
-
-    Realm.Builder setAlgorithmResult =
-        new Realm.Builder().setAlgorithm("https://example.org/example");
-
+    Realm.Builder setAlgorithmResult = (new Realm.Builder()).setAlgorithm("https://example.org/example");
     Realm.Builder setCharsetResult = setAlgorithmResult.setCharset(Charset.forName("UTF-8"));
-
-    Realm.Builder setServicePrincipalNameResult =
-        setCharsetResult
-            .setCustomLoginConfig(new HashMap<>())
-            .setLoginContextName("https://example.org/example")
-            .setMethodName("https://example.org/example")
-            .setNc("https://example.org/example")
-            .setNonce("")
-            .setNtlmDomain("https://example.org/example")
-            .setNtlmHost("https://example.org/example")
-            .setOmitQuery(true)
-            .setOpaque("https://example.org/example")
-            .setQop("https://example.org/example")
-            .setRealmName("https://example.org/example")
-            .setResponse("https://example.org/example")
-            .setScheme(AuthScheme.BASIC)
-            .setServicePrincipalName("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    Realm realm =
-        setServicePrincipalNameResult
-            .setUri(uri)
-            .setUseAbsoluteURI(true)
-            .setUseCanonicalHostname(true)
-            .setUsePreemptiveAuth(true)
-            .build();
-
-    // Act
-    Builder actualSetProxyServerResult =
-        configResult.setProxyServer(
-            new ProxyServer(
-                "https://example.org/example",
-                8080,
-                8080,
-                realm,
-                new ArrayList<>(),
-                ProxyType.HTTP));
-
-    // Assert
-    assertSame(configResult, actualSetProxyServerResult);
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName("Test Builder setRealm(Builder) with 'realmBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setNonce("https://example.org/example");
-    realmBuilder.setUri(null);
-    realmBuilder.setScheme(AuthScheme.BASIC);
+    Realm.Builder setServicePrincipalNameResult = setCharsetResult.setCustomLoginConfig(new HashMap<>())
+        .setLoginContextName("https://example.org/example")
+        .setMethodName("https://example.org/example")
+        .setNc("https://example.org/example")
+        .setNonce("")
+        .setNtlmDomain("https://example.org/example")
+        .setNtlmHost("https://example.org/example")
+        .setOmitQuery(true)
+        .setOpaque("https://example.org/example")
+        .setQop("https://example.org/example")
+        .setRealmName("https://example.org/example")
+        .setResponse("https://example.org/example")
+        .setScheme(AuthScheme.BASIC)
+        .setServicePrincipalName("https://example.org/example");
+    Realm realm = setServicePrincipalNameResult
+        .setUri(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+        .setUseAbsoluteURI(true)
+        .setUseCanonicalHostname(true)
+        .setUsePreemptiveAuth(true)
+        .build();
 
     // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("https://example.org/example", realm.getNonce());
-    assertNull(realm.getAlgorithm());
-    assertNull(realm.getQop());
-    assertNull(realm.getResponse());
-    assertNull(realm.getUri());
+    assertSame(configResult, configResult.setProxyServer(
+        new ProxyServer("https://example.org/example", 8080, 8080, realm, new ArrayList<>(), ProxyType.HTTP)));
   }
 
   /**
    * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName("Test Builder setRealm(Builder) with 'realmBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder2() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("4d08e2ca0bbe3f97b2c090b95d3e62d9", realm.getResponse());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName("Test Builder setRealm(Builder) with 'realmBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder3() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setNonce("https://example.org/example");
-    Uri context =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    Uri uri = Uri.create(context, "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("68f24a071f94612b575bc4d4808cc15d", realm.getResponse());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName("Test Builder setRealm(Builder) with 'realmBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder4() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setUseAbsoluteURI(true);
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("b56797fdd55efbde380e18fc83f14e59", realm.getResponse());
-    assertTrue(realm.isUseAbsoluteURI());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName("Test Builder setRealm(Builder) with 'realmBuilder'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder5() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setOmitQuery(true);
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("ac8d21b2a82bc835e1a6e606bbfca2de", realm.getResponse());
-    assertTrue(realm.isOmitQuery());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
    * <ul>
-   *   <li>Given {@code auth}.
-   *   <li>Then return build Realm Qop is {@code auth}.
+   *   <li>Given {@code BASIC}.</li>
+   *   <li>Then return config.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
+   * <p>
+   * Method under test: {@link Builder#setRealm(Realm.Builder)}
    */
   @Test
-  @DisplayName(
-      "Test Builder setRealm(Builder) with 'realmBuilder'; given 'auth'; then return build Realm Qop is 'auth'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test Builder setRealm(Builder) with 'realmBuilder'; given 'BASIC'; then return config")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder_givenAuth_thenReturnBuildRealmQopIsAuth() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setQop("auth");
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("auth", realm.getQop());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <ul>
-   *   <li>Given {@code MD5}.
-   *   <li>Then return build Realm Algorithm is {@code MD5}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName(
-      "Test Builder setRealm(Builder) with 'realmBuilder'; given 'MD5'; then return build Realm Algorithm is 'MD5'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder_givenMd5_thenReturnBuildRealmAlgorithmIsMd5() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setAlgorithm("MD5");
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("4d08e2ca0bbe3f97b2c090b95d3e62d9", realm.getResponse());
-    assertEquals("MD5", realm.getAlgorithm());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <ul>
-   *   <li>Then return build Realm Algorithm is {@code MD5-sess}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName(
-      "Test Builder setRealm(Builder) with 'realmBuilder'; then return build Realm Algorithm is 'MD5-sess'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder_thenReturnBuildRealmAlgorithmIsMd5Sess() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setAlgorithm("MD5-sess");
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("MD5-sess", realm.getAlgorithm());
-    assertSame(uri, realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <ul>
-   *   <li>Then return build Realm Nonce is empty string.
-   * </ul>
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName(
-      "Test Builder setRealm(Builder) with 'realmBuilder'; then return build Realm Nonce is empty string")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder_thenReturnBuildRealmNonceIsEmptyString() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setNonce("");
-    realmBuilder.setUri(null);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("", realm.getNonce());
-    assertNull(realm.getCnonce());
-    assertNull(realm.getResponse());
-    assertNull(realm.getUri());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <ul>
-   *   <li>Then return build Realm Nonce is {@code null}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName(
-      "Test Builder setRealm(Builder) with 'realmBuilder'; then return build Realm Nonce is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder_thenReturnBuildRealmNonceIsNull() {
+  void testBuilderSetRealmWithRealmBuilder_givenBasic_thenReturnConfig() {
     // Arrange
     Builder configResult = Dsl.config();
 
@@ -1012,62 +581,17 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
     realmBuilder.setScheme(AuthScheme.BASIC);
 
     // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertNull(realm.getNonce());
-    assertNull(realm.getPassword());
-    assertNull(realm.getPrincipal());
-  }
-
-  /**
-   * Test Builder {@link Builder#setRealm(Builder)} with {@code realmBuilder}.
-   *
-   * <ul>
-   *   <li>Then return build Realm Qop is {@code auth-int}.
-   * </ul>
-   *
-   * <p>Method under test: {@link Builder#setRealm(Realm.Builder)}
-   */
-  @Test
-  @DisplayName(
-      "Test Builder setRealm(Builder) with 'realmBuilder'; then return build Realm Qop is 'auth-int'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"Builder Builder.setRealm(Realm.Builder)"})
-  void testBuilderSetRealmWithRealmBuilder_thenReturnBuildRealmQopIsAuthInt() {
-    // Arrange
-    Builder configResult = Dsl.config();
-
-    Realm.Builder realmBuilder =
-        new Realm.Builder("https://example.org/example", "https://example.org/example");
-    realmBuilder.setQop("auth-int");
-    realmBuilder.setNonce("https://example.org/example");
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    realmBuilder.setUri(uri);
-    realmBuilder.setScheme(AuthScheme.BASIC);
-
-    // Act and Assert
-    Realm realm = configResult.setRealm(realmBuilder).build().getRealm();
-    assertEquals("auth-int", realm.getQop());
-    assertSame(uri, realm.getUri());
+    assertSame(configResult, configResult.setRealm(realmBuilder));
   }
 
   /**
    * Test Builder {@link Builder#setSslSessionCacheSize(Integer)}.
-   *
-   * <p>Method under test: {@link Builder#setSslSessionCacheSize(Integer)}
+   * <p>
+   * Method under test: {@link Builder#setSslSessionCacheSize(Integer)}
    */
   @Test
   @DisplayName("Test Builder setSslSessionCacheSize(Integer)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setSslSessionCacheSize(Integer)"})
   void testBuilderSetSslSessionCacheSize() {
     // Arrange
@@ -1083,13 +607,12 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
 
   /**
    * Test Builder {@link Builder#setSslSessionTimeout(Integer)}.
-   *
-   * <p>Method under test: {@link Builder#setSslSessionTimeout(Integer)}
+   * <p>
+   * Method under test: {@link Builder#setSslSessionTimeout(Integer)}
    */
   @Test
   @DisplayName("Test Builder setSslSessionTimeout(Integer)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Builder Builder.setSslSessionTimeout(Integer)"})
   void testBuilderSetSslSessionTimeout() {
     // Arrange

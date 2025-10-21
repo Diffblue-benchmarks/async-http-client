@@ -1,7 +1,6 @@
 package org.asynchttpclient.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -10,18 +9,16 @@ import org.junit.jupiter.api.Test;
 class UriEncoderDiffblueTest {
   /**
    * Test {@link UriEncoder#uriEncoder(boolean)}.
-   *
    * <ul>
-   *   <li>When {@code false}.
-   *   <li>Then return {@code FIXING}.
+   *   <li>When {@code false}.</li>
+   *   <li>Then return {@code FIXING}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link UriEncoder#uriEncoder(boolean)}
+   * <p>
+   * Method under test: {@link UriEncoder#uriEncoder(boolean)}
    */
   @Test
   @DisplayName("Test uriEncoder(boolean); when 'false'; then return 'FIXING'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"UriEncoder UriEncoder.uriEncoder(boolean)"})
   void testUriEncoder_whenFalse_thenReturnFixing() {
     // Arrange, Act and Assert
@@ -30,18 +27,16 @@ class UriEncoderDiffblueTest {
 
   /**
    * Test {@link UriEncoder#uriEncoder(boolean)}.
-   *
    * <ul>
-   *   <li>When {@code true}.
-   *   <li>Then return {@code RAW}.
+   *   <li>When {@code true}.</li>
+   *   <li>Then return {@code RAW}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link UriEncoder#uriEncoder(boolean)}
+   * <p>
+   * Method under test: {@link UriEncoder#uriEncoder(boolean)}
    */
   @Test
   @DisplayName("Test uriEncoder(boolean); when 'true'; then return 'RAW'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"UriEncoder UriEncoder.uriEncoder(boolean)"})
   void testUriEncoder_whenTrue_thenReturnRaw() {
     // Arrange, Act and Assert

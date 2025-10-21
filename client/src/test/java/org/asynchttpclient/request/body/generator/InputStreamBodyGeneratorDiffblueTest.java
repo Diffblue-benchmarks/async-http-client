@@ -2,7 +2,6 @@ package org.asynchttpclient.request.body.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,13 +13,11 @@ import org.junit.jupiter.api.Test;
 class InputStreamBodyGeneratorDiffblueTest {
   /**
    * Test getters and setters.
-   *
    * <ul>
-   *   <li>Then return ContentLength is minus one.
+   *   <li>Then return ContentLength is minus one.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link InputStreamBodyGenerator#InputStreamBodyGenerator(InputStream)}
    *   <li>{@link InputStreamBodyGenerator#getContentLength()}
@@ -29,21 +26,16 @@ class InputStreamBodyGeneratorDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters; then return ContentLength is minus one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void InputStreamBodyGenerator.<init>(InputStream)",
-    "void InputStreamBodyGenerator.<init>(InputStream, long)",
-    "long InputStreamBodyGenerator.getContentLength()",
-    "InputStream InputStreamBodyGenerator.getInputStream()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void InputStreamBodyGenerator.<init>(InputStream)",
+      "void InputStreamBodyGenerator.<init>(InputStream, long)", "long InputStreamBodyGenerator.getContentLength()",
+      "InputStream InputStreamBodyGenerator.getInputStream()"})
   void testGettersAndSetters_thenReturnContentLengthIsMinusOne() throws IOException {
     // Arrange
     ByteArrayInputStream inputStream = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    InputStreamBodyGenerator actualInputStreamBodyGenerator =
-        new InputStreamBodyGenerator(inputStream);
+    InputStreamBodyGenerator actualInputStreamBodyGenerator = new InputStreamBodyGenerator(inputStream);
     long actualContentLength = actualInputStreamBodyGenerator.getContentLength();
     InputStream actualInputStream = actualInputStreamBodyGenerator.getInputStream();
 
@@ -55,14 +47,12 @@ class InputStreamBodyGeneratorDiffblueTest {
 
   /**
    * Test getters and setters.
-   *
    * <ul>
-   *   <li>When three.
-   *   <li>Then return ContentLength is three.
+   *   <li>When three.</li>
+   *   <li>Then return ContentLength is three.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link InputStreamBodyGenerator#InputStreamBodyGenerator(InputStream, long)}
    *   <li>{@link InputStreamBodyGenerator#getContentLength()}
@@ -71,21 +61,16 @@ class InputStreamBodyGeneratorDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters; when three; then return ContentLength is three")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void InputStreamBodyGenerator.<init>(InputStream)",
-    "void InputStreamBodyGenerator.<init>(InputStream, long)",
-    "long InputStreamBodyGenerator.getContentLength()",
-    "InputStream InputStreamBodyGenerator.getInputStream()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void InputStreamBodyGenerator.<init>(InputStream)",
+      "void InputStreamBodyGenerator.<init>(InputStream, long)", "long InputStreamBodyGenerator.getContentLength()",
+      "InputStream InputStreamBodyGenerator.getInputStream()"})
   void testGettersAndSetters_whenThree_thenReturnContentLengthIsThree() throws IOException {
     // Arrange
     ByteArrayInputStream inputStream = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
 
     // Act
-    InputStreamBodyGenerator actualInputStreamBodyGenerator =
-        new InputStreamBodyGenerator(inputStream, 3L);
+    InputStreamBodyGenerator actualInputStreamBodyGenerator = new InputStreamBodyGenerator(inputStream, 3L);
     long actualContentLength = actualInputStreamBodyGenerator.getContentLength();
     InputStream actualInputStream = actualInputStreamBodyGenerator.getInputStream();
 

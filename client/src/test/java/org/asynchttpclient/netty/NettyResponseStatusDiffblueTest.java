@@ -3,7 +3,6 @@ package org.asynchttpclient.netty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.channel.Channel;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -19,37 +18,26 @@ import org.junit.jupiter.api.Test;
 class NettyResponseStatusDiffblueTest {
   /**
    * Test {@link NettyResponseStatus#NettyResponseStatus(Uri, HttpResponse, Channel)}.
-   *
    * <ul>
-   *   <li>Then return LocalAddress is {@code null}.
+   *   <li>Then return LocalAddress is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#NettyResponseStatus(Uri, HttpResponse,
-   * Channel)}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#NettyResponseStatus(Uri, HttpResponse, Channel)}
    */
   @Test
-  @DisplayName(
-      "Test new NettyResponseStatus(Uri, HttpResponse, Channel); then return LocalAddress is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new NettyResponseStatus(Uri, HttpResponse, Channel); then return LocalAddress is 'null'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyResponseStatus.<init>(Uri, HttpResponse, Channel)"})
   void testNewNettyResponseStatus_thenReturnLocalAddressIsNull() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act
-    NettyResponseStatus actualNettyResponseStatus = new NettyResponseStatus(uri, response, null);
+    NettyResponseStatus actualNettyResponseStatus = new NettyResponseStatus(uri,
+        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1)), null);
 
     // Assert
     assertEquals("HTTPS://EXAMPLE.ORG/EXAMPLE", actualNettyResponseStatus.getProtocolName());
@@ -65,38 +53,27 @@ class NettyResponseStatusDiffblueTest {
 
   /**
    * Test {@link NettyResponseStatus#NettyResponseStatus(Uri, HttpResponse, Channel)}.
-   *
    * <ul>
-   *   <li>Then return ProtocolName is {@code HTTPS://EXAMPLE.ORG/EXAMPLE}.
+   *   <li>Then return ProtocolName is {@code HTTPS://EXAMPLE.ORG/EXAMPLE}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#NettyResponseStatus(Uri, HttpResponse,
-   * Channel)}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#NettyResponseStatus(Uri, HttpResponse, Channel)}
    */
   @Test
-  @DisplayName(
-      "Test new NettyResponseStatus(Uri, HttpResponse, Channel); then return ProtocolName is 'HTTPS://EXAMPLE.ORG/EXAMPLE'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new NettyResponseStatus(Uri, HttpResponse, Channel); then return ProtocolName is 'HTTPS://EXAMPLE.ORG/EXAMPLE'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void NettyResponseStatus.<init>(Uri, HttpResponse, Channel)"})
   void testNewNettyResponseStatus_thenReturnProtocolNameIsHttpsExampleOrgExample() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act
-    NettyResponseStatus actualNettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    NettyResponseStatus actualNettyResponseStatus = new NettyResponseStatus(uri, response, new EmbeddedChannel());
 
     // Assert
     assertEquals("HTTPS://EXAMPLE.ORG/EXAMPLE", actualNettyResponseStatus.getProtocolName());
@@ -110,217 +87,153 @@ class NettyResponseStatusDiffblueTest {
 
   /**
    * Test {@link NettyResponseStatus#getStatusCode()}.
-   *
    * <ul>
-   *   <li>Then return one.
+   *   <li>Then return one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#getStatusCode()}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#getStatusCode()}
    */
   @Test
   @DisplayName("Test getStatusCode(); then return one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int NettyResponseStatus.getStatusCode()"})
   void testGetStatusCode_thenReturnOne() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals(1, nettyResponseStatus.getStatusCode());
+    assertEquals(1, (new NettyResponseStatus(uri, response, new EmbeddedChannel())).getStatusCode());
   }
 
   /**
    * Test {@link NettyResponseStatus#getStatusText()}.
-   *
    * <ul>
-   *   <li>Then return {@code Unknown Status (1)}.
+   *   <li>Then return {@code Unknown Status (1)}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#getStatusText()}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#getStatusText()}
    */
   @Test
   @DisplayName("Test getStatusText(); then return 'Unknown Status (1)'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.lang.String NettyResponseStatus.getStatusText()"})
   void testGetStatusText_thenReturnUnknownStatus1() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals("Unknown Status (1)", nettyResponseStatus.getStatusText());
+    assertEquals("Unknown Status (1)", (new NettyResponseStatus(uri, response, new EmbeddedChannel())).getStatusText());
   }
 
   /**
    * Test {@link NettyResponseStatus#getProtocolName()}.
-   *
    * <ul>
-   *   <li>Then return {@code HTTPS://EXAMPLE.ORG/EXAMPLE}.
+   *   <li>Then return {@code HTTPS://EXAMPLE.ORG/EXAMPLE}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#getProtocolName()}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#getProtocolName()}
    */
   @Test
   @DisplayName("Test getProtocolName(); then return 'HTTPS://EXAMPLE.ORG/EXAMPLE'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.lang.String NettyResponseStatus.getProtocolName()"})
   void testGetProtocolName_thenReturnHttpsExampleOrgExample() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals("HTTPS://EXAMPLE.ORG/EXAMPLE", nettyResponseStatus.getProtocolName());
+    assertEquals("HTTPS://EXAMPLE.ORG/EXAMPLE",
+        (new NettyResponseStatus(uri, response, new EmbeddedChannel())).getProtocolName());
   }
 
   /**
    * Test {@link NettyResponseStatus#getProtocolMajorVersion()}.
-   *
    * <ul>
-   *   <li>Then return one.
+   *   <li>Then return one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#getProtocolMajorVersion()}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#getProtocolMajorVersion()}
    */
   @Test
   @DisplayName("Test getProtocolMajorVersion(); then return one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int NettyResponseStatus.getProtocolMajorVersion()"})
   void testGetProtocolMajorVersion_thenReturnOne() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals(1, nettyResponseStatus.getProtocolMajorVersion());
+    assertEquals(1, (new NettyResponseStatus(uri, response, new EmbeddedChannel())).getProtocolMajorVersion());
   }
 
   /**
    * Test {@link NettyResponseStatus#getProtocolMinorVersion()}.
-   *
    * <ul>
-   *   <li>Then return one.
+   *   <li>Then return one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#getProtocolMinorVersion()}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#getProtocolMinorVersion()}
    */
   @Test
   @DisplayName("Test getProtocolMinorVersion(); then return one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int NettyResponseStatus.getProtocolMinorVersion()"})
   void testGetProtocolMinorVersion_thenReturnOne() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals(1, nettyResponseStatus.getProtocolMinorVersion());
+    assertEquals(1, (new NettyResponseStatus(uri, response, new EmbeddedChannel())).getProtocolMinorVersion());
   }
 
   /**
    * Test {@link NettyResponseStatus#getProtocolText()}.
-   *
    * <ul>
-   *   <li>Then return {@code HTTPS://EXAMPLE.ORG/EXAMPLE/1.1}.
+   *   <li>Then return {@code HTTPS://EXAMPLE.ORG/EXAMPLE/1.1}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link NettyResponseStatus#getProtocolText()}
+   * <p>
+   * Method under test: {@link NettyResponseStatus#getProtocolText()}
    */
   @Test
   @DisplayName("Test getProtocolText(); then return 'HTTPS://EXAMPLE.ORG/EXAMPLE/1.1'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.lang.String NettyResponseStatus.getProtocolText()"})
   void testGetProtocolText_thenReturnHttpsExampleOrgExample11() {
     // Arrange
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals("HTTPS://EXAMPLE.ORG/EXAMPLE/1.1", nettyResponseStatus.getProtocolText());
+    assertEquals("HTTPS://EXAMPLE.ORG/EXAMPLE/1.1",
+        (new NettyResponseStatus(uri, response, new EmbeddedChannel())).getProtocolText());
   }
 }

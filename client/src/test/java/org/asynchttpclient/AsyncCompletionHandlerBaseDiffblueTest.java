@@ -2,7 +2,6 @@ package org.asynchttpclient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import org.asynchttpclient.AsyncHandler.State;
 import org.asynchttpclient.Response.ResponseBuilder;
@@ -13,42 +12,34 @@ import org.junit.jupiter.api.Test;
 class AsyncCompletionHandlerBaseDiffblueTest {
   /**
    * Test {@link AsyncCompletionHandlerBase#onCompleted(Response)} with {@code Response}.
-   *
    * <ul>
-   *   <li>When {@link ResponseBuilder} (default constructor) build.
-   *   <li>Then return {@code null}.
+   *   <li>When {@link ResponseBuilder} (default constructor) build.</li>
+   *   <li>Then return {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link AsyncCompletionHandlerBase#onCompleted(Response)}
+   * <p>
+   * Method under test: {@link AsyncCompletionHandlerBase#onCompleted(Response)}
    */
   @Test
-  @DisplayName(
-      "Test onCompleted(Response) with 'Response'; when ResponseBuilder (default constructor) build; then return 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test onCompleted(Response) with 'Response'; when ResponseBuilder (default constructor) build; then return 'null'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"Response AsyncCompletionHandlerBase.onCompleted(Response)"})
   void testOnCompletedWithResponse_whenResponseBuilderBuild_thenReturnNull() throws Exception {
     // Arrange
     AsyncCompletionHandlerBase asyncCompletionHandlerBase = new AsyncCompletionHandlerBase();
+    Response response = (new ResponseBuilder()).build();
 
-    // Act
-    Response actualOnCompletedResult =
-        asyncCompletionHandlerBase.onCompleted(new ResponseBuilder().build());
-
-    // Assert
-    assertNull(actualOnCompletedResult);
+    // Act and Assert
+    assertNull(asyncCompletionHandlerBase.onCompleted(response));
   }
 
   /**
    * Test new {@link AsyncCompletionHandlerBase} (default constructor).
-   *
-   * <p>Method under test: default or parameterless constructor of {@link
-   * AsyncCompletionHandlerBase}
+   * <p>
+   * Method under test: default or parameterless constructor of {@link AsyncCompletionHandlerBase}
    */
   @Test
   @DisplayName("Test new AsyncCompletionHandlerBase (default constructor)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void AsyncCompletionHandlerBase.<init>()"})
   void testNewAsyncCompletionHandlerBase() throws Exception {
     // Arrange and Act

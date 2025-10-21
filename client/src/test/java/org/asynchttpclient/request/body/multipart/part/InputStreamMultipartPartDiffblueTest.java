@@ -5,13 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
-import io.netty.buffer.UnpooledDirectByteBuf;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,28 +25,23 @@ import org.junit.jupiter.api.Test;
 class InputStreamMultipartPartDiffblueTest {
   /**
    * Test {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}.
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart,
-   * byte[])}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}
    */
   @Test
   @DisplayName("Test new InputStreamMultipartPart(InputStreamPart, byte[])")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void InputStreamMultipartPart.<init>(InputStreamPart, byte[])"})
   void testNewInputStreamMultipartPart() throws UnsupportedEncodingException {
     // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
     part.setDispositionType("https://example.org/example");
     part.addCustomHeader("https://example.org/example", "https://example.org/example");
 
     // Act
-    InputStreamMultipartPart actualInputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamMultipartPart actualInputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     InputStreamPart inputStreamPart = actualInputStreamMultipartPart.part;
@@ -63,34 +56,26 @@ class InputStreamMultipartPartDiffblueTest {
 
   /**
    * Test {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}.
-   *
    * <ul>
-   *   <li>Given {@link ArrayList#ArrayList()}.
-   *   <li>Then return {@link MultipartPart#part} CustomHeaders Empty.
+   *   <li>Given {@link ArrayList#ArrayList()}.</li>
+   *   <li>Then return {@link MultipartPart#part} CustomHeaders Empty.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart,
-   * byte[])}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new InputStreamMultipartPart(InputStreamPart, byte[]); given ArrayList(); then return part CustomHeaders Empty")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new InputStreamMultipartPart(InputStreamPart, byte[]); given ArrayList(); then return part CustomHeaders Empty")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void InputStreamMultipartPart.<init>(InputStreamPart, byte[])"})
-  void testNewInputStreamMultipartPart_givenArrayList_thenReturnPartCustomHeadersEmpty()
-      throws IOException {
+  void testNewInputStreamMultipartPart_givenArrayList_thenReturnPartCustomHeadersEmpty() throws IOException {
     // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
     part.setCustomHeaders(new ArrayList<>());
 
     // Act
-    InputStreamMultipartPart actualInputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamMultipartPart actualInputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     InputStreamPart inputStreamPart = actualInputStreamMultipartPart.part;
@@ -115,31 +100,24 @@ class InputStreamMultipartPartDiffblueTest {
 
   /**
    * Test {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}.
-   *
    * <ul>
-   *   <li>Then return {@link MultipartPart#part} CustomHeaders is {@code null}.
+   *   <li>Then return {@link MultipartPart#part} CustomHeaders is {@code null}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart,
-   * byte[])}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new InputStreamMultipartPart(InputStreamPart, byte[]); then return part CustomHeaders is 'null'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new InputStreamMultipartPart(InputStreamPart, byte[]); then return part CustomHeaders is 'null'")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void InputStreamMultipartPart.<init>(InputStreamPart, byte[])"})
   void testNewInputStreamMultipartPart_thenReturnPartCustomHeadersIsNull() throws IOException {
     // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
 
     // Act
-    InputStreamMultipartPart actualInputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamMultipartPart actualInputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     InputStreamPart inputStreamPart = actualInputStreamMultipartPart.part;
@@ -164,33 +142,25 @@ class InputStreamMultipartPartDiffblueTest {
 
   /**
    * Test {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}.
-   *
    * <ul>
-   *   <li>Then return {@link MultipartPart#part} CustomHeaders size is one.
+   *   <li>Then return {@link MultipartPart#part} CustomHeaders size is one.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart,
-   * byte[])}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#InputStreamMultipartPart(InputStreamPart, byte[])}
    */
   @Test
-  @DisplayName(
-      "Test new InputStreamMultipartPart(InputStreamPart, byte[]); then return part CustomHeaders size is one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test new InputStreamMultipartPart(InputStreamPart, byte[]); then return part CustomHeaders size is one")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void InputStreamMultipartPart.<init>(InputStreamPart, byte[])"})
-  void testNewInputStreamMultipartPart_thenReturnPartCustomHeadersSizeIsOne()
-      throws UnsupportedEncodingException {
+  void testNewInputStreamMultipartPart_thenReturnPartCustomHeadersSizeIsOne() throws UnsupportedEncodingException {
     // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
     part.addCustomHeader("https://example.org/example", "https://example.org/example");
 
     // Act
-    InputStreamMultipartPart actualInputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamMultipartPart actualInputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
 
     // Assert
     List<Param> customHeaders = actualInputStreamMultipartPart.part.getCustomHeaders();
@@ -203,158 +173,90 @@ class InputStreamMultipartPartDiffblueTest {
 
   /**
    * Test {@link InputStreamMultipartPart#getContentLength()}.
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#getContentLength()}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#getContentLength()}
    */
   @Test
   @DisplayName("Test getContentLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long InputStreamMultipartPart.getContentLength()"})
   void testGetContentLength() throws UnsupportedEncodingException {
     // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
-    InputStreamMultipartPart inputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
 
     // Act and Assert
-    assertEquals(-1L, inputStreamMultipartPart.getContentLength());
+    assertEquals(-1L, (new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"))).getContentLength());
   }
 
   /**
    * Test {@link InputStreamMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#transferContentTo(ByteBuf)}
-   */
-  @Test
-  @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long InputStreamMultipartPart.transferContentTo(ByteBuf)"})
-  void testTransferContentToWithByteBuf() throws IOException {
-    // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
-    InputStreamMultipartPart inputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
-    DuplicatedByteBuf target =
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
-
-    // Act
-    long actualTransferContentToResult = inputStreamMultipartPart.transferContentTo(target);
-
-    // Assert
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
-    assertEquals(0L, actualTransferContentToResult);
-    byte[] byteArray = new byte[8];
-    assertEquals(8, inputStreamMultipartPart.part.getInputStream().read(byteArray));
-    assertEquals(MultipartState.PRE_CONTENT, inputStreamMultipartPart.getState());
-    assertFalse(target.isWritable());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
-  }
-
-  /**
-   * Test {@link InputStreamMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#transferContentTo(ByteBuf)}
-   */
-  @Test
-  @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long InputStreamMultipartPart.transferContentTo(ByteBuf)"})
-  void testTransferContentToWithByteBuf2() throws IOException {
-    // Arrange
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[] {});
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example", inputStream, "https://example.org/example", 3L);
-    InputStreamMultipartPart inputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
-    UnpooledDirectByteBuf target = new UnpooledDirectByteBuf(new AdaptiveByteBufAllocator(), 1, 3);
-
-    // Act
-    long actualTransferContentToResult = inputStreamMultipartPart.transferContentTo(target);
-
-    // Assert
-    int actualReadResult = inputStreamMultipartPart.part.getInputStream().read(new byte[] {});
-    assertEquals(-1, actualReadResult);
-    assertEquals(-1L, actualTransferContentToResult);
-    assertEquals(0, target.readerIndex());
-    assertEquals(0, target.writerIndex());
-    assertEquals(MultipartState.POST_CONTENT, inputStreamMultipartPart.getState());
-    assertTrue(target.isWritable());
-  }
-
-  /**
-   * Test {@link InputStreamMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
-   *
    * <ul>
-   *   <li>Then return zero.
+   *   <li>Then return zero.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#transferContentTo(ByteBuf)}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#transferContentTo(ByteBuf)}
    */
   @Test
   @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'; then return zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long InputStreamMultipartPart.transferContentTo(ByteBuf)"})
   void testTransferContentToWithByteBuf_thenReturnZero() throws IOException {
     // Arrange
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example",
-            new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")),
-            "https://example.org/example");
-    InputStreamMultipartPart inputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
 
-    // Act
-    long actualTransferContentToResult =
-        inputStreamMultipartPart.transferContentTo(
-            new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    InputStreamMultipartPart inputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
 
-    // Assert
-    assertEquals(0L, actualTransferContentToResult);
-    byte[] byteArray = new byte[8];
-    assertEquals(8, inputStreamMultipartPart.part.getInputStream().read(byteArray));
-    assertEquals(MultipartState.PRE_CONTENT, inputStreamMultipartPart.getState());
-    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
+    // Act and Assert
+    assertEquals(0L, inputStreamMultipartPart.transferContentTo(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
   }
 
   /**
-   * Test {@link InputStreamMultipartPart#transferContentTo(WritableByteChannel)} with {@code
-   * WritableByteChannel}.
-   *
+   * Test {@link InputStreamMultipartPart#transferContentTo(ByteBuf)} with {@code ByteBuf}.
    * <ul>
-   *   <li>Then return zero.
+   *   <li>When {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)} with buffer is {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link InputStreamMultipartPart#transferContentTo(WritableByteChannel)}
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#transferContentTo(ByteBuf)}
    */
   @Test
-  @DisplayName(
-      "Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; then return zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @DisplayName("Test transferContentTo(ByteBuf) with 'ByteBuf'; when DuplicatedByteBuf(ByteBuf) with buffer is EmptyByteBuf(ByteBufAllocator)")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"long InputStreamMultipartPart.transferContentTo(ByteBuf)"})
+  void testTransferContentToWithByteBuf_whenDuplicatedByteBufWithBufferIsEmptyByteBuf() throws IOException {
+    // Arrange
+    InputStreamPart part = new InputStreamPart("https://example.org/example",
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")), "https://example.org/example");
+
+    InputStreamMultipartPart inputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
+
+    // Act and Assert
+    assertEquals(0L, inputStreamMultipartPart
+        .transferContentTo(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()))));
+  }
+
+  /**
+   * Test {@link InputStreamMultipartPart#transferContentTo(WritableByteChannel)} with {@code WritableByteChannel}.
+   * <ul>
+   *   <li>Then return zero.</li>
+   * </ul>
+   * <p>
+   * Method under test: {@link InputStreamMultipartPart#transferContentTo(WritableByteChannel)}
+   */
+  @Test
+  @DisplayName("Test transferContentTo(WritableByteChannel) with 'WritableByteChannel'; then return zero")
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"long InputStreamMultipartPart.transferContentTo(WritableByteChannel)"})
   void testTransferContentToWithWritableByteChannel_thenReturnZero() throws IOException {
     // Arrange
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[] {});
-    InputStreamPart part =
-        new InputStreamPart(
-            "https://example.org/example", inputStream, "https://example.org/example");
-    InputStreamMultipartPart inputStreamMultipartPart =
-        new InputStreamMultipartPart(part, "AXAXAXAX".getBytes("UTF-8"));
+    InputStreamPart part = new InputStreamPart("https://example.org/example", new ByteArrayInputStream(new byte[]{}),
+        "https://example.org/example");
+
+    InputStreamMultipartPart inputStreamMultipartPart = new InputStreamMultipartPart(part,
+        "AXAXAXAX".getBytes("UTF-8"));
 
     // Act and Assert
     assertEquals(0L, inputStreamMultipartPart.transferContentTo((WritableByteChannel) null));

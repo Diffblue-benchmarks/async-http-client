@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -21,7 +20,6 @@ import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.ArrayList;
 import org.asynchttpclient.AsyncHandler;
 import org.asynchttpclient.DefaultRequest;
@@ -42,13 +40,12 @@ import org.junit.jupiter.api.Test;
 class FilterContextDiffblueTest {
   /**
    * Test FilterContextBuilder {@link FilterContextBuilder#FilterContextBuilder(FilterContext)}.
-   *
-   * <p>Method under test: {@link FilterContextBuilder#FilterContextBuilder(FilterContext)}
+   * <p>
+   * Method under test: {@link FilterContextBuilder#FilterContextBuilder(FilterContext)}
    */
   @Test
   @DisplayName("Test FilterContextBuilder new FilterContextBuilder(FilterContext)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"void FilterContextBuilder.<init>(FilterContext)"})
   void testFilterContextBuilderNewFilterContextBuilder() throws UnsupportedEncodingException {
     // Arrange
@@ -56,22 +53,14 @@ class FilterContextDiffblueTest {
     when(clone.replayRequest()).thenReturn(true);
     when(clone.getIOException()).thenReturn(ChannelClosedException.INSTANCE);
     when(clone.getAsyncHandler()).thenReturn(mock(AsyncHandler.class));
-    Uri uri =
-        new Uri(
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example",
-            8080,
-            "https://example.org/example",
-            "https://example.org/example",
-            "https://example.org/example");
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-    DefaultFullHttpResponse response =
-        new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    NettyResponseStatus nettyResponseStatus =
-        new NettyResponseStatus(uri, response, new EmbeddedChannel());
-    when(clone.getResponseStatus()).thenReturn(nettyResponseStatus);
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+
+    when(clone.getResponseStatus()).thenReturn(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
     Uri uri2 = mock(Uri.class);
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
@@ -88,37 +77,11 @@ class FilterContextDiffblueTest {
     ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
     File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-    Duration requestTimeout = Duration.ofSeconds(1L);
-    Duration readTimeout = Duration.ofSeconds(1L);
+    DefaultRequest defaultRequest = new DefaultRequest("https://example.org/example", uri2, address, localAddress,
+        headers, cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData,
+        streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true,
+        null, null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class));
 
-    DefaultRequest defaultRequest =
-        new DefaultRequest(
-            "https://example.org/example",
-            uri2,
-            address,
-            localAddress,
-            headers,
-            cookies,
-            byteData,
-            compositeByteData,
-            "https://example.org/example",
-            byteBufferData,
-            byteBufData,
-            streamData,
-            bodyGenerator,
-            formParams,
-            bodyParts,
-            "https://example.org/example",
-            proxyServer,
-            realm,
-            file,
-            true,
-            requestTimeout,
-            readTimeout,
-            1L,
-            Charset.forName("UTF-8"),
-            mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class));
     when(clone.getRequest()).thenReturn(defaultRequest);
 
     // Act

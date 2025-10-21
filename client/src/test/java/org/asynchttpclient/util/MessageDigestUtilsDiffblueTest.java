@@ -1,7 +1,6 @@
 package org.asynchttpclient.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.security.MessageDigest;
 import java.security.Provider;
@@ -12,13 +11,12 @@ import org.junit.jupiter.api.Test;
 class MessageDigestUtilsDiffblueTest {
   /**
    * Test {@link MessageDigestUtils#pooledMd5MessageDigest()}.
-   *
-   * <p>Method under test: {@link MessageDigestUtils#pooledMd5MessageDigest()}
+   * <p>
+   * Method under test: {@link MessageDigestUtils#pooledMd5MessageDigest()}
    */
   @Test
   @DisplayName("Test pooledMd5MessageDigest()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"MessageDigest MessageDigestUtils.pooledMd5MessageDigest()"})
   void testPooledMd5MessageDigest() {
     // Arrange and Act
@@ -39,18 +37,16 @@ class MessageDigestUtilsDiffblueTest {
 
   /**
    * Test {@link MessageDigestUtils#pooledSha1MessageDigest()}.
-   *
-   * <p>Method under test: {@link MessageDigestUtils#pooledSha1MessageDigest()}
+   * <p>
+   * Method under test: {@link MessageDigestUtils#pooledSha1MessageDigest()}
    */
   @Test
   @DisplayName("Test pooledSha1MessageDigest()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"MessageDigest MessageDigestUtils.pooledSha1MessageDigest()"})
   void testPooledSha1MessageDigest() {
     // Arrange and Act
-    MessageDigest actualPooledSha1MessageDigestResult =
-        MessageDigestUtils.pooledSha1MessageDigest();
+    MessageDigest actualPooledSha1MessageDigestResult = MessageDigestUtils.pooledSha1MessageDigest();
 
     // Assert
     Provider provider = actualPooledSha1MessageDigestResult.getProvider();

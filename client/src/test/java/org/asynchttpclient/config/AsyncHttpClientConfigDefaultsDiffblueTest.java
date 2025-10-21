@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -14,13 +13,12 @@ import org.junit.jupiter.api.Test;
 class AsyncHttpClientConfigDefaultsDiffblueTest {
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultThreadPoolName()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultThreadPoolName()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultThreadPoolName()}
    */
   @Test
   @DisplayName("Test defaultThreadPoolName()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String AsyncHttpClientConfigDefaults.defaultThreadPoolName()"})
   void testDefaultThreadPoolName() {
     // Arrange, Act and Assert
@@ -29,13 +27,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultMaxConnections()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxConnections()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxConnections()}
    */
   @Test
   @DisplayName("Test defaultMaxConnections()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultMaxConnections()"})
   void testDefaultMaxConnections() {
     // Arrange, Act and Assert
@@ -44,13 +41,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultMaxConnectionsPerHost()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxConnectionsPerHost()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxConnectionsPerHost()}
    */
   @Test
   @DisplayName("Test defaultMaxConnectionsPerHost()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultMaxConnectionsPerHost()"})
   void testDefaultMaxConnectionsPerHost() {
     // Arrange, Act and Assert
@@ -59,13 +55,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultAcquireFreeChannelTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultAcquireFreeChannelTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultAcquireFreeChannelTimeout()}
    */
   @Test
   @DisplayName("Test defaultAcquireFreeChannelTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultAcquireFreeChannelTimeout()"})
   void testDefaultAcquireFreeChannelTimeout() {
     // Arrange, Act and Assert
@@ -74,13 +69,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultConnectTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultConnectTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultConnectTimeout()}
    */
   @Test
   @DisplayName("Test defaultConnectTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultConnectTimeout()"})
   void testDefaultConnectTimeout() {
     // Arrange, Act and Assert
@@ -89,51 +83,40 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultPooledConnectionIdleTimeout()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultPooledConnectionIdleTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultPooledConnectionIdleTimeout()}
    */
   @Test
   @DisplayName("Test defaultPooledConnectionIdleTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "java.time.Duration AsyncHttpClientConfigDefaults.defaultPooledConnectionIdleTimeout()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultPooledConnectionIdleTimeout()"})
   void testDefaultPooledConnectionIdleTimeout() {
     // Arrange, Act and Assert
-    assertEquals(
-        60000000000L, AsyncHttpClientConfigDefaults.defaultPooledConnectionIdleTimeout().toNanos());
+    assertEquals(60000000000L, AsyncHttpClientConfigDefaults.defaultPooledConnectionIdleTimeout().toNanos());
   }
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultConnectionPoolCleanerPeriod()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultConnectionPoolCleanerPeriod()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultConnectionPoolCleanerPeriod()}
    */
   @Test
   @DisplayName("Test defaultConnectionPoolCleanerPeriod()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "java.time.Duration AsyncHttpClientConfigDefaults.defaultConnectionPoolCleanerPeriod()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultConnectionPoolCleanerPeriod()"})
   void testDefaultConnectionPoolCleanerPeriod() {
     // Arrange, Act and Assert
-    assertEquals(
-        100000000L, AsyncHttpClientConfigDefaults.defaultConnectionPoolCleanerPeriod().toNanos());
+    assertEquals(100000000L, AsyncHttpClientConfigDefaults.defaultConnectionPoolCleanerPeriod().toNanos());
   }
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultReadTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultReadTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultReadTimeout()}
    */
   @Test
   @DisplayName("Test defaultReadTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultReadTimeout()"})
   void testDefaultReadTimeout() {
     // Arrange, Act and Assert
@@ -142,13 +125,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultRequestTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultRequestTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultRequestTimeout()}
    */
   @Test
   @DisplayName("Test defaultRequestTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultRequestTimeout()"})
   void testDefaultRequestTimeout() {
     // Arrange, Act and Assert
@@ -157,13 +139,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultConnectionTtl()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultConnectionTtl()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultConnectionTtl()}
    */
   @Test
   @DisplayName("Test defaultConnectionTtl()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultConnectionTtl()"})
   void testDefaultConnectionTtl() {
     // Arrange, Act and Assert
@@ -172,13 +153,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultMaxRedirects()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxRedirects()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxRedirects()}
    */
   @Test
   @DisplayName("Test defaultMaxRedirects()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultMaxRedirects()"})
   void testDefaultMaxRedirects() {
     // Arrange, Act and Assert
@@ -187,13 +167,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultCompressionEnforced()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultCompressionEnforced()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultCompressionEnforced()}
    */
   @Test
   @DisplayName("Test defaultCompressionEnforced()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultCompressionEnforced()"})
   void testDefaultCompressionEnforced() {
     // Arrange, Act and Assert
@@ -202,14 +181,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultEnableAutomaticDecompression()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultEnableAutomaticDecompression()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnableAutomaticDecompression()}
    */
   @Test
   @DisplayName("Test defaultEnableAutomaticDecompression()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultEnableAutomaticDecompression()"})
   void testDefaultEnableAutomaticDecompression() {
     // Arrange, Act and Assert
@@ -218,13 +195,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUserAgent()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUserAgent()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUserAgent()}
    */
   @Test
   @DisplayName("Test defaultUserAgent()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String AsyncHttpClientConfigDefaults.defaultUserAgent()"})
   void testDefaultUserAgent() {
     // Arrange, Act and Assert
@@ -233,30 +209,26 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultEnabledProtocols()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnabledProtocols()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnabledProtocols()}
    */
   @Test
   @DisplayName("Test defaultEnabledProtocols()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String[] AsyncHttpClientConfigDefaults.defaultEnabledProtocols()"})
   void testDefaultEnabledProtocols() {
     // Arrange, Act and Assert
-    assertArrayEquals(
-        new String[] {"TLSv1.3", "TLSv1.2"},
-        AsyncHttpClientConfigDefaults.defaultEnabledProtocols());
+    assertArrayEquals(new String[]{"TLSv1.3", "TLSv1.2"}, AsyncHttpClientConfigDefaults.defaultEnabledProtocols());
   }
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultEnabledCipherSuites()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnabledCipherSuites()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnabledCipherSuites()}
    */
   @Test
   @DisplayName("Test defaultEnabledCipherSuites()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"String[] AsyncHttpClientConfigDefaults.defaultEnabledCipherSuites()"})
   void testDefaultEnabledCipherSuites() {
     // Arrange, Act and Assert
@@ -265,13 +237,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultFilterInsecureCipherSuites()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultFilterInsecureCipherSuites()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultFilterInsecureCipherSuites()}
    */
   @Test
   @DisplayName("Test defaultFilterInsecureCipherSuites()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultFilterInsecureCipherSuites()"})
   void testDefaultFilterInsecureCipherSuites() {
     // Arrange, Act and Assert
@@ -280,13 +251,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseProxySelector()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseProxySelector()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseProxySelector()}
    */
   @Test
   @DisplayName("Test defaultUseProxySelector()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseProxySelector()"})
   void testDefaultUseProxySelector() {
     // Arrange, Act and Assert
@@ -295,13 +265,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseProxyProperties()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseProxyProperties()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseProxyProperties()}
    */
   @Test
   @DisplayName("Test defaultUseProxyProperties()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseProxyProperties()"})
   void testDefaultUseProxyProperties() {
     // Arrange, Act and Assert
@@ -310,13 +279,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultValidateResponseHeaders()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultValidateResponseHeaders()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultValidateResponseHeaders()}
    */
   @Test
   @DisplayName("Test defaultValidateResponseHeaders()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultValidateResponseHeaders()"})
   void testDefaultValidateResponseHeaders() {
     // Arrange, Act and Assert
@@ -325,17 +293,13 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultAggregateWebSocketFrameFragments()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultAggregateWebSocketFrameFragments()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultAggregateWebSocketFrameFragments()}
    */
   @Test
   @DisplayName("Test defaultAggregateWebSocketFrameFragments()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "boolean AsyncHttpClientConfigDefaults.defaultAggregateWebSocketFrameFragments()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultAggregateWebSocketFrameFragments()"})
   void testDefaultAggregateWebSocketFrameFragments() {
     // Arrange, Act and Assert
     assertTrue(AsyncHttpClientConfigDefaults.defaultAggregateWebSocketFrameFragments());
@@ -343,13 +307,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultEnableWebSocketCompression()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnableWebSocketCompression()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultEnableWebSocketCompression()}
    */
   @Test
   @DisplayName("Test defaultEnableWebSocketCompression()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultEnableWebSocketCompression()"})
   void testDefaultEnableWebSocketCompression() {
     // Arrange, Act and Assert
@@ -358,13 +321,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultStrict302Handling()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultStrict302Handling()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultStrict302Handling()}
    */
   @Test
   @DisplayName("Test defaultStrict302Handling()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultStrict302Handling()"})
   void testDefaultStrict302Handling() {
     // Arrange, Act and Assert
@@ -373,13 +335,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultKeepAlive()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultKeepAlive()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultKeepAlive()}
    */
   @Test
   @DisplayName("Test defaultKeepAlive()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultKeepAlive()"})
   void testDefaultKeepAlive() {
     // Arrange, Act and Assert
@@ -388,13 +349,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultMaxRequestRetry()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxRequestRetry()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultMaxRequestRetry()}
    */
   @Test
   @DisplayName("Test defaultMaxRequestRetry()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultMaxRequestRetry()"})
   void testDefaultMaxRequestRetry() {
     // Arrange, Act and Assert
@@ -403,17 +363,13 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultDisableUrlEncodingForBoundRequests()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultDisableUrlEncodingForBoundRequests()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultDisableUrlEncodingForBoundRequests()}
    */
   @Test
   @DisplayName("Test defaultDisableUrlEncodingForBoundRequests()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "boolean AsyncHttpClientConfigDefaults.defaultDisableUrlEncodingForBoundRequests()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultDisableUrlEncodingForBoundRequests()"})
   void testDefaultDisableUrlEncodingForBoundRequests() {
     // Arrange, Act and Assert
     assertFalse(AsyncHttpClientConfigDefaults.defaultDisableUrlEncodingForBoundRequests());
@@ -421,13 +377,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseLaxCookieEncoder()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseLaxCookieEncoder()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseLaxCookieEncoder()}
    */
   @Test
   @DisplayName("Test defaultUseLaxCookieEncoder()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseLaxCookieEncoder()"})
   void testDefaultUseLaxCookieEncoder() {
     // Arrange, Act and Assert
@@ -436,13 +391,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseOpenSsl()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseOpenSsl()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseOpenSsl()}
    */
   @Test
   @DisplayName("Test defaultUseOpenSsl()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseOpenSsl()"})
   void testDefaultUseOpenSsl() {
     // Arrange, Act and Assert
@@ -451,13 +405,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseInsecureTrustManager()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseInsecureTrustManager()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseInsecureTrustManager()}
    */
   @Test
   @DisplayName("Test defaultUseInsecureTrustManager()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseInsecureTrustManager()"})
   void testDefaultUseInsecureTrustManager() {
     // Arrange, Act and Assert
@@ -465,19 +418,14 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
   }
 
   /**
-   * Test {@link
-   * AsyncHttpClientConfigDefaults#defaultDisableHttpsEndpointIdentificationAlgorithm()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultDisableHttpsEndpointIdentificationAlgorithm()}
+   * Test {@link AsyncHttpClientConfigDefaults#defaultDisableHttpsEndpointIdentificationAlgorithm()}.
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultDisableHttpsEndpointIdentificationAlgorithm()}
    */
   @Test
   @DisplayName("Test defaultDisableHttpsEndpointIdentificationAlgorithm()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "boolean AsyncHttpClientConfigDefaults.defaultDisableHttpsEndpointIdentificationAlgorithm()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultDisableHttpsEndpointIdentificationAlgorithm()"})
   void testDefaultDisableHttpsEndpointIdentificationAlgorithm() {
     // Arrange, Act and Assert
     assertFalse(AsyncHttpClientConfigDefaults.defaultDisableHttpsEndpointIdentificationAlgorithm());
@@ -485,13 +433,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSslSessionCacheSize()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSslSessionCacheSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSslSessionCacheSize()}
    */
   @Test
   @DisplayName("Test defaultSslSessionCacheSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultSslSessionCacheSize()"})
   void testDefaultSslSessionCacheSize() {
     // Arrange, Act and Assert
@@ -500,13 +447,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSslSessionTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSslSessionTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSslSessionTimeout()}
    */
   @Test
   @DisplayName("Test defaultSslSessionTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultSslSessionTimeout()"})
   void testDefaultSslSessionTimeout() {
     // Arrange, Act and Assert
@@ -515,13 +461,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultTcpNoDelay()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultTcpNoDelay()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultTcpNoDelay()}
    */
   @Test
   @DisplayName("Test defaultTcpNoDelay()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultTcpNoDelay()"})
   void testDefaultTcpNoDelay() {
     // Arrange, Act and Assert
@@ -530,13 +475,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSoReuseAddress()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoReuseAddress()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoReuseAddress()}
    */
   @Test
   @DisplayName("Test defaultSoReuseAddress()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultSoReuseAddress()"})
   void testDefaultSoReuseAddress() {
     // Arrange, Act and Assert
@@ -545,13 +489,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSoKeepAlive()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoKeepAlive()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoKeepAlive()}
    */
   @Test
   @DisplayName("Test defaultSoKeepAlive()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultSoKeepAlive()"})
   void testDefaultSoKeepAlive() {
     // Arrange, Act and Assert
@@ -560,13 +503,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSoLinger()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoLinger()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoLinger()}
    */
   @Test
   @DisplayName("Test defaultSoLinger()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultSoLinger()"})
   void testDefaultSoLinger() {
     // Arrange, Act and Assert
@@ -575,13 +517,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSoSndBuf()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoSndBuf()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoSndBuf()}
    */
   @Test
   @DisplayName("Test defaultSoSndBuf()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultSoSndBuf()"})
   void testDefaultSoSndBuf() {
     // Arrange, Act and Assert
@@ -590,13 +531,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultSoRcvBuf()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoRcvBuf()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultSoRcvBuf()}
    */
   @Test
   @DisplayName("Test defaultSoRcvBuf()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultSoRcvBuf()"})
   void testDefaultSoRcvBuf() {
     // Arrange, Act and Assert
@@ -605,17 +545,13 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxInitialLineLength()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxInitialLineLength()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxInitialLineLength()}
    */
   @Test
   @DisplayName("Test defaultHttpClientCodecMaxInitialLineLength()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "int AsyncHttpClientConfigDefaults.defaultHttpClientCodecMaxInitialLineLength()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHttpClientCodecMaxInitialLineLength()"})
   void testDefaultHttpClientCodecMaxInitialLineLength() {
     // Arrange, Act and Assert
     assertEquals(4096, AsyncHttpClientConfigDefaults.defaultHttpClientCodecMaxInitialLineLength());
@@ -623,14 +559,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxHeaderSize()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxHeaderSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxHeaderSize()}
    */
   @Test
   @DisplayName("Test defaultHttpClientCodecMaxHeaderSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHttpClientCodecMaxHeaderSize()"})
   void testDefaultHttpClientCodecMaxHeaderSize() {
     // Arrange, Act and Assert
@@ -639,14 +573,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxChunkSize()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxChunkSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecMaxChunkSize()}
    */
   @Test
   @DisplayName("Test defaultHttpClientCodecMaxChunkSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHttpClientCodecMaxChunkSize()"})
   void testDefaultHttpClientCodecMaxChunkSize() {
     // Arrange, Act and Assert
@@ -655,14 +587,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecInitialBufferSize()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultHttpClientCodecInitialBufferSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHttpClientCodecInitialBufferSize()}
    */
   @Test
   @DisplayName("Test defaultHttpClientCodecInitialBufferSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHttpClientCodecInitialBufferSize()"})
   void testDefaultHttpClientCodecInitialBufferSize() {
     // Arrange, Act and Assert
@@ -671,13 +601,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultDisableZeroCopy()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultDisableZeroCopy()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultDisableZeroCopy()}
    */
   @Test
   @DisplayName("Test defaultDisableZeroCopy()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultDisableZeroCopy()"})
   void testDefaultDisableZeroCopy() {
     // Arrange, Act and Assert
@@ -686,13 +615,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHandshakeTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultHandshakeTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHandshakeTimeout()}
    */
   @Test
   @DisplayName("Test defaultHandshakeTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHandshakeTimeout()"})
   void testDefaultHandshakeTimeout() {
     // Arrange, Act and Assert
@@ -701,13 +629,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultChunkedFileChunkSize()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultChunkedFileChunkSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultChunkedFileChunkSize()}
    */
   @Test
   @DisplayName("Test defaultChunkedFileChunkSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultChunkedFileChunkSize()"})
   void testDefaultChunkedFileChunkSize() {
     // Arrange, Act and Assert
@@ -716,13 +643,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultWebSocketMaxBufferSize()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultWebSocketMaxBufferSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultWebSocketMaxBufferSize()}
    */
   @Test
   @DisplayName("Test defaultWebSocketMaxBufferSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultWebSocketMaxBufferSize()"})
   void testDefaultWebSocketMaxBufferSize() {
     // Arrange, Act and Assert
@@ -731,13 +657,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultWebSocketMaxFrameSize()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultWebSocketMaxFrameSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultWebSocketMaxFrameSize()}
    */
   @Test
   @DisplayName("Test defaultWebSocketMaxFrameSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultWebSocketMaxFrameSize()"})
   void testDefaultWebSocketMaxFrameSize() {
     // Arrange, Act and Assert
@@ -746,13 +671,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultKeepEncodingHeader()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultKeepEncodingHeader()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultKeepEncodingHeader()}
    */
   @Test
   @DisplayName("Test defaultKeepEncodingHeader()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultKeepEncodingHeader()"})
   void testDefaultKeepEncodingHeader() {
     // Arrange, Act and Assert
@@ -761,16 +685,13 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultShutdownQuietPeriod()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultShutdownQuietPeriod()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultShutdownQuietPeriod()}
    */
   @Test
   @DisplayName("Test defaultShutdownQuietPeriod()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "java.time.Duration AsyncHttpClientConfigDefaults.defaultShutdownQuietPeriod()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultShutdownQuietPeriod()"})
   void testDefaultShutdownQuietPeriod() {
     // Arrange, Act and Assert
     assertEquals(2000000000L, AsyncHttpClientConfigDefaults.defaultShutdownQuietPeriod().toNanos());
@@ -778,13 +699,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultShutdownTimeout()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultShutdownTimeout()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultShutdownTimeout()}
    */
   @Test
   @DisplayName("Test defaultShutdownTimeout()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"java.time.Duration AsyncHttpClientConfigDefaults.defaultShutdownTimeout()"})
   void testDefaultShutdownTimeout() {
     // Arrange, Act and Assert
@@ -793,13 +713,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseNativeTransport()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseNativeTransport()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseNativeTransport()}
    */
   @Test
   @DisplayName("Test defaultUseNativeTransport()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseNativeTransport()"})
   void testDefaultUseNativeTransport() {
     // Arrange, Act and Assert
@@ -808,14 +727,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultUseOnlyEpollNativeTransport()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultUseOnlyEpollNativeTransport()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultUseOnlyEpollNativeTransport()}
    */
   @Test
   @DisplayName("Test defaultUseOnlyEpollNativeTransport()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"boolean AsyncHttpClientConfigDefaults.defaultUseOnlyEpollNativeTransport()"})
   void testDefaultUseOnlyEpollNativeTransport() {
     // Arrange, Act and Assert
@@ -824,13 +741,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultIoThreadsCount()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultIoThreadsCount()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultIoThreadsCount()}
    */
   @Test
   @DisplayName("Test defaultIoThreadsCount()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultIoThreadsCount()"})
   void testDefaultIoThreadsCount() {
     // Arrange, Act and Assert
@@ -839,14 +755,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHashedWheelTimerTickDuration()}.
-   *
-   * <p>Method under test: {@link
-   * AsyncHttpClientConfigDefaults#defaultHashedWheelTimerTickDuration()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHashedWheelTimerTickDuration()}
    */
   @Test
   @DisplayName("Test defaultHashedWheelTimerTickDuration()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHashedWheelTimerTickDuration()"})
   void testDefaultHashedWheelTimerTickDuration() {
     // Arrange, Act and Assert
@@ -855,13 +769,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultHashedWheelTimerSize()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultHashedWheelTimerSize()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultHashedWheelTimerSize()}
    */
   @Test
   @DisplayName("Test defaultHashedWheelTimerSize()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultHashedWheelTimerSize()"})
   void testDefaultHashedWheelTimerSize() {
     // Arrange, Act and Assert
@@ -870,13 +783,12 @@ class AsyncHttpClientConfigDefaultsDiffblueTest {
 
   /**
    * Test {@link AsyncHttpClientConfigDefaults#defaultExpiredCookieEvictionDelay()}.
-   *
-   * <p>Method under test: {@link AsyncHttpClientConfigDefaults#defaultExpiredCookieEvictionDelay()}
+   * <p>
+   * Method under test: {@link AsyncHttpClientConfigDefaults#defaultExpiredCookieEvictionDelay()}
    */
   @Test
   @DisplayName("Test defaultExpiredCookieEvictionDelay()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
+  @Tag("MaintainedByDiffblue")
   @MethodsUnderTest({"int AsyncHttpClientConfigDefaults.defaultExpiredCookieEvictionDelay()"})
   void testDefaultExpiredCookieEvictionDelay() {
     // Arrange, Act and Assert

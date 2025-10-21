@@ -2,7 +2,6 @@ package org.asynchttpclient.netty.request.body;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,13 +13,11 @@ import org.junit.jupiter.api.Test;
 class NettyInputStreamBodyDiffblueTest {
   /**
    * Test getters and setters.
-   *
    * <ul>
-   *   <li>Then return ContentLength is minus one.
+   *   <li>Then return ContentLength is minus one.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link NettyInputStreamBody#NettyInputStreamBody(InputStream)}
    *   <li>{@link NettyInputStreamBody#getContentLength()}
@@ -29,14 +26,10 @@ class NettyInputStreamBodyDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters; then return ContentLength is minus one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void NettyInputStreamBody.<init>(InputStream)",
-    "void NettyInputStreamBody.<init>(InputStream, long)",
-    "long NettyInputStreamBody.getContentLength()",
-    "InputStream NettyInputStreamBody.getInputStream()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void NettyInputStreamBody.<init>(InputStream)",
+      "void NettyInputStreamBody.<init>(InputStream, long)", "long NettyInputStreamBody.getContentLength()",
+      "InputStream NettyInputStreamBody.getInputStream()"})
   void testGettersAndSetters_thenReturnContentLengthIsMinusOne() throws IOException {
     // Arrange
     ByteArrayInputStream inputStream = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
@@ -54,14 +47,12 @@ class NettyInputStreamBodyDiffblueTest {
 
   /**
    * Test getters and setters.
-   *
    * <ul>
-   *   <li>When three.
-   *   <li>Then return ContentLength is three.
+   *   <li>When three.</li>
+   *   <li>Then return ContentLength is three.</li>
    * </ul>
-   *
-   * <p>Methods under test:
-   *
+   * <p>
+   * Methods under test:
    * <ul>
    *   <li>{@link NettyInputStreamBody#NettyInputStreamBody(InputStream, long)}
    *   <li>{@link NettyInputStreamBody#getContentLength()}
@@ -70,14 +61,10 @@ class NettyInputStreamBodyDiffblueTest {
    */
   @Test
   @DisplayName("Test getters and setters; when three; then return ContentLength is three")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void NettyInputStreamBody.<init>(InputStream)",
-    "void NettyInputStreamBody.<init>(InputStream, long)",
-    "long NettyInputStreamBody.getContentLength()",
-    "InputStream NettyInputStreamBody.getInputStream()"
-  })
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"void NettyInputStreamBody.<init>(InputStream)",
+      "void NettyInputStreamBody.<init>(InputStream, long)", "long NettyInputStreamBody.getContentLength()",
+      "InputStream NettyInputStreamBody.getInputStream()"})
   void testGettersAndSetters_whenThree_thenReturnContentLengthIsThree() throws IOException {
     // Arrange
     ByteArrayInputStream inputStream = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));

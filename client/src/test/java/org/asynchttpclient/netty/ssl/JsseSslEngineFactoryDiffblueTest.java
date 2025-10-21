@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
@@ -21,33 +20,24 @@ import org.junit.jupiter.api.Test;
 class JsseSslEngineFactoryDiffblueTest {
   /**
    * Test {@link JsseSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}.
-   *
    * <ul>
-   *   <li>Then return PeerHost is {@code https://example.org/example}.
+   *   <li>Then return PeerHost is {@code https://example.org/example}.</li>
    * </ul>
-   *
-   * <p>Method under test: {@link JsseSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String,
-   * int)}
+   * <p>
+   * Method under test: {@link JsseSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}
    */
   @Test
-  @DisplayName(
-      "Test newSslEngine(AsyncHttpClientConfig, String, int); then return PeerHost is 'https://example.org/example'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "SSLEngine JsseSslEngineFactory.newSslEngine(AsyncHttpClientConfig, String, int)"
-  })
-  void testNewSslEngine_thenReturnPeerHostIsHttpsExampleOrgExample()
-      throws NoSuchAlgorithmException {
+  @DisplayName("Test newSslEngine(AsyncHttpClientConfig, String, int); then return PeerHost is 'https://example.org/example'")
+  @Tag("MaintainedByDiffblue")
+  @MethodsUnderTest({"SSLEngine JsseSslEngineFactory.newSslEngine(AsyncHttpClientConfig, String, int)"})
+  void testNewSslEngine_thenReturnPeerHostIsHttpsExampleOrgExample() throws NoSuchAlgorithmException {
     // Arrange
     JsseSslEngineFactory jsseSslEngineFactory = new JsseSslEngineFactory(SSLContext.getDefault());
-
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.isDisableHttpsEndpointIdentificationAlgorithm()).thenReturn(true);
 
     // Act
-    SSLEngine actualNewSslEngineResult =
-        jsseSslEngineFactory.newSslEngine(config, "https://example.org/example", 8080);
+    SSLEngine actualNewSslEngineResult = jsseSslEngineFactory.newSslEngine(config, "https://example.org/example", 8080);
 
     // Assert
     verify(config).isDisableHttpsEndpointIdentificationAlgorithm();
