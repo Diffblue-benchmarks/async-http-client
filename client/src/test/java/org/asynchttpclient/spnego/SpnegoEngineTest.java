@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import javax.security.auth.login.Configuration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -35,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 
@@ -80,6 +80,7 @@ public class SpnegoEngineTest extends AbstractBasicTest {
     kerbyServer.setKdcRealm("service.ws.apache.org");
     kerbyServer.setAllowUdp(false);
     kerbyServer.setWorkDir(new File(basedir, "target"));
+
     // kerbyServer.setInnerKdcImpl(new NettyKdcServerImpl(kerbyServer.getKdcSetting()));
     kerbyServer.init();
 
@@ -95,12 +96,9 @@ public class SpnegoEngineTest extends AbstractBasicTest {
     kerbyServer.start();
     FileUtils.copyInputStreamToFile(
         SpnegoEngine.class.getResourceAsStream("/kerberos.jaas"), loginConfig);
-
     customLoginConfig = new HashMap<>();
     customLoginConfig.put("alice", "levine");
-
     when(tokenGenerator.generateSpnegoDERObject(any())).thenReturn(mockGeneratedToken);
-
     specialEngineSetup =
         new SpnegoEngine(
             this.alice,
@@ -165,10 +163,10 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   })
   void testNewSpnegoEngine2() {
     // Arrange
-    String username = this.alice;
-    String password = this.alice;
-    String servicePrincipalName = this.alice;
-    String realmName = this.alice;
+    String username = this.basedir;
+    String password = this.basedir;
+    String servicePrincipalName = this.basedir;
+    String realmName = this.basedir;
     HashMap<String, String> customLoginConfig = new HashMap<>();
 
     // Act
@@ -180,11 +178,54 @@ public class SpnegoEngineTest extends AbstractBasicTest {
             realmName,
             true,
             customLoginConfig,
-            this.alice,
+            this.basedir,
             mock(SpnegoTokenGenerator.class));
 
     // Assert
     assertNull(actualSpnegoEngine.getLoginConfiguration());
+  }
+
+  /**
+   * Test {@link SpnegoEngine#SpnegoEngine(String, String, String, String, boolean, Map, String,
+   * SpnegoTokenGenerator)}.
+   *
+   * <p>Method under test: {@link SpnegoEngine#SpnegoEngine(String, String, String, String, boolean,
+   * Map, String, SpnegoTokenGenerator)}
+   */
+  @Test
+  @DisplayName(
+      "Test new SpnegoEngine(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "void SpnegoEngine.<init>(String, String, String, String, boolean, Map, String, SpnegoTokenGenerator)"
+  })
+  void testNewSpnegoEngine3() {
+    // Arrange
+    String username = this.alice;
+    String password = this.alice;
+    String servicePrincipalName = this.alice;
+    String realmName = this.alice;
+    Map<String, String> customLoginConfig = this.customLoginConfig;
+    String loginContextName = this.alice;
+
+    // Act
+    SpnegoEngine actualSpnegoEngine =
+        new SpnegoEngine(
+            username,
+            password,
+            servicePrincipalName,
+            realmName,
+            true,
+            customLoginConfig,
+            loginContextName,
+            this.tokenGenerator);
+
+    // Assert
+    Configuration loginConfiguration = actualSpnegoEngine.getLoginConfiguration();
+    assertNull(loginConfiguration.getType());
+    assertNull(loginConfiguration.getProvider());
+    assertNull(loginConfiguration.getParameters());
   }
 
   /**
@@ -208,10 +249,10 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   })
   void testInstance_whenHashMap_thenReturnLoginConfigurationIsNull() {
     // Arrange
-    String username = this.alice;
-    String password = this.alice;
-    String servicePrincipalName = this.alice;
-    String realmName = this.alice;
+    String username = this.basedir;
+    String password = this.basedir;
+    String servicePrincipalName = this.basedir;
+    String realmName = this.basedir;
     HashMap<String, String> customLoginConfig = new HashMap<>();
 
     // Act
@@ -223,7 +264,7 @@ public class SpnegoEngineTest extends AbstractBasicTest {
             realmName,
             true,
             customLoginConfig,
-            this.alice);
+            this.basedir);
 
     // Assert
     assertNull(actualInstanceResult.getLoginConfiguration());
@@ -250,12 +291,12 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   })
   void testInstance_whenNull_thenReturnLoginConfigurationIsNull() {
     // Arrange
-    String password = this.alice;
-    String servicePrincipalName = this.alice;
+    String password = this.basedir;
+    String servicePrincipalName = this.basedir;
 
     // Act
     SpnegoEngine actualInstanceResult =
-        SpnegoEngine.instance(null, password, servicePrincipalName, this.alice, true, null, null);
+        SpnegoEngine.instance(null, password, servicePrincipalName, this.basedir, true, null, null);
 
     // Assert
     assertNull(actualInstanceResult.getLoginConfiguration());
@@ -282,9 +323,9 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   })
   void testInstance_whenNull_thenReturnLoginConfigurationIsNull2() {
     // Arrange
-    String password = this.alice;
-    String servicePrincipalName = this.alice;
-    String realmName = this.alice;
+    String password = this.basedir;
+    String servicePrincipalName = this.basedir;
+    String realmName = this.basedir;
 
     // Act
     SpnegoEngine actualInstanceResult =
@@ -293,6 +334,51 @@ public class SpnegoEngineTest extends AbstractBasicTest {
 
     // Assert
     assertNull(actualInstanceResult.getLoginConfiguration());
+  }
+
+  /**
+   * Test {@link SpnegoEngine#instance(String, String, String, String, boolean, Map, String)}.
+   *
+   * <ul>
+   *   <li>When this {@link SpnegoEngineTest#customLoginConfig}.
+   *   <li>Then return LoginConfiguration Type is {@code null}.
+   * </ul>
+   *
+   * <p>Method under test: {@link SpnegoEngine#instance(String, String, String, String, boolean,
+   * Map, String)}
+   */
+  @Test
+  @DisplayName(
+      "Test instance(String, String, String, String, boolean, Map, String); when this customLoginConfig; then return LoginConfiguration Type is 'null'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "SpnegoEngine SpnegoEngine.instance(String, String, String, String, boolean, Map, String)"
+  })
+  void testInstance_whenThisCustomLoginConfig_thenReturnLoginConfigurationTypeIsNull() {
+    // Arrange
+    String username = this.alice;
+    String password = this.alice;
+    String servicePrincipalName = this.alice;
+    String realmName = this.alice;
+    Map<String, String> customLoginConfig = this.customLoginConfig;
+
+    // Act
+    SpnegoEngine actualInstanceResult =
+        SpnegoEngine.instance(
+            username,
+            password,
+            servicePrincipalName,
+            realmName,
+            true,
+            customLoginConfig,
+            this.alice);
+
+    // Assert
+    Configuration loginConfiguration = actualInstanceResult.getLoginConfiguration();
+    assertNull(loginConfiguration.getType());
+    assertNull(loginConfiguration.getProvider());
+    assertNull(loginConfiguration.getParameters());
   }
 
   /**
@@ -307,8 +393,8 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
   void testGetCompleteServicePrincipalName() {
     // Arrange
-    String username = this.alice;
-    String password = this.alice;
+    String username = this.basedir;
+    String password = this.basedir;
     HashMap<String, String> customLoginConfig = new HashMap<>();
 
     SpnegoEngine spnegoEngine =
@@ -319,12 +405,12 @@ public class SpnegoEngineTest extends AbstractBasicTest {
             null,
             false,
             customLoginConfig,
-            this.alice,
+            this.basedir,
             mock(SpnegoTokenGenerator.class));
 
     // Act
     String actualCompleteServicePrincipalName =
-        spnegoEngine.getCompleteServicePrincipalName(this.alice);
+        spnegoEngine.getCompleteServicePrincipalName(this.basedir);
 
     // Assert
     assertEquals("@", actualCompleteServicePrincipalName);
@@ -342,9 +428,9 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
   void testGetCompleteServicePrincipalName2() {
     // Arrange
-    String username = this.alice;
-    String password = this.alice;
-    String realmName = this.alice;
+    String username = this.basedir;
+    String password = this.basedir;
+    String realmName = this.basedir;
     HashMap<String, String> customLoginConfig = new HashMap<>();
 
     SpnegoEngine spnegoEngine =
@@ -355,55 +441,35 @@ public class SpnegoEngineTest extends AbstractBasicTest {
             realmName,
             false,
             customLoginConfig,
-            this.alice,
+            this.basedir,
             mock(SpnegoTokenGenerator.class));
 
     // Act
     String actualCompleteServicePrincipalName =
-        spnegoEngine.getCompleteServicePrincipalName(this.alice);
+        spnegoEngine.getCompleteServicePrincipalName(this.basedir);
 
     // Assert
     assertEquals("@", actualCompleteServicePrincipalName);
   }
 
   /**
-   * Test {@link SpnegoEngine#getCompleteServicePrincipalName(String)}.
+   * Test {@link SpnegoEngine#getLoginConfiguration()}.
    *
-   * <ul>
-   *   <li>Then return {@code HTTP@alice@service.ws.apache.org}.
-   * </ul>
-   *
-   * <p>Method under test: {@link SpnegoEngine#getCompleteServicePrincipalName(String)}
+   * <p>Method under test: {@link SpnegoEngine#getLoginConfiguration()}
    */
   @Test
-  @DisplayName(
-      "Test getCompleteServicePrincipalName(String); then return 'HTTP@alice@service.ws.apache.org'")
+  @DisplayName("Test getLoginConfiguration()")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({"String SpnegoEngine.getCompleteServicePrincipalName(String)"})
-  void testGetCompleteServicePrincipalName_thenReturnHttpAliceServiceWsApacheOrg() {
-    // Arrange
-    String username = this.alice;
-    String password = this.alice;
-    HashMap<String, String> customLoginConfig = new HashMap<>();
-
-    SpnegoEngine spnegoEngine =
-        new SpnegoEngine(
-            username,
-            password,
-            null,
-            null,
-            false,
-            customLoginConfig,
-            this.alice,
-            mock(SpnegoTokenGenerator.class));
-
-    // Act
-    String actualCompleteServicePrincipalName =
-        spnegoEngine.getCompleteServicePrincipalName(this.alice);
+  @MethodsUnderTest({"Configuration SpnegoEngine.getLoginConfiguration()"})
+  void testGetLoginConfiguration() {
+    // Arrange and Act
+    Configuration actualLoginConfiguration = this.specialEngineSetup.getLoginConfiguration();
 
     // Assert
-    assertEquals("HTTP@alice@service.ws.apache.org", actualCompleteServicePrincipalName);
+    assertNull(actualLoginConfiguration.getType());
+    assertNull(actualLoginConfiguration.getProvider());
+    assertNull(actualLoginConfiguration.getParameters());
   }
 
   /**
@@ -420,9 +486,7 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   @DisplayName("Test getLoginConfiguration(); given SpnegoEngine(); then return 'null'")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({
-    "javax.security.auth.login.Configuration SpnegoEngine.getLoginConfiguration()"
-  })
+  @MethodsUnderTest({"Configuration SpnegoEngine.getLoginConfiguration()"})
   void testGetLoginConfiguration_givenSpnegoEngine_thenReturnNull() {
     // Arrange, Act and Assert
     assertNull(new SpnegoEngine().getLoginConfiguration());
@@ -441,15 +505,13 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   @DisplayName("Test getLoginConfiguration(); then return 'null'")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({
-    "javax.security.auth.login.Configuration SpnegoEngine.getLoginConfiguration()"
-  })
+  @MethodsUnderTest({"Configuration SpnegoEngine.getLoginConfiguration()"})
   void testGetLoginConfiguration_thenReturnNull() {
     // Arrange
-    String username = this.alice;
-    String password = this.alice;
-    String servicePrincipalName = this.alice;
-    String realmName = this.alice;
+    String username = this.basedir;
+    String password = this.basedir;
+    String servicePrincipalName = this.basedir;
+    String realmName = this.basedir;
     HashMap<String, String> customLoginConfig = new HashMap<>();
 
     SpnegoEngine spnegoEngine =
@@ -460,7 +522,7 @@ public class SpnegoEngineTest extends AbstractBasicTest {
             realmName,
             true,
             customLoginConfig,
-            this.alice,
+            this.basedir,
             mock(SpnegoTokenGenerator.class));
 
     // Act and Assert
