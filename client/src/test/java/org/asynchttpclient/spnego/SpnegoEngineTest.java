@@ -32,7 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
 
@@ -50,6 +53,14 @@ public class SpnegoEngineTest extends AbstractBasicTest {
   private File bobKeytab;
 
   private File loginConfig;
+
+  Map<String, String> customLoginConfig;
+
+  SpnegoTokenGenerator tokenGenerator = mock(SpnegoTokenGenerator.class);
+
+  byte[] mockGeneratedToken = "token As Bytes".getBytes();
+
+  SpnegoEngine specialEngineSetup;
 
   @BeforeEach
   public void startServers() throws Exception {
@@ -84,6 +95,22 @@ public class SpnegoEngineTest extends AbstractBasicTest {
     kerbyServer.start();
     FileUtils.copyInputStreamToFile(
         SpnegoEngine.class.getResourceAsStream("/kerberos.jaas"), loginConfig);
+
+    customLoginConfig = new HashMap<>();
+    customLoginConfig.put("alice", "levine");
+
+    when(tokenGenerator.generateSpnegoDERObject(any())).thenReturn(mockGeneratedToken);
+
+    specialEngineSetup =
+        new SpnegoEngine(
+            this.alice,
+            "password",
+            null,
+            this.basedir,
+            true,
+            customLoginConfig,
+            this.basedir,
+            tokenGenerator);
   }
 
   @RepeatedIfExceptionsTest(repeats = 5)
