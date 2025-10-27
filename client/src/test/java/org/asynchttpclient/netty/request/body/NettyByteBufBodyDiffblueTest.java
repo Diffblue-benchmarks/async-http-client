@@ -3,65 +3,56 @@ package org.asynchttpclient.netty.request.body;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import com.diffblue.cover.annotations.MethodsUnderTest;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
+import io.netty.buffer.ReadOnlyByteBuf;
 import org.asynchttpclient.config.AsyncHttpClientConfigDefaults;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class NettyByteBufBodyDiffblueTest {
   /**
-   * Test {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}.
-   * <ul>
-   *   <li>Then return ContentTypeOverride is {@code acquireFreeChannelTimeout}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}
+   * Method under test: {@link NettyByteBufBody#byteBuf()}
    */
   @Test
-  @DisplayName("Test new NettyByteBufBody(ByteBuf, CharSequence); then return ContentTypeOverride is 'acquireFreeChannelTimeout'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NettyByteBufBody.<init>(ByteBuf, CharSequence)"})
-  void testNewNettyByteBufBody_thenReturnContentTypeOverrideIsAcquireFreeChannelTimeout() {
-    // Arrange and Act
-    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())),
-        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT);
+  void testByteBuf() {
+    // Arrange
+    DuplicatedByteBuf bb = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
 
-    // Assert
-    assertEquals("acquireFreeChannelTimeout", actualNettyByteBufBody.getContentTypeOverride());
-    assertEquals(0L, actualNettyByteBufBody.getContentLength());
+    // Act and Assert
+    assertSame(bb, (new NettyByteBufBody(bb)).byteBuf());
   }
 
   /**
-   * Test {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}.
-   * <ul>
-   *   <li>Then return ContentTypeOverride is {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}
+   * Method under test: {@link NettyByteBufBody#byteBuf()}
    */
   @Test
-  @DisplayName("Test new NettyByteBufBody(ByteBuf); then return ContentTypeOverride is 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NettyByteBufBody.<init>(ByteBuf)"})
-  void testNewNettyByteBufBody_thenReturnContentTypeOverrideIsNull() {
-    // Arrange and Act
-    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
-        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+  void testByteBuf2() {
+    // Arrange
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+    DuplicatedByteBuf bb = new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer)));
+
+    // Act
+    ByteBuf actualByteBufResult = (new NettyByteBufBody(bb)).byteBuf();
 
     // Assert
-    assertNull(actualNettyByteBufBody.getContentTypeOverride());
-    assertEquals(0L, actualNettyByteBufBody.getContentLength());
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    assertSame(bb, actualByteBufResult);
   }
 
   /**
-   * Test getters and setters.
-   * <p>
    * Methods under test:
    * <ul>
    *   <li>{@link NettyByteBufBody#getContentLength()}
@@ -69,10 +60,6 @@ class NettyByteBufBodyDiffblueTest {
    * </ul>
    */
   @Test
-  @DisplayName("Test getters and setters")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"long NettyByteBufBody.getContentLength()",
-      "CharSequence NettyByteBufBody.getContentTypeOverride()"})
   void testGettersAndSetters() {
     // Arrange
     NettyByteBufBody nettyByteBufBody = new NettyByteBufBody(
@@ -87,19 +74,84 @@ class NettyByteBufBodyDiffblueTest {
   }
 
   /**
-   * Test {@link NettyByteBufBody#byteBuf()}.
-   * <p>
-   * Method under test: {@link NettyByteBufBody#byteBuf()}
+   * Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}
    */
   @Test
-  @DisplayName("Test byteBuf()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ByteBuf NettyByteBufBody.byteBuf()"})
-  void testByteBuf() {
-    // Arrange
-    DuplicatedByteBuf bb = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+  void testNewNettyByteBufBody() {
+    // Arrange and Act
+    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
 
-    // Act and Assert
-    assertSame(bb, (new NettyByteBufBody(bb)).byteBuf());
+    // Assert
+    assertNull(actualNettyByteBufBody.getContentTypeOverride());
+    assertEquals(0L, actualNettyByteBufBody.getContentLength());
+  }
+
+  /**
+   * Method under test: {@link NettyByteBufBody#NettyByteBufBody(ByteBuf)}
+   */
+  @Test
+  void testNewNettyByteBufBody2() {
+    // Arrange
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+
+    // Act
+    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))));
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    assertNull(actualNettyByteBufBody.getContentTypeOverride());
+    assertEquals(0L, actualNettyByteBufBody.getContentLength());
+  }
+
+  /**
+   * Method under test:
+   * {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}
+   */
+  @Test
+  void testNewNettyByteBufBody3() {
+    // Arrange and Act
+    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())),
+        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT);
+
+    // Assert
+    assertEquals("acquireFreeChannelTimeout", actualNettyByteBufBody.getContentTypeOverride());
+    assertEquals(0L, actualNettyByteBufBody.getContentLength());
+  }
+
+  /**
+   * Method under test:
+   * {@link NettyByteBufBody#NettyByteBufBody(ByteBuf, CharSequence)}
+   */
+  @Test
+  void testNewNettyByteBufBody4() {
+    // Arrange
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+
+    // Act
+    NettyByteBufBody actualNettyByteBufBody = new NettyByteBufBody(
+        new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))),
+        AsyncHttpClientConfigDefaults.ACQUIRE_FREE_CHANNEL_TIMEOUT);
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    assertEquals("acquireFreeChannelTimeout", actualNettyByteBufBody.getContentTypeOverride());
+    assertEquals(0L, actualNettyByteBufBody.getContentLength());
   }
 }

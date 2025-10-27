@@ -1,146 +1,38 @@
 package org.asynchttpclient.spnego;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import jakarta.security.auth.message.callback.CertStoreCallback;
 import java.io.IOException;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class NamePasswordCallbackHandlerDiffblueTest {
   /**
-   * Test {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String)}.
-   * <ul>
-   *   <li>Then first element {@link NameCallback}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String)}
-   */
-  @Test
-  @DisplayName("Test new NamePasswordCallbackHandler(String, String); then first element NameCallback")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.<init>(String, String)"})
-  void testNewNamePasswordCallbackHandler_thenFirstElementNameCallback()
-      throws IOException, UnsupportedCallbackException {
-    // Arrange and Act
-    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
-        "https://example.org/example");
-    Callback[] callbacks = new Callback[]{new NameCallback("setObject")};
-    actualNamePasswordCallbackHandler.handle(callbacks);
-
-    // Assert
-    Callback callback = callbacks[0];
-    assertTrue(callback instanceof NameCallback);
-    assertEquals("janedoe", ((NameCallback) callback).getName());
-    assertEquals(1, callbacks.length);
-    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
-  }
-
-  /**
-   * Test {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String, String)}.
-   * <ul>
-   *   <li>Then first element {@link NameCallback}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String, String)}
-   */
-  @Test
-  @DisplayName("Test new NamePasswordCallbackHandler(String, String, String); then first element NameCallback")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.<init>(String, String, String)"})
-  void testNewNamePasswordCallbackHandler_thenFirstElementNameCallback2()
-      throws IOException, UnsupportedCallbackException {
-    // Arrange and Act
-    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
-        "https://example.org/example", "https://example.org/example");
-    Callback[] callbacks = new Callback[]{new NameCallback("foo")};
-    actualNamePasswordCallbackHandler.handle(callbacks);
-
-    // Assert
-    Callback callback = callbacks[0];
-    assertTrue(callback instanceof NameCallback);
-    assertEquals("janedoe", ((NameCallback) callback).getName());
-    assertEquals(1, callbacks.length);
-    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
-  }
-
-  /**
-   * Test {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String)}.
-   * <ul>
-   *   <li>Then first element {@link PasswordCallback}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String)}
-   */
-  @Test
-  @DisplayName("Test new NamePasswordCallbackHandler(String, String); then first element PasswordCallback")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.<init>(String, String)"})
-  void testNewNamePasswordCallbackHandler_thenFirstElementPasswordCallback()
-      throws IOException, UnsupportedCallbackException {
-    // Arrange and Act
-    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
-        "https://example.org/example");
-    Callback[] callbacks = new Callback[]{new PasswordCallback("setObject", true)};
-    actualNamePasswordCallbackHandler.handle(callbacks);
-
-    // Assert
-    Callback callback = callbacks[0];
-    assertTrue(callback instanceof PasswordCallback);
-    assertEquals(1, callbacks.length);
-    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
-    char[] expectedPassword = "https://example.org/example".toCharArray();
-    assertArrayEquals(expectedPassword, ((PasswordCallback) callback).getPassword());
-  }
-
-  /**
-   * Test {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String, String)}.
-   * <ul>
-   *   <li>Then first element {@link PasswordCallback}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String, String)}
-   */
-  @Test
-  @DisplayName("Test new NamePasswordCallbackHandler(String, String, String); then first element PasswordCallback")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.<init>(String, String, String)"})
-  void testNewNamePasswordCallbackHandler_thenFirstElementPasswordCallback2()
-      throws IOException, UnsupportedCallbackException {
-    // Arrange and Act
-    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
-        "https://example.org/example", "https://example.org/example");
-    Callback[] callbacks = new Callback[]{new PasswordCallback("foo", true)};
-    actualNamePasswordCallbackHandler.handle(callbacks);
-
-    // Assert
-    Callback callback = callbacks[0];
-    assertTrue(callback instanceof PasswordCallback);
-    assertEquals(1, callbacks.length);
-    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
-    char[] expectedPassword = "https://example.org/example".toCharArray();
-    assertArrayEquals(expectedPassword, ((PasswordCallback) callback).getPassword());
-  }
-
-  /**
-   * Test {@link NamePasswordCallbackHandler#handle(Callback[])}.
-   * <p>
    * Method under test: {@link NamePasswordCallbackHandler#handle(Callback[])}
    */
   @Test
-  @DisplayName("Test handle(Callback[])")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.handle(Callback[])"})
   void testHandle() throws IOException, UnsupportedCallbackException {
+    // Arrange
+    NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
+        "https://example.org/example");
+
+    // Act and Assert
+    assertThrows(UnsupportedCallbackException.class,
+        () -> namePasswordCallbackHandler.handle(new Callback[]{new CertStoreCallback()}));
+  }
+
+  /**
+   * Method under test: {@link NamePasswordCallbackHandler#handle(Callback[])}
+   */
+  @Test
+  void testHandle2() throws IOException, UnsupportedCallbackException {
     // Arrange
     NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
         "https://example.org/example", "https://example.org/example");
@@ -151,116 +43,157 @@ class NamePasswordCallbackHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link NamePasswordCallbackHandler#handle(Callback[])}.
-   * <p>
    * Method under test: {@link NamePasswordCallbackHandler#handle(Callback[])}
    */
   @Test
-  @DisplayName("Test handle(Callback[])")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.handle(Callback[])"})
-  void testHandle2() throws IOException, UnsupportedCallbackException {
+  void testHandle3() throws IOException, UnsupportedCallbackException {
     // Arrange
-    NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe", null);
-    Callback[] callbacks = new Callback[]{new PasswordCallback("setObject", true)};
+    NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
+        "https://example.org/example");
+    NameCallback nameCallback = new NameCallback("setObject");
+    Callback[] callbacks = new Callback[]{nameCallback};
 
     // Act
     namePasswordCallbackHandler.handle(callbacks);
 
     // Assert that nothing has changed
-    assertTrue(callbacks[0] instanceof PasswordCallback);
-    assertEquals(1, callbacks.length);
-  }
-
-  /**
-   * Test {@link NamePasswordCallbackHandler#handle(Callback[])}.
-   * <ul>
-   *   <li>Then first element {@link NameCallback}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link NamePasswordCallbackHandler#handle(Callback[])}
-   */
-  @Test
-  @DisplayName("Test handle(Callback[]); then first element NameCallback")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.handle(Callback[])"})
-  void testHandle_thenFirstElementNameCallback() throws IOException, UnsupportedCallbackException {
-    // Arrange
-    NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
-        "https://example.org/example");
-    Callback[] callbacks = new Callback[]{new NameCallback("setObject")};
-
-    // Act
-    namePasswordCallbackHandler.handle(callbacks);
-
-    // Assert
     Callback callback = callbacks[0];
     assertTrue(callback instanceof NameCallback);
     assertEquals("janedoe", ((NameCallback) callback).getName());
     assertEquals(1, callbacks.length);
+    assertSame(nameCallback, callback);
   }
 
   /**
-   * Test {@link NamePasswordCallbackHandler#handle(Callback[])}.
-   * <ul>
-   *   <li>Then first element Password is {@code https://example.org/example} toCharArray.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link NamePasswordCallbackHandler#handle(Callback[])}
    */
   @Test
-  @DisplayName("Test handle(Callback[]); then first element Password is 'https://example.org/example' toCharArray")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.handle(Callback[])"})
-  void testHandle_thenFirstElementPasswordIsHttpsExampleOrgExampleToCharArray()
-      throws IOException, UnsupportedCallbackException {
+  void testHandle4() throws IOException, UnsupportedCallbackException {
     // Arrange
     NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
         "https://example.org/example");
-    Callback[] callbacks = new Callback[]{new PasswordCallback("setObject", true)};
+    PasswordCallback passwordCallback = new PasswordCallback("setObject", true);
+
+    Callback[] callbacks = new Callback[]{passwordCallback};
 
     // Act
     namePasswordCallbackHandler.handle(callbacks);
 
-    // Assert
-    Callback callback = callbacks[0];
-    assertTrue(callback instanceof PasswordCallback);
+    // Assert that nothing has changed
     assertEquals(1, callbacks.length);
-    char[] expectedPassword = "https://example.org/example".toCharArray();
-    assertArrayEquals(expectedPassword, ((PasswordCallback) callback).getPassword());
+    assertSame(passwordCallback, callbacks[0]);
   }
 
   /**
-   * Test {@link NamePasswordCallbackHandler#handle(Callback[])}.
-   * <ul>
-   *   <li>Then throw {@link UnsupportedCallbackException}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link NamePasswordCallbackHandler#handle(Callback[])}
    */
   @Test
-  @DisplayName("Test handle(Callback[]); then throw UnsupportedCallbackException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void NamePasswordCallbackHandler.handle(Callback[])"})
-  void testHandle_thenThrowUnsupportedCallbackException() throws IOException, UnsupportedCallbackException {
+  void testHandle5() throws IOException, UnsupportedCallbackException {
     // Arrange
-    NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
-        "https://example.org/example");
+    NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe", null);
+    PasswordCallback passwordCallback = new PasswordCallback("setObject", true);
 
-    // Act and Assert
-    assertThrows(UnsupportedCallbackException.class,
-        () -> namePasswordCallbackHandler.handle(new Callback[]{new CertStoreCallback()}));
+    Callback[] callbacks = new Callback[]{passwordCallback};
+
+    // Act
+    namePasswordCallbackHandler.handle(callbacks);
+
+    // Assert that nothing has changed
+    Callback callback = callbacks[0];
+    assertTrue(callback instanceof PasswordCallback);
+    assertEquals(1, callbacks.length);
+    assertSame(passwordCallback, callback);
   }
 
   /**
-   * Test {@link NamePasswordCallbackHandler#handleCallback(Callback)}.
-   * <p>
-   * Method under test: {@link NamePasswordCallbackHandler#handleCallback(Callback)}
+   * Method under test:
+   * {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String)}
    */
   @Test
-  @DisplayName("Test handleCallback(Callback)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean NamePasswordCallbackHandler.handleCallback(Callback)"})
+  void testNewNamePasswordCallbackHandler() throws IOException, UnsupportedCallbackException {
+    // Arrange and Act
+    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
+        "https://example.org/example");
+    NameCallback nameCallback = new NameCallback("setObject");
+    Callback[] callbacks = new Callback[]{nameCallback};
+    actualNamePasswordCallbackHandler.handle(callbacks);
+
+    // Assert that nothing has changed
+    Callback callback = callbacks[0];
+    assertTrue(callback instanceof NameCallback);
+    assertEquals("janedoe", ((NameCallback) callback).getName());
+    assertEquals(1, callbacks.length);
+    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
+    assertSame(nameCallback, callback);
+  }
+
+  /**
+   * Method under test:
+   * {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String)}
+   */
+  @Test
+  void testNewNamePasswordCallbackHandler2() throws IOException, UnsupportedCallbackException {
+    // Arrange and Act
+    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
+        "https://example.org/example");
+    PasswordCallback passwordCallback = new PasswordCallback("setObject", true);
+
+    Callback[] callbacks = new Callback[]{passwordCallback};
+    actualNamePasswordCallbackHandler.handle(callbacks);
+
+    // Assert that nothing has changed
+    assertEquals(1, callbacks.length);
+    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
+    assertSame(passwordCallback, callbacks[0]);
+  }
+
+  /**
+   * Method under test:
+   * {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String, String)}
+   */
+  @Test
+  void testNewNamePasswordCallbackHandler3() throws IOException, UnsupportedCallbackException {
+    // Arrange and Act
+    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
+        "https://example.org/example", "https://example.org/example");
+    NameCallback nameCallback = new NameCallback("foo");
+    Callback[] callbacks = new Callback[]{nameCallback};
+    actualNamePasswordCallbackHandler.handle(callbacks);
+
+    // Assert that nothing has changed
+    Callback callback = callbacks[0];
+    assertTrue(callback instanceof NameCallback);
+    assertEquals("janedoe", ((NameCallback) callback).getName());
+    assertEquals(1, callbacks.length);
+    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
+    assertSame(nameCallback, callback);
+  }
+
+  /**
+   * Method under test:
+   * {@link NamePasswordCallbackHandler#NamePasswordCallbackHandler(String, String, String)}
+   */
+  @Test
+  void testNewNamePasswordCallbackHandler4() throws IOException, UnsupportedCallbackException {
+    // Arrange and Act
+    NamePasswordCallbackHandler actualNamePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",
+        "https://example.org/example", "https://example.org/example");
+    PasswordCallback passwordCallback = new PasswordCallback("foo", true);
+
+    Callback[] callbacks = new Callback[]{passwordCallback};
+    actualNamePasswordCallbackHandler.handle(callbacks);
+
+    // Assert that nothing has changed
+    assertEquals(1, callbacks.length);
+    assertFalse(actualNamePasswordCallbackHandler.handleCallback(null));
+    assertSame(passwordCallback, callbacks[0]);
+  }
+
+  /**
+   * Method under test:
+   * {@link NamePasswordCallbackHandler#handleCallback(Callback)}
+   */
+  @Test
   void testHandleCallback() {
     // Arrange
     NamePasswordCallbackHandler namePasswordCallbackHandler = new NamePasswordCallbackHandler("janedoe",

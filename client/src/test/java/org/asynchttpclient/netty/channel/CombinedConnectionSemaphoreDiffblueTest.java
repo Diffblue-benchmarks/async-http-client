@@ -2,94 +2,25 @@ package org.asynchttpclient.netty.channel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 import org.asynchttpclient.exception.TooManyConnectionsException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+import org.asynchttpclient.exception.TooManyConnectionsPerHostException;
 import org.junit.jupiter.api.Test;
 
 class CombinedConnectionSemaphoreDiffblueTest {
   /**
-   * Test {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}.
-   * <p>
-   * Method under test: {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}
+   * Method under test:
+   * {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}
    */
   @Test
-  @DisplayName("Test new CombinedConnectionSemaphore(int, int, int)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void CombinedConnectionSemaphore.<init>(int, int, int)"})
-  void testNewCombinedConnectionSemaphore() {
-    // Arrange, Act and Assert
-    MaxConnectionSemaphore maxConnectionSemaphore = (new CombinedConnectionSemaphore(3, 3,
-        10)).globalMaxConnectionSemaphore;
-    IOException ioException = maxConnectionSemaphore.tooManyConnections;
-    assertTrue(ioException instanceof TooManyConnectionsException);
-    assertEquals("Too many connections: 3", ioException.getLocalizedMessage());
-    assertEquals("Too many connections: 3", ioException.getMessage());
-    assertFalse(maxConnectionSemaphore.freeChannels.isFair());
-  }
-
-  /**
-   * Test {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}.
-   * <p>
-   * Method under test: {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}
-   */
-  @Test
-  @DisplayName("Test new CombinedConnectionSemaphore(int, int, int)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void CombinedConnectionSemaphore.<init>(int, int, int)"})
-  void testNewCombinedConnectionSemaphore2() {
-    // Arrange, Act and Assert
-    MaxConnectionSemaphore maxConnectionSemaphore = (new CombinedConnectionSemaphore(0, 3,
-        10)).globalMaxConnectionSemaphore;
-    Semaphore semaphore = maxConnectionSemaphore.freeChannels;
-    Collection<Thread> queuedThreads = ((InfiniteSemaphore) semaphore).getQueuedThreads();
-    assertTrue(queuedThreads instanceof List);
-    IOException ioException = maxConnectionSemaphore.tooManyConnections;
-    assertTrue(ioException instanceof TooManyConnectionsException);
-    assertTrue(semaphore instanceof InfiniteSemaphore);
-    assertEquals("Too many connections: 0", ioException.getLocalizedMessage());
-    assertEquals("Too many connections: 0", ioException.getMessage());
-    assertTrue(queuedThreads.isEmpty());
-    assertTrue(semaphore.isFair());
-  }
-
-  /**
-   * Test {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}.
-   * <p>
-   * Method under test: {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}
-   */
-  @Test
-  @DisplayName("Test acquireChannelLock(Object)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void CombinedConnectionSemaphore.acquireChannelLock(Object)"})
   void testAcquireChannelLock() throws IOException {
-    // Arrange
-    CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 0, 10);
-
-    // Act
-    combinedConnectionSemaphore.acquireChannelLock("Partition Key");
-
-    // Assert that nothing has changed
-    assertTrue(combinedConnectionSemaphore.freeChannelsPerHost.isEmpty());
-  }
-
-  /**
-   * Test {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}.
-   * <p>
-   * Method under test: {@link CombinedConnectionSemaphore#acquireChannelLock(Object)}
-   */
-  @Test
-  @DisplayName("Test acquireChannelLock(Object)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void CombinedConnectionSemaphore.acquireChannelLock(Object)"})
-  void testAcquireChannelLock2() throws IOException {
     // Arrange
     CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 3, 0);
 
@@ -106,28 +37,19 @@ class CombinedConnectionSemaphoreDiffblueTest {
   }
 
   /**
-   * Test {@link CombinedConnectionSemaphore#acquireGlobal(Object)}.
-   * <p>
    * Method under test: {@link CombinedConnectionSemaphore#acquireGlobal(Object)}
    */
   @Test
-  @DisplayName("Test acquireGlobal(Object)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"long CombinedConnectionSemaphore.acquireGlobal(Object)"})
   void testAcquireGlobal() throws IOException {
     // Arrange, Act and Assert
     assertEquals(0L, (new CombinedConnectionSemaphore(3, 3, 10)).acquireGlobal("Partition Key"));
   }
 
   /**
-   * Test {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}.
-   * <p>
-   * Method under test: {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
+   * Method under test:
+   * {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
    */
   @Test
-  @DisplayName("Test releaseChannelLock(Object)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void CombinedConnectionSemaphore.releaseChannelLock(Object)"})
   void testReleaseChannelLock() {
     // Arrange
     CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 3, 10);
@@ -145,22 +67,74 @@ class CombinedConnectionSemaphoreDiffblueTest {
   }
 
   /**
-   * Test {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}.
-   * <p>
-   * Method under test: {@link CombinedConnectionSemaphore#releaseChannelLock(Object)}
+   * Method under test:
+   * {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}
    */
   @Test
-  @DisplayName("Test releaseChannelLock(Object)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void CombinedConnectionSemaphore.releaseChannelLock(Object)"})
-  void testReleaseChannelLock2() {
-    // Arrange
-    CombinedConnectionSemaphore combinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 0, 10);
+  void testNewCombinedConnectionSemaphore() {
+    // Arrange and Act
+    CombinedConnectionSemaphore actualCombinedConnectionSemaphore = new CombinedConnectionSemaphore(3, 3, 10);
 
-    // Act
-    combinedConnectionSemaphore.releaseChannelLock("Partition Key");
+    // Assert
+    MaxConnectionSemaphore maxConnectionSemaphore = actualCombinedConnectionSemaphore.globalMaxConnectionSemaphore;
+    IOException ioException = maxConnectionSemaphore.tooManyConnections;
+    assertTrue(ioException instanceof TooManyConnectionsException);
+    IOException ioException2 = actualCombinedConnectionSemaphore.tooManyConnectionsPerHost;
+    assertTrue(ioException2 instanceof TooManyConnectionsPerHostException);
+    assertEquals("Too many connections: 3", ioException.getLocalizedMessage());
+    assertEquals("Too many connections: 3", ioException2.getLocalizedMessage());
+    assertEquals("Too many connections: 3", ioException.getMessage());
+    assertEquals("Too many connections: 3", ioException2.getMessage());
+    assertNull(ioException.getCause());
+    assertNull(ioException2.getCause());
+    Semaphore semaphore = maxConnectionSemaphore.freeChannels;
+    assertEquals(0, semaphore.getQueueLength());
+    Throwable[] suppressed = ioException2.getSuppressed();
+    assertEquals(0, suppressed.length);
+    assertEquals(10, maxConnectionSemaphore.acquireTimeout);
+    assertEquals(10, actualCombinedConnectionSemaphore.acquireTimeout);
+    assertEquals(3, actualCombinedConnectionSemaphore.maxConnectionsPerHost);
+    assertFalse(semaphore.hasQueuedThreads());
+    assertFalse(semaphore.isFair());
+    assertTrue(actualCombinedConnectionSemaphore.freeChannelsPerHost.isEmpty());
+    assertSame(suppressed, ioException.getSuppressed());
+  }
 
-    // Assert that nothing has changed
-    assertTrue(combinedConnectionSemaphore.freeChannelsPerHost.isEmpty());
+  /**
+   * Method under test:
+   * {@link CombinedConnectionSemaphore#CombinedConnectionSemaphore(int, int, int)}
+   */
+  @Test
+  void testNewCombinedConnectionSemaphore2() {
+    // Arrange and Act
+    CombinedConnectionSemaphore actualCombinedConnectionSemaphore = new CombinedConnectionSemaphore(0, 3, 10);
+
+    // Assert
+    MaxConnectionSemaphore maxConnectionSemaphore = actualCombinedConnectionSemaphore.globalMaxConnectionSemaphore;
+    Semaphore semaphore = maxConnectionSemaphore.freeChannels;
+    Collection<Thread> queuedThreads = ((InfiniteSemaphore) semaphore).getQueuedThreads();
+    assertTrue(queuedThreads instanceof List);
+    IOException ioException = maxConnectionSemaphore.tooManyConnections;
+    assertTrue(ioException instanceof TooManyConnectionsException);
+    IOException ioException2 = actualCombinedConnectionSemaphore.tooManyConnectionsPerHost;
+    assertTrue(ioException2 instanceof TooManyConnectionsPerHostException);
+    assertTrue(semaphore instanceof InfiniteSemaphore);
+    assertEquals("Too many connections: 0", ioException.getLocalizedMessage());
+    assertEquals("Too many connections: 0", ioException.getMessage());
+    assertEquals("Too many connections: 3", ioException2.getLocalizedMessage());
+    assertEquals("Too many connections: 3", ioException2.getMessage());
+    assertNull(ioException.getCause());
+    assertNull(ioException2.getCause());
+    assertEquals(0, semaphore.getQueueLength());
+    Throwable[] suppressed = ioException2.getSuppressed();
+    assertEquals(0, suppressed.length);
+    assertEquals(10, maxConnectionSemaphore.acquireTimeout);
+    assertEquals(10, actualCombinedConnectionSemaphore.acquireTimeout);
+    assertEquals(3, actualCombinedConnectionSemaphore.maxConnectionsPerHost);
+    assertFalse(semaphore.hasQueuedThreads());
+    assertTrue(queuedThreads.isEmpty());
+    assertTrue(actualCombinedConnectionSemaphore.freeChannelsPerHost.isEmpty());
+    assertTrue(semaphore.isFair());
+    assertSame(suppressed, ioException.getSuppressed());
   }
 }

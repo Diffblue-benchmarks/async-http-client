@@ -2,21 +2,14 @@ package org.asynchttpclient.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import com.diffblue.cover.annotations.MethodsUnderTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class TooManyConnectionsPerHostExceptionDiffblueTest {
   /**
-   * Test {@link TooManyConnectionsPerHostException#TooManyConnectionsPerHostException(int)}.
-   * <p>
-   * Method under test: {@link TooManyConnectionsPerHostException#TooManyConnectionsPerHostException(int)}
+   * Method under test:
+   * {@link TooManyConnectionsPerHostException#TooManyConnectionsPerHostException(int)}
    */
   @Test
-  @DisplayName("Test new TooManyConnectionsPerHostException(int)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void TooManyConnectionsPerHostException.<init>(int)"})
   void testNewTooManyConnectionsPerHostException() {
     // Arrange and Act
     TooManyConnectionsPerHostException actualTooManyConnectionsPerHostException = new TooManyConnectionsPerHostException(

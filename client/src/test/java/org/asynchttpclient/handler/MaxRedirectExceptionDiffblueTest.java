@@ -2,21 +2,13 @@ package org.asynchttpclient.handler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import com.diffblue.cover.annotations.MethodsUnderTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class MaxRedirectExceptionDiffblueTest {
   /**
-   * Test {@link MaxRedirectException#MaxRedirectException(String)}.
-   * <p>
    * Method under test: {@link MaxRedirectException#MaxRedirectException(String)}
    */
   @Test
-  @DisplayName("Test new MaxRedirectException(String)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void MaxRedirectException.<init>(String)"})
   void testNewMaxRedirectException() {
     // Arrange and Act
     MaxRedirectException actualMaxRedirectException = new MaxRedirectException("https://example.org/example");

@@ -2,22 +2,15 @@ package org.asynchttpclient.handler.resumable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.util.Map;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class PropertiesBasedResumableProcessorDiffblueTest {
   /**
-   * Test {@link PropertiesBasedResumableProcessor#put(String, long)}.
-   * <p>
-   * Method under test: {@link PropertiesBasedResumableProcessor#put(String, long)}
+   * Method under test:
+   * {@link PropertiesBasedResumableProcessor#put(String, long)}
    */
   @Test
-  @DisplayName("Test put(String, long)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void PropertiesBasedResumableProcessor.put(String, long)"})
   void testPut() {
     // Arrange
     PropertiesBasedResumableProcessor propertiesBasedResumableProcessor = new PropertiesBasedResumableProcessor();
@@ -33,14 +26,9 @@ class PropertiesBasedResumableProcessorDiffblueTest {
   }
 
   /**
-   * Test {@link PropertiesBasedResumableProcessor#load()}.
-   * <p>
    * Method under test: {@link PropertiesBasedResumableProcessor#load()}
    */
   @Test
-  @DisplayName("Test load()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Map PropertiesBasedResumableProcessor.load()"})
   void testLoad() {
     // Arrange and Act
     Map<String, Long> actualLoadResult = (new PropertiesBasedResumableProcessor()).load();

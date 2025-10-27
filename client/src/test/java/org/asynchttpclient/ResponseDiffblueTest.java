@@ -1,66 +1,43 @@
 package org.asynchttpclient;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.MethodsUnderTest;
+import io.netty.buffer.AdaptiveByteBufAllocator;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.DuplicatedByteBuf;
+import io.netty.buffer.EmptyByteBuf;
+import io.netty.buffer.ReadOnlyByteBuf;
+import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
-import org.asynchttpclient.Response.ResponseBuilder;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 import org.asynchttpclient.netty.EagerResponseBodyPart;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+import org.asynchttpclient.netty.NettyResponseStatus;
+import org.asynchttpclient.uri.Uri;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class ResponseDiffblueTest {
   /**
-   * Test ResponseBuilder {@link ResponseBuilder#accumulate(HttpResponseBodyPart)} with {@code bodyPart}.
-   * <ul>
-   *   <li>Given three.</li>
-   *   <li>Then calls {@link EagerResponseBodyPart#length()}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResponseBuilder#accumulate(HttpResponseBodyPart)}
+   * Method under test: {@link Response.ResponseBuilder#accumulate(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test ResponseBuilder accumulate(HttpResponseBodyPart) with 'bodyPart'; given three; then calls length()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResponseBuilder.accumulate(HttpResponseBodyPart)"})
-  void testResponseBuilderAccumulateWithBodyPart_givenThree_thenCallsLength() {
-    // Arrange
-    ResponseBuilder responseBuilder = new ResponseBuilder();
-    EagerResponseBodyPart bodyPart = mock(EagerResponseBodyPart.class);
-    when(bodyPart.length()).thenReturn(3);
-
-    // Act
-    responseBuilder.accumulate(bodyPart);
-
-    // Assert
-    verify(bodyPart).length();
-  }
-
-  /**
-   * Test ResponseBuilder {@link ResponseBuilder#accumulate(HttpHeaders)} with {@code headers}.
-   * <ul>
-   *   <li>Then calls {@link HttpHeaders#add(HttpHeaders)}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResponseBuilder#accumulate(HttpHeaders)}
-   */
-  @Test
-  @DisplayName("Test ResponseBuilder accumulate(HttpHeaders) with 'headers'; then calls add(HttpHeaders)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResponseBuilder.accumulate(HttpHeaders)"})
-  void testResponseBuilderAccumulateWithHeaders_thenCallsAdd() {
+  void testResponseBuilderAccumulate() {
     // Arrange
     EmptyHttpHeaders headers = mock(EmptyHttpHeaders.class);
     when(headers.add(Mockito.<HttpHeaders>any())).thenReturn(new DefaultHttpHeaders());
 
-    ResponseBuilder responseBuilder = new ResponseBuilder();
+    Response.ResponseBuilder responseBuilder = new Response.ResponseBuilder();
     responseBuilder.accumulate(headers);
 
     // Act
@@ -71,31 +48,113 @@ class ResponseDiffblueTest {
   }
 
   /**
-   * Test ResponseBuilder {@link ResponseBuilder#build()}.
-   * <p>
-   * Method under test: {@link ResponseBuilder#build()}
+   * Method under test:
+   * {@link Response.ResponseBuilder#accumulate(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test ResponseBuilder build()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResponseBuilder.accumulate(org.asynchttpclient.HttpResponseStatus)",
-      "Response ResponseBuilder.build()"})
-  void testResponseBuilderBuild() {
-    // Arrange, Act and Assert
-    assertNull((new ResponseBuilder()).build());
+  void testResponseBuilderAccumulate2() {
+    // Arrange
+    Response.ResponseBuilder responseBuilder = new Response.ResponseBuilder();
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+    when(buffer.getBytes(anyInt(), Mockito.<byte[]>any(), anyInt(), anyInt()))
+        .thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+
+    // Act
+    responseBuilder.accumulate(
+        new EagerResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))), true));
+
+    // Assert that nothing has changed
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).getBytes(eq(1), isA(byte[].class), eq(0), eq(0));
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
   }
 
   /**
-   * Test ResponseBuilder new {@link ResponseBuilder} (default constructor).
-   * <p>
-   * Method under test: default or parameterless constructor of {@link ResponseBuilder}
+   * Method under test:
+   * {@link Response.ResponseBuilder#accumulate(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test ResponseBuilder new ResponseBuilder (default constructor)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResponseBuilder.<init>()"})
+  void testResponseBuilderAccumulate3() {
+    // Arrange
+    Response.ResponseBuilder responseBuilder = new Response.ResponseBuilder();
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(0);
+    when(buffer.writerIndex()).thenReturn(1);
+    when(buffer.getBytes(anyInt(), Mockito.<byte[]>any(), anyInt(), anyInt()))
+        .thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+
+    // Act
+    responseBuilder.accumulate(
+        new EagerResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))), true));
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).getBytes(eq(0), isA(byte[].class), eq(0), eq(1));
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+  }
+
+  /**
+   * Method under test: {@link Response.ResponseBuilder#build()}
+   */
+  @Test
+  void testResponseBuilderBuild() {
+    // Arrange, Act and Assert
+    assertNull((new Response.ResponseBuilder()).build());
+  }
+
+  /**
+   * Method under test: default or parameterless constructor of
+   * {@link Response.ResponseBuilder}
+   */
+  @Test
   void testResponseBuilderNewResponseBuilder() {
     // Arrange, Act and Assert
-    assertNull((new ResponseBuilder()).build());
+    assertNull((new Response.ResponseBuilder()).build());
+  }
+
+  /**
+   * Method under test: {@link Response.ResponseBuilder#reset()}
+   */
+  @Test
+  void testResponseBuilderReset() {
+    // Arrange
+    Response.ResponseBuilder responseBuilder = new Response.ResponseBuilder();
+
+    // Act
+    responseBuilder.reset();
+
+    // Assert
+    assertNull(responseBuilder.build());
+  }
+
+  /**
+   * Method under test: {@link Response.ResponseBuilder#reset()}
+   */
+  @Test
+  void testResponseBuilderReset2() {
+    // Arrange
+    Response.ResponseBuilder responseBuilder = new Response.ResponseBuilder();
+    Uri uri = mock(Uri.class);
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+
+    responseBuilder.accumulate(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
+
+    // Act
+    responseBuilder.reset();
+
+    // Assert
+    assertNull(responseBuilder.build());
   }
 }

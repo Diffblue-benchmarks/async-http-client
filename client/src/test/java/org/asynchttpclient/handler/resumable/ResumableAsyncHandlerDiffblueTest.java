@@ -5,14 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
@@ -20,520 +20,177 @@ import io.netty.buffer.EmptyByteBuf;
 import io.netty.buffer.ReadOnlyByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.handler.codec.http.DefaultCookie;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.Cookie;
-import io.netty.resolver.NameResolver;
+import io.netty.resolver.DefaultNameResolver;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 import org.asynchttpclient.AbstractBasicTest;
-import org.asynchttpclient.AbstractBasicTest.AsyncCompletionHandlerAdapter;
 import org.asynchttpclient.AsyncHandler;
-import org.asynchttpclient.AsyncHandler.State;
 import org.asynchttpclient.DefaultRequest;
 import org.asynchttpclient.HttpResponseBodyPart;
 import org.asynchttpclient.Param;
 import org.asynchttpclient.Realm;
 import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilderBase;
 import org.asynchttpclient.Response;
 import org.asynchttpclient.channel.ChannelPoolPartitioning;
-import org.asynchttpclient.handler.resumable.ResumableAsyncHandler.ResumableProcessor;
+import org.asynchttpclient.handler.TransferCompletionHandler;
+import org.asynchttpclient.handler.TransferListener;
 import org.asynchttpclient.netty.EagerResponseBodyPart;
 import org.asynchttpclient.netty.LazyResponseBodyPart;
 import org.asynchttpclient.netty.NettyResponse;
 import org.asynchttpclient.netty.NettyResponseStatus;
 import org.asynchttpclient.proxy.ProxyServer;
+import org.asynchttpclient.proxy.ProxyType;
 import org.asynchttpclient.request.body.generator.BodyGenerator;
 import org.asynchttpclient.request.body.multipart.Part;
 import org.asynchttpclient.uri.Uri;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class ResumableAsyncHandlerDiffblueTest {
   /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler()}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler()}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
    */
   @Test
-  @DisplayName("Test new ResumableAsyncHandler()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>()"})
-  void testNewResumableAsyncHandler() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler()).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(long)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(long)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(long)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(long)"})
-  void testNewResumableAsyncHandler2() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(1L)).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(long, AsyncHandler)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(long, AsyncHandler)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(long, AsyncHandler)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(long, AsyncHandler)"})
-  void testNewResumableAsyncHandler3() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(1L, new AsyncCompletionHandlerAdapter())).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(AsyncHandler)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(AsyncHandler)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(AsyncHandler)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(AsyncHandler)"})
-  void testNewResumableAsyncHandler4() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(new AsyncCompletionHandlerAdapter())).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(boolean)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(boolean)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(boolean)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(boolean)"})
-  void testNewResumableAsyncHandler5() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(true)).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor)}.
-   * <ul>
-   *   <li>When {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(ResumableProcessor); when 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(ResumableProcessor)"})
-  void testNewResumableAsyncHandler_whenNull() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler((ResumableProcessor) null)).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor, boolean)}.
-   * <ul>
-   *   <li>When {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor, boolean)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(ResumableProcessor, boolean); when 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(ResumableProcessor, boolean)"})
-  void testNewResumableAsyncHandler_whenNull2() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(null, true)).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor)}.
-   * <ul>
-   *   <li>When {@link PropertiesBasedResumableProcessor} (default constructor).</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(ResumableProcessor); when PropertiesBasedResumableProcessor (default constructor)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(ResumableProcessor)"})
-  void testNewResumableAsyncHandler_whenPropertiesBasedResumableProcessor() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(new PropertiesBasedResumableProcessor())).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor, boolean)}.
-   * <ul>
-   *   <li>When {@link PropertiesBasedResumableProcessor} (default constructor).</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler(ResumableProcessor, boolean)}
-   */
-  @Test
-  @DisplayName("Test new ResumableAsyncHandler(ResumableProcessor, boolean); when PropertiesBasedResumableProcessor (default constructor)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ResumableAsyncHandler.<init>(ResumableProcessor, boolean)"})
-  void testNewResumableAsyncHandler_whenPropertiesBasedResumableProcessor2() throws Exception {
-    // Arrange, Act and Assert
-    assertNull((new ResumableAsyncHandler(new PropertiesBasedResumableProcessor(), true)).onCompleted());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
-   */
-  @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
   void testOnStatusReceived() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
+    Uri uri = mock(Uri.class);
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
 
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version,
+        io.netty.handler.codec.http.HttpResponseStatus.valueOf(1));
 
     // Act
-    State actualOnStatusReceivedResult = resumableAsyncHandler
+    AsyncHandler.State actualOnStatusReceivedResult = resumableAsyncHandler
         .onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
 
     // Assert
     Response onCompletedResult = resumableAsyncHandler.onCompleted();
+    HttpHeaders headers = onCompletedResult.getHeaders();
+    assertTrue(headers instanceof EmptyHttpHeaders);
     assertTrue(onCompletedResult instanceof NettyResponse);
+    assertEquals("", onCompletedResult.getResponseBody());
     assertEquals("Unknown Status (1)", onCompletedResult.getStatusText());
+    assertNull(onCompletedResult.getContentType());
+    assertEquals(-1, onCompletedResult.getResponseBodyAsStream().read(new byte[]{}));
+    assertEquals(0, headers.size());
+    ByteBuffer responseBodyAsByteBuffer = onCompletedResult.getResponseBodyAsByteBuffer();
+    assertEquals(0, responseBodyAsByteBuffer.capacity());
+    assertEquals(0, responseBodyAsByteBuffer.limit());
+    assertEquals(0, responseBodyAsByteBuffer.position());
+    assertEquals(0, responseBodyAsByteBuffer.array().length);
+    assertEquals(0, onCompletedResult.getResponseBodyAsBytes().length);
     assertEquals(1, onCompletedResult.getStatusCode());
-    assertEquals(State.ABORT, actualOnStatusReceivedResult);
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
+    assertEquals(AsyncHandler.State.ABORT, actualOnStatusReceivedResult);
+    assertFalse(responseBodyAsByteBuffer.hasRemaining());
+    assertFalse(headers.iterator().hasNext());
+    assertFalse(onCompletedResult.hasResponseBody());
+    assertFalse(onCompletedResult.hasResponseHeaders());
+    assertFalse(onCompletedResult.isRedirected());
+    assertTrue(headers.isEmpty());
+    assertTrue(responseBodyAsByteBuffer.hasArray());
+    assertTrue(onCompletedResult.getCookies().isEmpty());
+    assertTrue(onCompletedResult.hasResponseStatus());
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived2() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(200));
-
-    // Act
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Assert
-    Response onCompletedResult = resumableAsyncHandler.onCompleted();
-    assertTrue(onCompletedResult instanceof NettyResponse);
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
-   */
-  @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived3() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(206));
-
-    // Act
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Assert
-    Response onCompletedResult = resumableAsyncHandler.onCompleted();
-    assertTrue(onCompletedResult instanceof NettyResponse);
-    assertEquals("Partial Content", onCompletedResult.getStatusText());
-    assertEquals(206, onCompletedResult.getStatusCode());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
-   */
-  @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived4() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", null, "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(200));
-
-    // Act
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Assert
-    Response onCompletedResult = resumableAsyncHandler.onCompleted();
-    assertTrue(onCompletedResult instanceof NettyResponse);
-    assertSame(uri, onCompletedResult.getUri());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
-   */
-  @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived5() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(200));
-
-    // Act
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Assert
-    Response onCompletedResult = resumableAsyncHandler.onCompleted();
-    assertTrue(onCompletedResult instanceof NettyResponse);
-    assertSame(uri, onCompletedResult.getUri());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
-   */
-  @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived6() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        null, "https://example.org/example", "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(200));
-
-    // Act
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Assert
-    Response onCompletedResult = resumableAsyncHandler.onCompleted();
-    assertTrue(onCompletedResult instanceof NettyResponse);
-    assertSame(uri, onCompletedResult.getUri());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
-   */
-  @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived7() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", null, "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(200));
-
-    // Act
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Assert
-    Response onCompletedResult = resumableAsyncHandler.onCompleted();
-    assertTrue(onCompletedResult instanceof NettyResponse);
-    assertSame(uri, onCompletedResult.getUri());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsByteBuffer().array());
-    assertArrayEquals(new byte[]{}, onCompletedResult.getResponseBodyAsBytes());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
-   */
-  @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
   void testOnBodyPartReceived() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
 
     // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler.onBodyPartReceived(
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler.onBodyPartReceived(
         new EagerResponseBodyPart(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true)));
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
   void testOnBodyPartReceived2() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-
-    // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler
-        .onBodyPartReceived(new LazyResponseBodyPart(new EmptyByteBuf(new AdaptiveByteBufAllocator()), true)));
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <ul>
-   *   <li>Given {@link ResumableAsyncHandler#ResumableAsyncHandler(boolean)} with accumulateBody is {@code true}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
-   */
-  @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart); given ResumableAsyncHandler(boolean) with accumulateBody is 'true'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
-  void testOnBodyPartReceived_givenResumableAsyncHandlerWithAccumulateBodyIsTrue() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler(true);
 
     // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler.onBodyPartReceived(
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler.onBodyPartReceived(
         new EagerResponseBodyPart(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true)));
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <ul>
-   *   <li>When {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)} with buffer is compositeBuffer three.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart); when DuplicatedByteBuf(ByteBuf) with buffer is compositeBuffer three")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
-  void testOnBodyPartReceived_whenDuplicatedByteBufWithBufferIsCompositeBufferThree() throws Exception {
+  void testOnBodyPartReceived3() throws Exception {
+    // Arrange
+    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+    when(buffer.getBytes(anyInt(), Mockito.<byte[]>any(), anyInt(), anyInt()))
+        .thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+
+    // Act
+    AsyncHandler.State actualOnBodyPartReceivedResult = resumableAsyncHandler.onBodyPartReceived(
+        new EagerResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))), true));
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).getBytes(eq(1), isA(byte[].class), eq(0), eq(0));
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    assertEquals(AsyncHandler.State.CONTINUE, actualOnBodyPartReceivedResult);
+  }
+
+  /**
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   */
+  @Test
+  void testOnBodyPartReceived4() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
 
     // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler
         .onBodyPartReceived(new LazyResponseBodyPart(new DuplicatedByteBuf(Unpooled.compositeBuffer(3)), true)));
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <ul>
-   *   <li>When {@link ReadOnlyByteBuf#ReadOnlyByteBuf(ByteBuf)} with buffer is compositeBuffer three.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart); when ReadOnlyByteBuf(ByteBuf) with buffer is compositeBuffer three")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
-  void testOnBodyPartReceived_whenReadOnlyByteBufWithBufferIsCompositeBufferThree() throws Exception {
+  void testOnBodyPartReceived5() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
 
     // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler.onBodyPartReceived(
-        new LazyResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(Unpooled.compositeBuffer(3))), true)));
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <ul>
-   *   <li>When {@link ReadOnlyByteBuf#ReadOnlyByteBuf(ByteBuf)} with buffer is {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
-   */
-  @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart); when ReadOnlyByteBuf(ByteBuf) with buffer is DuplicatedByteBuf(ByteBuf)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
-  void testOnBodyPartReceived_whenReadOnlyByteBufWithBufferIsDuplicatedByteBuf() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-
-    // Act and Assert
-    assertEquals(State.CONTINUE,
+    assertEquals(AsyncHandler.State.CONTINUE,
         resumableAsyncHandler
             .onBodyPartReceived(new LazyResponseBodyPart(
                 new DuplicatedByteBuf(
@@ -542,840 +199,515 @@ class ResumableAsyncHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onCompleted()}.
-   * <ul>
-   *   <li>Given {@link ResumableAsyncHandler#ResumableAsyncHandler()}.</li>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   */
+  @Test
+  void testOnBodyPartReceived6() throws Exception {
+    // Arrange
+    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
+
+    // Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler.onBodyPartReceived(
+        new LazyResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(Unpooled.compositeBuffer(3))), true)));
+  }
+
+  /**
+   * Method under test:
+   * {@link ResumableAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   */
+  @Test
+  void testOnBodyPartReceived7() throws Exception {
+    // Arrange
+    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
+
+    // Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler
+        .onBodyPartReceived(new LazyResponseBodyPart(new EmptyByteBuf(new AdaptiveByteBufAllocator()), true)));
+  }
+
+  /**
    * Method under test: {@link ResumableAsyncHandler#onCompleted()}
    */
   @Test
-  @DisplayName("Test onCompleted(); given ResumableAsyncHandler(); then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response ResumableAsyncHandler.onCompleted()"})
-  void testOnCompleted_givenResumableAsyncHandler_thenReturnNull() throws Exception {
+  void testOnCompleted() throws Exception {
     // Arrange, Act and Assert
     assertNull((new ResumableAsyncHandler()).onCompleted());
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onCompleted()}.
-   * <ul>
-   *   <li>Then Headers return {@link EmptyHttpHeaders}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link ResumableAsyncHandler#onCompleted()}
    */
   @Test
-  @DisplayName("Test onCompleted(); then Headers return EmptyHttpHeaders")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response ResumableAsyncHandler.onCompleted()"})
-  void testOnCompleted_thenHeadersReturnEmptyHttpHeaders() throws Exception {
+  void testOnCompleted2() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+    Uri uri = new Uri(Uri.HTTP, "https://example.org/example", "https://example.org/example", 8080,
         "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+    InetAddress address = mock(InetAddress.class);
+    InetAddress localAddress = mock(InetAddress.class);
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
+    ArrayList<Cookie> cookies = new ArrayList<>();
+    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
+    ArrayList<byte[]> compositeByteData = new ArrayList<>();
+    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
+    DuplicatedByteBuf byteBufData = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
+    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
+    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
+    ArrayList<Param> formParams = new ArrayList<>();
+    ArrayList<Part> bodyParts = new ArrayList<>();
+    Realm realm = mock(Realm.class);
+    ProxyServer proxyServer = new ProxyServer("https://example.org/example", 8080, 8080, realm, new ArrayList<>(),
+        ProxyType.HTTP);
 
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    Realm realm2 = mock(Realm.class);
+    resumableAsyncHandler.adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address,
+        localAddress, headers, cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData,
+        byteBufData, streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer,
+        realm2, Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile(), true, null, null, 1L, null,
+        mock(ChannelPoolPartitioning.class), RequestBuilderBase.DEFAULT_NAME_RESOLVER));
 
-    resumableAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel()));
-
-    // Act
-    Response actualOnCompletedResult = resumableAsyncHandler.onCompleted();
-
-    // Assert
-    assertTrue(actualOnCompletedResult.getHeaders() instanceof EmptyHttpHeaders);
-    assertTrue(actualOnCompletedResult instanceof NettyResponse);
-    assertEquals("", actualOnCompletedResult.getResponseBody());
-    assertEquals("Unknown Status (1)", actualOnCompletedResult.getStatusText());
-    assertNull(actualOnCompletedResult.getContentType());
-    assertEquals(-1, actualOnCompletedResult.getResponseBodyAsStream().read(new byte[]{}));
-    assertEquals(1, actualOnCompletedResult.getStatusCode());
-    assertFalse(actualOnCompletedResult.hasResponseBody());
-    assertFalse(actualOnCompletedResult.hasResponseHeaders());
-    assertFalse(actualOnCompletedResult.isRedirected());
-    assertTrue(actualOnCompletedResult.getCookies().isEmpty());
-    assertTrue(actualOnCompletedResult.hasResponseStatus());
-    assertSame(uri, actualOnCompletedResult.getUri());
-    assertArrayEquals(new byte[]{}, actualOnCompletedResult.getResponseBodyAsBytes());
+    // Act and Assert
+    assertNull(resumableAsyncHandler.onCompleted());
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}.
-   * <ul>
-   *   <li>Given {@code 42}.</li>
-   *   <li>When {@link EmptyHttpHeaders} {@link HttpHeaders#get(CharSequence)} return {@code 42}.</li>
-   *   <li>Then calls {@link HttpHeaders#get(CharSequence)}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test onHeadersReceived(HttpHeaders); given '42'; when EmptyHttpHeaders get(CharSequence) return '42'; then calls get(CharSequence)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onHeadersReceived(HttpHeaders)"})
-  void testOnHeadersReceived_given42_whenEmptyHttpHeadersGetReturn42_thenCallsGet() throws Exception {
+  void testOnHeadersReceived() throws Exception {
+    // Arrange
+    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
+
+    // Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler.onHeadersReceived(new DefaultHttpHeaders()));
+  }
+
+  /**
+   * Method under test:
+   * {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}
+   */
+  @Test
+  void testOnHeadersReceived2() throws Exception {
+    // Arrange
+    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler(1L);
+
+    // Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE, resumableAsyncHandler.onHeadersReceived(new DefaultHttpHeaders()));
+  }
+
+  /**
+   * Method under test:
+   * {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}
+   */
+  @Test
+  void testOnHeadersReceived3() throws Exception {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
     EmptyHttpHeaders headers = mock(EmptyHttpHeaders.class);
     when(headers.get(Mockito.<CharSequence>any())).thenReturn("42");
 
     // Act
-    State actualOnHeadersReceivedResult = resumableAsyncHandler.onHeadersReceived(headers);
+    AsyncHandler.State actualOnHeadersReceivedResult = resumableAsyncHandler.onHeadersReceived(headers);
 
     // Assert
     verify(headers).get(isA(CharSequence.class));
-    assertEquals(State.CONTINUE, actualOnHeadersReceivedResult);
+    assertEquals(AsyncHandler.State.CONTINUE, actualOnHeadersReceivedResult);
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}.
-   * <ul>
-   *   <li>When {@link DefaultHttpHeaders#DefaultHttpHeaders()}.</li>
-   *   <li>Then return {@code CONTINUE}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onHeadersReceived(HttpHeaders)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test onHeadersReceived(HttpHeaders); when DefaultHttpHeaders(); then return 'CONTINUE'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onHeadersReceived(HttpHeaders)"})
-  void testOnHeadersReceived_whenDefaultHttpHeaders_thenReturnContinue() throws Exception {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-
-    // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler.onHeadersReceived(new DefaultHttpHeaders()));
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}.
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
-   */
-  @Test
-  @DisplayName("Test onTrailingHeadersReceived(HttpHeaders)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"State ResumableAsyncHandler.onTrailingHeadersReceived(HttpHeaders)"})
   void testOnTrailingHeadersReceived() {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
 
     // Act and Assert
-    assertEquals(State.CONTINUE, resumableAsyncHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
+    assertEquals(AsyncHandler.State.CONTINUE,
+        resumableAsyncHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>Given {@code http}.</li>
-   *   <li>Then return Uri toJavaNetURI toString is a string.</li>
-   * </ul>
-   * <p>
+   * Method under test:
+   * {@link ResumableAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
+   */
+  @Test
+  void testOnTrailingHeadersReceived2() {
+    // Arrange, Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE,
+        (new ResumableAsyncHandler()).onTrailingHeadersReceived(mock(EmptyHttpHeaders.class)));
+  }
+
+  /**
    * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); given 'http'; then return Uri toJavaNetURI toString is a string")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_givenHttp_thenReturnUriToJavaNetURIToStringIsAString()
-      throws UnsupportedEncodingException, URISyntaxException {
+  void testAdjustRequestRange() throws IOException {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("https://example.org/example");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("http");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
+    Uri uri = new Uri(Uri.HTTP, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
     ArrayList<Cookie> cookies = new ArrayList<>();
     byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
     ArrayList<byte[]> compositeByteData = new ArrayList<>();
     ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
+    DuplicatedByteBuf byteBufData = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
     ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
     BodyGenerator bodyGenerator = mock(BodyGenerator.class);
     ArrayList<Param> formParams = new ArrayList<>();
     ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    ProxyServer proxyServer = new ProxyServer("https://example.org/example", 8080, 8080, realm, new ArrayList<>(),
+        ProxyType.HTTP);
+
+    Realm realm2 = mock(Realm.class);
 
     // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
+    Request actualAdjustRequestRangeResult = resumableAsyncHandler
+        .adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+            cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData,
+            streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm2,
+            Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile(), true, null, null, 1L, null,
+            mock(ChannelPoolPartitioning.class), RequestBuilderBase.DEFAULT_NAME_RESOLVER));
 
     // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
+    HttpHeaders headers2 = actualAdjustRequestRangeResult.getHeaders();
+    assertTrue(headers2 instanceof DefaultHttpHeaders);
+    assertTrue(actualAdjustRequestRangeResult.getNameResolver() instanceof DefaultNameResolver);
     assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
-        + "://example.org/example", actualAdjustRequestRangeResult.getUri().toJavaNetURI().toString());
+    assertEquals("UTF-8", actualAdjustRequestRangeResult.getCharset().name());
     assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
         + "://example.org/example", actualAdjustRequestRangeResult.getUrl());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
+    List<Param> queryParams = actualAdjustRequestRangeResult.getQueryParams();
+    assertEquals(1, queryParams.size());
+    Param getResult = queryParams.get(0);
+    assertEquals("https://example.org/example", getResult.getName());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getMethod());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getStringData());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getVirtualHost());
+    File file = actualAdjustRequestRangeResult.getFile();
+    assertEquals("test.txt", file.getName());
+    assertNull(getResult.getValue());
+    Duration readTimeout = actualAdjustRequestRangeResult.getReadTimeout();
+    assertEquals(0L, readTimeout.toNanos());
+    assertEquals(1L, actualAdjustRequestRangeResult.getRangeOffset());
+    InputStream streamData2 = actualAdjustRequestRangeResult.getStreamData();
+    byte[] byteArray = new byte[8];
+    assertEquals(8, streamData2.read(byteArray));
+    assertTrue(file.isAbsolute());
+    List<Part> bodyParts2 = actualAdjustRequestRangeResult.getBodyParts();
+    assertTrue(bodyParts2.isEmpty());
+    List<byte[]> compositeByteData2 = actualAdjustRequestRangeResult.getCompositeByteData();
+    assertTrue(compositeByteData2.isEmpty());
+    assertTrue(actualAdjustRequestRangeResult.getFollowRedirect());
+    assertEquals(headers, headers2);
+    assertEquals(uri, actualAdjustRequestRangeResult.getUri());
+    assertSame(byteBufData, actualAdjustRequestRangeResult.getByteBufData());
+    assertSame(streamData, streamData2);
+    assertSame(compositeByteData, compositeByteData2);
+    assertSame(proxyServer, actualAdjustRequestRangeResult.getProxyServer());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getCookies());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getFormParams());
+    assertSame(readTimeout, actualAdjustRequestRangeResult.getRequestTimeout());
+    assertSame(byteBufferData, actualAdjustRequestRangeResult.getByteBufferData());
     byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
     assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
+    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>Given {@code https}.</li>
-   *   <li>Then return Uri Scheme is {@code https}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); given 'https'; then return Uri Scheme is 'https'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_givenHttps_thenReturnUriSchemeIsHttps()
-      throws UnsupportedEncodingException, URISyntaxException {
+  void testAdjustRequestRange2() throws IOException {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("https://example.org/example");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("https");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
+    Uri uri = new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
     ArrayList<Cookie> cookies = new ArrayList<>();
     byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
     ArrayList<byte[]> compositeByteData = new ArrayList<>();
     ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
+    DuplicatedByteBuf byteBufData = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
     ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
     BodyGenerator bodyGenerator = mock(BodyGenerator.class);
     ArrayList<Param> formParams = new ArrayList<>();
     ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    ProxyServer proxyServer = new ProxyServer("https://example.org/example", 8080, 8080, realm, new ArrayList<>(),
+        ProxyType.HTTP);
+
+    Realm realm2 = mock(Realm.class);
 
     // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
+    Request actualAdjustRequestRangeResult = resumableAsyncHandler
+        .adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+            cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData,
+            streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm2,
+            Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile(), true, null, null, 1L, null,
+            mock(ChannelPoolPartitioning.class), RequestBuilderBase.DEFAULT_NAME_RESOLVER));
 
     // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
+    HttpHeaders headers2 = actualAdjustRequestRangeResult.getHeaders();
+    assertTrue(headers2 instanceof DefaultHttpHeaders);
+    assertTrue(actualAdjustRequestRangeResult.getNameResolver() instanceof DefaultNameResolver);
     assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    Uri uri2 = actualAdjustRequestRangeResult.getUri();
-    assertEquals("https", uri2.getScheme());
-    assertEquals("https://https://example.org/example:8080", uri2.getBaseUrl());
-    assertEquals("https://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
-        + "://example.org/example", uri2.toJavaNetURI().toString());
+    assertEquals("UTF-8", actualAdjustRequestRangeResult.getCharset().name());
+    List<Param> queryParams = actualAdjustRequestRangeResult.getQueryParams();
+    assertEquals(1, queryParams.size());
+    Param getResult = queryParams.get(0);
+    assertEquals("https://example.org/example", getResult.getName());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getMethod());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getStringData());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getVirtualHost());
     assertEquals("https://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
         + "://example.org/example", actualAdjustRequestRangeResult.getUrl());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
+    File file = actualAdjustRequestRangeResult.getFile();
+    assertEquals("test.txt", file.getName());
+    assertNull(getResult.getValue());
+    Duration readTimeout = actualAdjustRequestRangeResult.getReadTimeout();
+    assertEquals(0L, readTimeout.toNanos());
+    assertEquals(1L, actualAdjustRequestRangeResult.getRangeOffset());
+    InputStream streamData2 = actualAdjustRequestRangeResult.getStreamData();
+    byte[] byteArray = new byte[8];
+    assertEquals(8, streamData2.read(byteArray));
+    assertTrue(file.isAbsolute());
+    List<Part> bodyParts2 = actualAdjustRequestRangeResult.getBodyParts();
+    assertTrue(bodyParts2.isEmpty());
+    List<byte[]> compositeByteData2 = actualAdjustRequestRangeResult.getCompositeByteData();
+    assertTrue(compositeByteData2.isEmpty());
+    assertTrue(actualAdjustRequestRangeResult.getFollowRedirect());
+    assertEquals(headers, headers2);
+    assertEquals(uri, actualAdjustRequestRangeResult.getUri());
+    assertSame(byteBufData, actualAdjustRequestRangeResult.getByteBufData());
+    assertSame(streamData, streamData2);
+    assertSame(compositeByteData, compositeByteData2);
+    assertSame(proxyServer, actualAdjustRequestRangeResult.getProxyServer());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getCookies());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getFormParams());
+    assertSame(readTimeout, actualAdjustRequestRangeResult.getRequestTimeout());
+    assertSame(byteBufferData, actualAdjustRequestRangeResult.getByteBufferData());
     byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
     assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
+    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>Given {@code null}.</li>
-   *   <li>When {@link HttpHeaders} {@link HttpHeaders#get(CharSequence)} return {@code null}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); given 'null'; when HttpHeaders get(CharSequence) return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_givenNull_whenHttpHeadersGetReturnNull()
-      throws UnsupportedEncodingException, URISyntaxException {
+  void testAdjustRequestRange3() throws IOException {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("https://example.org/example");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("http");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn(null);
+    Uri uri = new Uri(Uri.WS, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
     ArrayList<Cookie> cookies = new ArrayList<>();
     byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
     ArrayList<byte[]> compositeByteData = new ArrayList<>();
     ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
+    DuplicatedByteBuf byteBufData = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
     ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
     BodyGenerator bodyGenerator = mock(BodyGenerator.class);
     ArrayList<Param> formParams = new ArrayList<>();
     ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    ProxyServer proxyServer = new ProxyServer("https://example.org/example", 8080, 8080, realm, new ArrayList<>(),
+        ProxyType.HTTP);
+
+    Realm realm2 = mock(Realm.class);
 
     // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
+    Request actualAdjustRequestRangeResult = resumableAsyncHandler
+        .adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+            cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData,
+            streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm2,
+            Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile(), true, null, null, 1L, null,
+            mock(ChannelPoolPartitioning.class), RequestBuilderBase.DEFAULT_NAME_RESOLVER));
 
     // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
+    HttpHeaders headers2 = actualAdjustRequestRangeResult.getHeaders();
+    assertTrue(headers2 instanceof DefaultHttpHeaders);
+    assertTrue(actualAdjustRequestRangeResult.getNameResolver() instanceof DefaultNameResolver);
     assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
-        + "://example.org/example", actualAdjustRequestRangeResult.getUri().toJavaNetURI().toString());
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
-        + "://example.org/example", actualAdjustRequestRangeResult.getUrl());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
-    byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>Given {@code ws}.</li>
-   *   <li>When {@link Uri} {@link Uri#getScheme()} return {@code ws}.</li>
-   *   <li>Then return Uri Scheme is {@code ws}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
-   */
-  @Test
-  @DisplayName("Test adjustRequestRange(Request); given 'ws'; when Uri getScheme() return 'ws'; then return Uri Scheme is 'ws'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_givenWs_whenUriGetSchemeReturnWs_thenReturnUriSchemeIsWs()
-      throws UnsupportedEncodingException, URISyntaxException {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("https://example.org/example");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("ws");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-
-    // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
-
-    // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
-    assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    Uri uri2 = actualAdjustRequestRangeResult.getUri();
-    assertEquals("ws", uri2.getScheme());
-    assertEquals("ws://https://example.org/example:8080", uri2.getBaseUrl());
-    assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/example?https:/"
-        + "/example.org/example", uri2.toJavaNetURI().toString());
+    assertEquals("UTF-8", actualAdjustRequestRangeResult.getCharset().name());
+    List<Param> queryParams = actualAdjustRequestRangeResult.getQueryParams();
+    assertEquals(1, queryParams.size());
+    Param getResult = queryParams.get(0);
+    assertEquals("https://example.org/example", getResult.getName());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getMethod());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getStringData());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getVirtualHost());
+    File file = actualAdjustRequestRangeResult.getFile();
+    assertEquals("test.txt", file.getName());
     assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/example?https:/"
         + "/example.org/example", actualAdjustRequestRangeResult.getUrl());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
+    assertNull(getResult.getValue());
+    Duration readTimeout = actualAdjustRequestRangeResult.getReadTimeout();
+    assertEquals(0L, readTimeout.toNanos());
+    assertEquals(1L, actualAdjustRequestRangeResult.getRangeOffset());
+    InputStream streamData2 = actualAdjustRequestRangeResult.getStreamData();
+    byte[] byteArray = new byte[8];
+    assertEquals(8, streamData2.read(byteArray));
+    assertTrue(file.isAbsolute());
+    List<Part> bodyParts2 = actualAdjustRequestRangeResult.getBodyParts();
+    assertTrue(bodyParts2.isEmpty());
+    List<byte[]> compositeByteData2 = actualAdjustRequestRangeResult.getCompositeByteData();
+    assertTrue(compositeByteData2.isEmpty());
+    assertTrue(actualAdjustRequestRangeResult.getFollowRedirect());
+    assertEquals(headers, headers2);
+    assertEquals(uri, actualAdjustRequestRangeResult.getUri());
+    assertSame(byteBufData, actualAdjustRequestRangeResult.getByteBufData());
+    assertSame(streamData, streamData2);
+    assertSame(compositeByteData, compositeByteData2);
+    assertSame(proxyServer, actualAdjustRequestRangeResult.getProxyServer());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getCookies());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getFormParams());
+    assertSame(readTimeout, actualAdjustRequestRangeResult.getRequestTimeout());
+    assertSame(byteBufferData, actualAdjustRequestRangeResult.getByteBufferData());
     byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
     assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
+    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>Given {@code wss}.</li>
-   *   <li>Then return Uri Scheme is {@code wss}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); given 'wss'; then return Uri Scheme is 'wss'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_givenWss_thenReturnUriSchemeIsWss()
-      throws UnsupportedEncodingException, URISyntaxException {
+  void testAdjustRequestRange4() throws IOException {
     // Arrange
     ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("https://example.org/example");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("wss");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
+    Uri uri = new Uri(Uri.WSS, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
     ArrayList<Cookie> cookies = new ArrayList<>();
     byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
     ArrayList<byte[]> compositeByteData = new ArrayList<>();
     ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
+    DuplicatedByteBuf byteBufData = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
     ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
     BodyGenerator bodyGenerator = mock(BodyGenerator.class);
     ArrayList<Param> formParams = new ArrayList<>();
     ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
     Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    ProxyServer proxyServer = new ProxyServer("https://example.org/example", 8080, 8080, realm, new ArrayList<>(),
+        ProxyType.HTTP);
+
+    Realm realm2 = mock(Realm.class);
 
     // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
+    Request actualAdjustRequestRangeResult = resumableAsyncHandler
+        .adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address, localAddress, headers,
+            cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData, byteBufData,
+            streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer, realm2,
+            Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile(), true, null, null, 1L, null,
+            mock(ChannelPoolPartitioning.class), RequestBuilderBase.DEFAULT_NAME_RESOLVER));
 
     // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
+    HttpHeaders headers2 = actualAdjustRequestRangeResult.getHeaders();
+    assertTrue(headers2 instanceof DefaultHttpHeaders);
+    assertTrue(actualAdjustRequestRangeResult.getNameResolver() instanceof DefaultNameResolver);
     assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    Uri uri2 = actualAdjustRequestRangeResult.getUri();
-    assertEquals("wss", uri2.getScheme());
-    assertEquals("wss://https://example.org/example:8080", uri2.getBaseUrl());
-    assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/example?https:"
-        + "//example.org/example", uri2.toJavaNetURI().toString());
+    assertEquals("UTF-8", actualAdjustRequestRangeResult.getCharset().name());
+    List<Param> queryParams = actualAdjustRequestRangeResult.getQueryParams();
+    assertEquals(1, queryParams.size());
+    Param getResult = queryParams.get(0);
+    assertEquals("https://example.org/example", getResult.getName());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getMethod());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getStringData());
+    assertEquals("https://example.org/example", actualAdjustRequestRangeResult.getVirtualHost());
+    File file = actualAdjustRequestRangeResult.getFile();
+    assertEquals("test.txt", file.getName());
     assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/example?https:"
         + "//example.org/example", actualAdjustRequestRangeResult.getUrl());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
+    assertNull(getResult.getValue());
+    Duration readTimeout = actualAdjustRequestRangeResult.getReadTimeout();
+    assertEquals(0L, readTimeout.toNanos());
+    assertEquals(1L, actualAdjustRequestRangeResult.getRangeOffset());
+    InputStream streamData2 = actualAdjustRequestRangeResult.getStreamData();
+    byte[] byteArray = new byte[8];
+    assertEquals(8, streamData2.read(byteArray));
+    assertTrue(file.isAbsolute());
+    List<Part> bodyParts2 = actualAdjustRequestRangeResult.getBodyParts();
+    assertTrue(bodyParts2.isEmpty());
+    List<byte[]> compositeByteData2 = actualAdjustRequestRangeResult.getCompositeByteData();
+    assertTrue(compositeByteData2.isEmpty());
+    assertTrue(actualAdjustRequestRangeResult.getFollowRedirect());
+    assertEquals(headers, headers2);
+    assertEquals(uri, actualAdjustRequestRangeResult.getUri());
+    assertSame(byteBufData, actualAdjustRequestRangeResult.getByteBufData());
+    assertSame(streamData, streamData2);
+    assertSame(compositeByteData, compositeByteData2);
+    assertSame(proxyServer, actualAdjustRequestRangeResult.getProxyServer());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getCookies());
+    assertSame(bodyParts2, actualAdjustRequestRangeResult.getFormParams());
+    assertSame(readTimeout, actualAdjustRequestRangeResult.getRequestTimeout());
+    assertSame(byteBufferData, actualAdjustRequestRangeResult.getByteBufferData());
     byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
     assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
+    assertArrayEquals("AXAXAXAX".getBytes("UTF-8"), byteArray);
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>Then return Cookies is {@link ArrayList#ArrayList()}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
+   * Method under test: {@link ResumableAsyncHandler#ResumableAsyncHandler()}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); then return Cookies is ArrayList()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_thenReturnCookiesIsArrayList() throws UnsupportedEncodingException {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("https://example.org/example");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("http");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    cookies.add(new DefaultCookie("https://example.org/example", "https://example.org/example"));
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-
-    // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
-
-    // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
-    assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    assertEquals(cookies, actualAdjustRequestRangeResult.getCookies());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
-    byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
+  void testNewResumableAsyncHandler() throws Exception {
+    // Arrange, Act and Assert
+    assertNull((new ResumableAsyncHandler()).onCompleted());
+    assertNull((new ResumableAsyncHandler(1L)).onCompleted());
+    assertNull((new ResumableAsyncHandler(1L, new AbstractBasicTest.AsyncCompletionHandlerAdapter())).onCompleted());
+    assertNull((new ResumableAsyncHandler(new AbstractBasicTest.AsyncCompletionHandlerAdapter())).onCompleted());
+    assertNull((new ResumableAsyncHandler(new PropertiesBasedResumableProcessor())).onCompleted());
+    assertNull((new ResumableAsyncHandler((ResumableAsyncHandler.ResumableProcessor) null)).onCompleted());
+    assertNull((new ResumableAsyncHandler(new PropertiesBasedResumableProcessor(), true)).onCompleted());
+    assertNull((new ResumableAsyncHandler(null, true)).onCompleted());
+    assertNull((new ResumableAsyncHandler(true)).onCompleted());
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>When {@link Uri} {@link Uri#getQuery()} return empty string.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#ResumableAsyncHandler(long, AsyncHandler)}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); when Uri getQuery() return empty string")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_whenUriGetQueryReturnEmptyString()
-      throws UnsupportedEncodingException, URISyntaxException {
+  void testNewResumableAsyncHandler2() throws Exception {
     // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn("");
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("http");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-
-    // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
-
-    // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
-    assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    Uri uri2 = actualAdjustRequestRangeResult.getUri();
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example",
-        uri2.toJavaNetURI().toString());
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example",
-        actualAdjustRequestRangeResult.getUrl());
-    assertNull(uri2.getQuery());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
-    byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>When {@link Uri} {@link Uri#getQuery()} return {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
-   */
-  @Test
-  @DisplayName("Test adjustRequestRange(Request); when Uri getQuery() return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_whenUriGetQueryReturnNull() throws UnsupportedEncodingException, URISyntaxException {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getPort()).thenReturn(8080);
-    when(uri.getFragment()).thenReturn("https://example.org/example");
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    when(uri.getQuery()).thenReturn(null);
-    when(uri.getUserInfo()).thenReturn("https://example.org/example");
-    when(uri.getPath()).thenReturn("https://example.org/example");
-    when(uri.getScheme()).thenReturn("http");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
-
-    // Act
-    Request actualAdjustRequestRangeResult = resumableAsyncHandler.adjustRequestRange(
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
-
-    // Assert
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getFragment();
-    verify(uri).getHost();
-    verify(uri).getPath();
-    verify(uri).getPort();
-    verify(uri).getQuery();
-    verify(uri, atLeast(1)).getScheme();
-    verify(uri).getUserInfo();
-    verify(uri).toUrl();
-    assertTrue(actualAdjustRequestRangeResult instanceof DefaultRequest);
-    Uri uri2 = actualAdjustRequestRangeResult.getUri();
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example",
-        uri2.toJavaNetURI().toString());
-    assertEquals("http://https://example.org/example@https://example.org/example:8080https://example.org/example",
-        actualAdjustRequestRangeResult.getUrl());
-    assertNull(uri2.getQuery());
-    byte[] expectedArrayResult = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedArrayResult, actualAdjustRequestRangeResult.getByteBufferData().array());
-    byte[] expectedByteData = "AXAXAXAX".getBytes("UTF-8");
-    assertArrayEquals(expectedByteData, actualAdjustRequestRangeResult.getByteData());
-  }
-
-  /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>When {@link Uri} {@link Uri#getScheme()} return {@code https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
-   */
-  @Test
-  @DisplayName("Test adjustRequestRange(Request); when Uri getScheme() return 'https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_whenUriGetSchemeReturnHttpsExampleOrgExample() throws UnsupportedEncodingException {
-    // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getScheme()).thenReturn("https://example.org/example");
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    TransferCompletionHandler decoratedAsyncHandler = new TransferCompletionHandler();
+    decoratedAsyncHandler.addTransferListener(mock(TransferListener.class));
 
     // Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> resumableAsyncHandler.adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address,
-            localAddress, headers, cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData,
-            byteBufData, streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer,
-            realm, file, true, null, null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class))));
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getScheme();
-    verify(uri).toUrl();
+    assertNull((new ResumableAsyncHandler(1L, decoratedAsyncHandler)).onCompleted());
   }
 
   /**
-   * Test {@link ResumableAsyncHandler#adjustRequestRange(Request)}.
-   * <ul>
-   *   <li>When {@link Uri} {@link Uri#getScheme()} return {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ResumableAsyncHandler#adjustRequestRange(Request)}
+   * Method under test:
+   * {@link ResumableAsyncHandler#ResumableAsyncHandler(AsyncHandler)}
    */
   @Test
-  @DisplayName("Test adjustRequestRange(Request); when Uri getScheme() return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Request ResumableAsyncHandler.adjustRequestRange(Request)"})
-  void testAdjustRequestRange_whenUriGetSchemeReturnNull() throws UnsupportedEncodingException {
+  void testNewResumableAsyncHandler3() throws Exception {
     // Arrange
-    ResumableAsyncHandler resumableAsyncHandler = new ResumableAsyncHandler();
-    Uri uri = mock(Uri.class);
-    when(uri.getScheme()).thenReturn(null);
-    when(uri.toUrl()).thenReturn("https://example.org/example");
-    HttpHeaders headers = mock(HttpHeaders.class);
-    when(headers.get(Mockito.<CharSequence>any())).thenReturn("https://example.org/example");
-
-    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
-    when(headers.iterator()).thenReturn(entryList.iterator());
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    TransferCompletionHandler decoratedAsyncHandler = new TransferCompletionHandler();
+    decoratedAsyncHandler.addTransferListener(mock(TransferListener.class));
 
     // Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> resumableAsyncHandler.adjustRequestRange(new DefaultRequest("https://example.org/example", uri, address,
-            localAddress, headers, cookies, byteData, compositeByteData, "https://example.org/example", byteBufferData,
-            byteBufData, streamData, bodyGenerator, formParams, bodyParts, "https://example.org/example", proxyServer,
-            realm, file, true, null, null, 1L, Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class),
-            mock(NameResolver.class))));
-    verify(headers).get(isA(CharSequence.class));
-    verify(headers).iterator();
-    verify(uri).getScheme();
-    verify(uri).toUrl();
+    assertNull((new ResumableAsyncHandler(decoratedAsyncHandler)).onCompleted());
   }
 }

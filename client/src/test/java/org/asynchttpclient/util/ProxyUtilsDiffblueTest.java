@@ -1,146 +1,93 @@
 package org.asynchttpclient.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.MethodsUnderTest;
-import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.buffer.AdaptiveByteBufAllocator;
+import io.netty.buffer.DuplicatedByteBuf;
+import io.netty.buffer.EmptyByteBuf;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.cookie.Cookie;
-import io.netty.resolver.NameResolver;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import org.asynchttpclient.AsyncHttpClientConfig;
 import org.asynchttpclient.DefaultRequest;
 import org.asynchttpclient.Param;
 import org.asynchttpclient.Realm;
 import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilderBase;
 import org.asynchttpclient.channel.ChannelPoolPartitioning;
 import org.asynchttpclient.proxy.ProxyServer;
 import org.asynchttpclient.proxy.ProxyServerSelector;
+import org.asynchttpclient.proxy.ProxyType;
 import org.asynchttpclient.request.body.generator.BodyGenerator;
 import org.asynchttpclient.request.body.multipart.Part;
 import org.asynchttpclient.uri.Uri;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 class ProxyUtilsDiffblueTest {
   /**
-   * Test {@link ProxyUtils#getProxyServer(AsyncHttpClientConfig, Request)}.
-   * <ul>
-   *   <li>Given {@code false}.</li>
-   *   <li>When {@link ProxyServer} {@link ProxyServer#isIgnoredForHost(String)} return {@code false}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ProxyUtils#getProxyServer(AsyncHttpClientConfig, Request)}
+   * Method under test:
+   * {@link ProxyUtils#getProxyServer(AsyncHttpClientConfig, Request)}
    */
   @Test
-  @DisplayName("Test getProxyServer(AsyncHttpClientConfig, Request); given 'false'; when ProxyServer isIgnoredForHost(String) return 'false'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ProxyServer ProxyUtils.getProxyServer(AsyncHttpClientConfig, Request)"})
-  void testGetProxyServer_givenFalse_whenProxyServerIsIgnoredForHostReturnFalse() throws UnsupportedEncodingException {
+  void testGetProxyServer() throws UnsupportedEncodingException {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    Uri uri = mock(Uri.class);
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    when(proxyServer.isIgnoredForHost(Mockito.<String>any())).thenReturn(false);
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
-    HttpHeaders headers = mock(HttpHeaders.class);
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
     ArrayList<Cookie> cookies = new ArrayList<>();
     byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
     ArrayList<byte[]> compositeByteData = new ArrayList<>();
     ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
+    DuplicatedByteBuf byteBufData = new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator()));
     ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
     BodyGenerator bodyGenerator = mock(BodyGenerator.class);
     ArrayList<Param> formParams = new ArrayList<>();
     ArrayList<Part> bodyParts = new ArrayList<>();
     Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    ArrayList<String> nonProxyHosts = new ArrayList<>();
+    ProxyServer proxyServer = new ProxyServer("https://example.org/example", 8080, 8080, realm, nonProxyHosts,
+        ProxyType.HTTP);
 
-    // Act
-    ProxyUtils.getProxyServer(config,
-        new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
-            compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
-
-    // Assert
-    verify(proxyServer).isIgnoredForHost(eq("https://example.org/example"));
-    verify(uri).getHost();
-  }
-
-  /**
-   * Test {@link ProxyUtils#getProxyServer(AsyncHttpClientConfig, Request)}.
-   * <ul>
-   *   <li>Given {@code true}.</li>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ProxyUtils#getProxyServer(AsyncHttpClientConfig, Request)}
-   */
-  @Test
-  @DisplayName("Test getProxyServer(AsyncHttpClientConfig, Request); given 'true'; then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ProxyServer ProxyUtils.getProxyServer(AsyncHttpClientConfig, Request)"})
-  void testGetProxyServer_givenTrue_thenReturnNull() throws UnsupportedEncodingException {
-    // Arrange
-    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    Uri uri = mock(Uri.class);
-    when(uri.getHost()).thenReturn("https://example.org/example");
-    ProxyServer proxyServer = mock(ProxyServer.class);
-    when(proxyServer.isIgnoredForHost(Mockito.<String>any())).thenReturn(true);
-    InetAddress address = mock(InetAddress.class);
-    InetAddress localAddress = mock(InetAddress.class);
-    HttpHeaders headers = mock(HttpHeaders.class);
-    ArrayList<Cookie> cookies = new ArrayList<>();
-    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
-    ArrayList<byte[]> compositeByteData = new ArrayList<>();
-    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
-    ByteBuf byteBufData = mock(ByteBuf.class);
-    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
-    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
-    ArrayList<Param> formParams = new ArrayList<>();
-    ArrayList<Part> bodyParts = new ArrayList<>();
-    Realm realm = mock(Realm.class);
-    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    Realm realm2 = mock(Realm.class);
 
     // Act
     ProxyServer actualProxyServer = ProxyUtils.getProxyServer(config,
         new DefaultRequest("https://example.org/example", uri, address, localAddress, headers, cookies, byteData,
             compositeByteData, "https://example.org/example", byteBufferData, byteBufData, streamData, bodyGenerator,
-            formParams, bodyParts, "https://example.org/example", proxyServer, realm, file, true, null, null, 1L,
-            Charset.forName("UTF-8"), mock(ChannelPoolPartitioning.class), mock(NameResolver.class)));
+            formParams, bodyParts, "https://example.org/example", proxyServer, realm2,
+            Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile(), true, null, null, 1L, null,
+            mock(ChannelPoolPartitioning.class), RequestBuilderBase.DEFAULT_NAME_RESOLVER));
 
     // Assert
-    verify(proxyServer).isIgnoredForHost(eq("https://example.org/example"));
-    verify(uri).getHost();
-    assertNull(actualProxyServer);
+    assertEquals("https://example.org/example", actualProxyServer.getHost());
+    assertNull(actualProxyServer.getCustomHeaders());
+    assertEquals(8080, actualProxyServer.getPort());
+    assertEquals(8080, actualProxyServer.getSecuredPort());
+    assertEquals(ProxyType.HTTP, actualProxyServer.getProxyType());
+    List<String> nonProxyHosts2 = actualProxyServer.getNonProxyHosts();
+    assertTrue(nonProxyHosts2.isEmpty());
+    assertSame(nonProxyHosts, nonProxyHosts2);
   }
 
   /**
-   * Test {@link ProxyUtils#createProxyServerSelector(Properties)} with {@code properties}.
-   * <p>
    * Method under test: {@link ProxyUtils#createProxyServerSelector(Properties)}
    */
   @Test
-  @DisplayName("Test createProxyServerSelector(Properties) with 'properties'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ProxyServerSelector ProxyUtils.createProxyServerSelector(Properties)"})
-  void testCreateProxyServerSelectorWithProperties() {
+  void testCreateProxyServerSelector() {
     // Arrange and Act
     ProxyServerSelector actualCreateProxyServerSelectorResult = ProxyUtils.createProxyServerSelector(new Properties());
 
@@ -151,14 +98,9 @@ class ProxyUtilsDiffblueTest {
   }
 
   /**
-   * Test {@link ProxyUtils#getJdkDefaultProxyServerSelector()}.
-   * <p>
    * Method under test: {@link ProxyUtils#getJdkDefaultProxyServerSelector()}
    */
   @Test
-  @DisplayName("Test getJdkDefaultProxyServerSelector()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ProxyServerSelector ProxyUtils.getJdkDefaultProxyServerSelector()"})
   void testGetJdkDefaultProxyServerSelector() {
     // Arrange and Act
     ProxyServerSelector actualJdkDefaultProxyServerSelector = ProxyUtils.getJdkDefaultProxyServerSelector();
@@ -170,14 +112,9 @@ class ProxyUtilsDiffblueTest {
   }
 
   /**
-   * Test {@link ProxyUtils#getJdkDefaultProxyServerSelector()}.
-   * <p>
    * Method under test: {@link ProxyUtils#getJdkDefaultProxyServerSelector()}
    */
   @Test
-  @DisplayName("Test getJdkDefaultProxyServerSelector()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ProxyServerSelector ProxyUtils.getJdkDefaultProxyServerSelector()"})
   void testGetJdkDefaultProxyServerSelector2() {
     // Arrange and Act
     ProxyServerSelector actualJdkDefaultProxyServerSelector = ProxyUtils.getJdkDefaultProxyServerSelector();

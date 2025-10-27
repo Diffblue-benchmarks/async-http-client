@@ -2,42 +2,34 @@ package org.asynchttpclient.request.body.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import io.netty.buffer.AdaptiveByteBufAllocator;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+import io.netty.buffer.ReadOnlyByteBuf;
 import org.junit.jupiter.api.Test;
 
 class UnboundedQueueFeedableBodyGeneratorDiffblueTest {
   /**
-   * Test new {@link UnboundedQueueFeedableBodyGenerator} (default constructor).
-   * <p>
-   * Method under test: default or parameterless constructor of {@link UnboundedQueueFeedableBodyGenerator}
+   * Method under test: default or parameterless constructor of
+   * {@link UnboundedQueueFeedableBodyGenerator}
    */
   @Test
-  @DisplayName("Test new UnboundedQueueFeedableBodyGenerator (default constructor)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void UnboundedQueueFeedableBodyGenerator.<init>()"})
   void testNewUnboundedQueueFeedableBodyGenerator() {
     // Arrange, Act and Assert
     assertTrue((new UnboundedQueueFeedableBodyGenerator()).queue.isEmpty());
   }
 
   /**
-   * Test {@link UnboundedQueueFeedableBodyGenerator#offer(BodyChunk)}.
-   * <ul>
-   *   <li>Then {@link UnboundedQueueFeedableBodyGenerator} (default constructor) {@link QueueBasedFeedableBodyGenerator#queue} size is one.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link UnboundedQueueFeedableBodyGenerator#offer(BodyChunk)}
+   * Method under test:
+   * {@link UnboundedQueueFeedableBodyGenerator#offer(BodyChunk)}
    */
   @Test
-  @DisplayName("Test offer(BodyChunk); then UnboundedQueueFeedableBodyGenerator (default constructor) queue size is one")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean UnboundedQueueFeedableBodyGenerator.offer(BodyChunk)"})
-  void testOffer_thenUnboundedQueueFeedableBodyGeneratorQueueSizeIsOne() {
+  void testOffer() {
     // Arrange
     UnboundedQueueFeedableBodyGenerator unboundedQueueFeedableBodyGenerator = new UnboundedQueueFeedableBodyGenerator();
 
@@ -46,6 +38,33 @@ class UnboundedQueueFeedableBodyGeneratorDiffblueTest {
         .offer(new BodyChunk(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true));
 
     // Assert
+    assertEquals(1, unboundedQueueFeedableBodyGenerator.queue.size());
+    assertTrue(actualOfferResult);
+  }
+
+  /**
+   * Method under test:
+   * {@link UnboundedQueueFeedableBodyGenerator#offer(BodyChunk)}
+   */
+  @Test
+  void testOffer2() {
+    // Arrange
+    UnboundedQueueFeedableBodyGenerator unboundedQueueFeedableBodyGenerator = new UnboundedQueueFeedableBodyGenerator();
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+
+    // Act
+    boolean actualOfferResult = unboundedQueueFeedableBodyGenerator
+        .offer(new BodyChunk(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))), true));
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
     assertEquals(1, unboundedQueueFeedableBodyGenerator.queue.size());
     assertTrue(actualOfferResult);
   }

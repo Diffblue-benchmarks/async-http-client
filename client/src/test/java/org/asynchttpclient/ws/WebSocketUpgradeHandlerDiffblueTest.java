@@ -4,191 +4,210 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.anyBoolean;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import com.diffblue.cover.annotations.MethodsUnderTest;
+import static org.mockito.Mockito.when;
 import io.netty.buffer.AdaptiveByteBufAllocator;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
+import io.netty.buffer.ReadOnlyByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.ContinuationWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.PongWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import java.util.ArrayList;
 import org.asynchttpclient.AsyncHandler;
-import org.asynchttpclient.AsyncHandler.State;
+import org.asynchttpclient.AsyncHttpClientConfig;
 import org.asynchttpclient.HttpResponseBodyPart;
 import org.asynchttpclient.exception.ChannelClosedException;
 import org.asynchttpclient.netty.EagerResponseBodyPart;
 import org.asynchttpclient.netty.NettyResponseStatus;
+import org.asynchttpclient.netty.handler.HttpHandler;
 import org.asynchttpclient.netty.ws.NettyWebSocket;
 import org.asynchttpclient.uri.Uri;
-import org.asynchttpclient.ws.WebSocketUpgradeHandler.Builder;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 class WebSocketUpgradeHandlerDiffblueTest {
   /**
-   * Test Builder {@link Builder#addWebSocketListener(WebSocketListener)}.
-   * <p>
-   * Method under test: {@link Builder#addWebSocketListener(WebSocketListener)}
+   * Method under test:
+   * {@link WebSocketUpgradeHandler.Builder#addWebSocketListener(WebSocketListener)}
    */
   @Test
-  @DisplayName("Test Builder addWebSocketListener(WebSocketListener)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Builder Builder.addWebSocketListener(WebSocketListener)"})
   void testBuilderAddWebSocketListener() {
     // Arrange
-    Builder builder = new Builder();
+    WebSocketUpgradeHandler.Builder builder = new WebSocketUpgradeHandler.Builder();
 
     // Act and Assert
     assertSame(builder, builder.addWebSocketListener(null));
   }
 
   /**
-   * Test Builder {@link Builder#removeWebSocketListener(WebSocketListener)}.
-   * <p>
-   * Method under test: {@link Builder#removeWebSocketListener(WebSocketListener)}
+   * Method under test:
+   * {@link WebSocketUpgradeHandler.Builder#removeWebSocketListener(WebSocketListener)}
    */
   @Test
-  @DisplayName("Test Builder removeWebSocketListener(WebSocketListener)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Builder Builder.removeWebSocketListener(WebSocketListener)"})
   void testBuilderRemoveWebSocketListener() {
     // Arrange
-    Builder builder = new Builder();
+    WebSocketUpgradeHandler.Builder builder = new WebSocketUpgradeHandler.Builder();
 
     // Act and Assert
     assertSame(builder, builder.removeWebSocketListener(null));
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onStatusReceived(HttpResponseStatus)}.
-   * <ul>
-   *   <li>Then return {@code ABORT}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
    */
   @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus); then return 'ABORT'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({
-      "AsyncHandler.State WebSocketUpgradeHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived_thenReturnAbort() throws Exception {
+  void testOnStatusReceived() throws Exception {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(mock(WebSocketListener.class));
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
     Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
         "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
 
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version,
+        io.netty.handler.codec.http.HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals(State.ABORT,
+    assertEquals(AsyncHandler.State.ABORT,
         webSocketUpgradeHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel())));
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onStatusReceived(HttpResponseStatus)}.
-   * <ul>
-   *   <li>Then return {@code CONTINUE}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus); then return 'CONTINUE'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({
-      "AsyncHandler.State WebSocketUpgradeHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived_thenReturnContinue() throws Exception {
-    // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
-
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(101));
-
-    // Act and Assert
-    assertEquals(State.CONTINUE,
-        webSocketUpgradeHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel())));
-  }
-
-  /**
-   * Test {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}.
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}
-   */
-  @Test
-  @DisplayName("Test onHeadersReceived(HttpHeaders)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"AsyncHandler.State WebSocketUpgradeHandler.onHeadersReceived(HttpHeaders)"})
   void testOnHeadersReceived() throws Exception {
     // Arrange
     WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
 
     // Act and Assert
-    assertEquals(State.CONTINUE, webSocketUpgradeHandler.onHeadersReceived(new DefaultHttpHeaders()));
+    assertEquals(AsyncHandler.State.CONTINUE, webSocketUpgradeHandler.onHeadersReceived(new DefaultHttpHeaders()));
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#onHeadersReceived(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"AsyncHandler.State WebSocketUpgradeHandler.onBodyPartReceived(HttpResponseBodyPart)"})
+  void testOnHeadersReceived2() throws Exception {
+    // Arrange, Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE,
+        (new WebSocketUpgradeHandler(new ArrayList<>())).onHeadersReceived(mock(EmptyHttpHeaders.class)));
+  }
+
+  /**
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   */
+  @Test
   void testOnBodyPartReceived() throws Exception {
     // Arrange
     WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
 
     // Act and Assert
-    assertEquals(State.CONTINUE, webSocketUpgradeHandler.onBodyPartReceived(
+    assertEquals(AsyncHandler.State.CONTINUE, webSocketUpgradeHandler.onBodyPartReceived(
         new EagerResponseBodyPart(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true)));
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onCompleted()}.
-   * <p>
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   */
+  @Test
+  void testOnBodyPartReceived2() throws Exception {
+    // Arrange
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+    when(buffer.getBytes(anyInt(), Mockito.<byte[]>any(), anyInt(), anyInt()))
+        .thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+
+    // Act
+    AsyncHandler.State actualOnBodyPartReceivedResult = webSocketUpgradeHandler.onBodyPartReceived(
+        new EagerResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))), true));
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).getBytes(eq(1), isA(byte[].class), eq(0), eq(0));
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    assertEquals(AsyncHandler.State.CONTINUE, actualOnBodyPartReceivedResult);
+  }
+
+  /**
    * Method under test: {@link WebSocketUpgradeHandler#onCompleted()}
    */
   @Test
-  @DisplayName("Test onCompleted()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"NettyWebSocket WebSocketUpgradeHandler.onCompleted()"})
   void testOnCompleted() throws Exception {
     // Arrange, Act and Assert
     assertNull((new WebSocketUpgradeHandler(new ArrayList<>())).onCompleted());
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onThrowable(Throwable)}.
-   * <p>
+   * Method under test: {@link WebSocketUpgradeHandler#onCompleted()}
+   */
+  @Test
+  void testOnCompleted2() throws Exception {
+    // Arrange
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(mock(WebSocketListener.class));
+
+    // Act and Assert
+    assertNull((new WebSocketUpgradeHandler(listeners)).onCompleted());
+  }
+
+  /**
    * Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
    */
   @Test
-  @DisplayName("Test onThrowable(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onThrowable(Throwable)"})
   void testOnThrowable() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onError(Mockito.<Throwable>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+
+    // Act
+    (new WebSocketUpgradeHandler(listeners)).onThrowable(ChannelClosedException.INSTANCE);
+
+    // Assert
+    verify(webSocketListener).onError(isA(Throwable.class));
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
+   */
+  @Test
+  void testOnThrowable2() {
     // Arrange
     WebSocketListener webSocketListener = mock(WebSocketListener.class);
     doNothing().when(webSocketListener).onError(Mockito.<Throwable>any());
@@ -208,42 +227,10 @@ class WebSocketUpgradeHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onThrowable(Throwable)}.
-   * <ul>
-   *   <li>Given {@link WebSocketListener} {@link WebSocketListener#onError(Throwable)} does nothing.</li>
-   *   <li>Then calls {@link WebSocketListener#onError(Throwable)}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onThrowable(Throwable)}
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onThrowable(Throwable); given WebSocketListener onError(Throwable) does nothing; then calls onError(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onThrowable(Throwable)"})
-  void testOnThrowable_givenWebSocketListenerOnErrorDoesNothing_thenCallsOnError() {
-    // Arrange
-    WebSocketListener webSocketListener = mock(WebSocketListener.class);
-    doNothing().when(webSocketListener).onError(Mockito.<Throwable>any());
-
-    ArrayList<WebSocketListener> listeners = new ArrayList<>();
-    listeners.add(webSocketListener);
-
-    // Act
-    (new WebSocketUpgradeHandler(listeners)).onThrowable(ChannelClosedException.INSTANCE);
-
-    // Assert
-    verify(webSocketListener).onError(isA(Throwable.class));
-  }
-
-  /**
-   * Test {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}.
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}
-   */
-  @Test
-  @DisplayName("Test setWebSocket(NettyWebSocket)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.setWebSocket(NettyWebSocket)"})
   void testSetWebSocket() throws Exception {
     // Arrange
     WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
@@ -258,14 +245,29 @@ class WebSocketUpgradeHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <p>
+   * Method under test:
+   * {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}
+   */
+  @Test
+  void testSetWebSocket2() throws Exception {
+    // Arrange
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(mock(WebSocketListener.class));
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    EmbeddedChannel channel = new EmbeddedChannel();
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+
+    // Act
+    webSocketUpgradeHandler.setWebSocket(webSocket);
+
+    // Assert
+    assertSame(webSocket, webSocketUpgradeHandler.onCompleted());
+  }
+
+  /**
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
   void testOnOpen() {
     // Arrange
     WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
@@ -280,20 +282,41 @@ class WebSocketUpgradeHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link BinaryWebSocketFrame#BinaryWebSocketFrame()}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given BinaryWebSocketFrame()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenBinaryWebSocketFrame() {
+  void testOnOpen2() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    EmbeddedChannel channel = new EmbeddedChannel();
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  void testOnOpen3() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onBinaryFrame(Mockito.<byte[]>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -303,105 +326,51 @@ class WebSocketUpgradeHandlerDiffblueTest {
     webSocketUpgradeHandler.onOpen(webSocket);
 
     // Assert
+    verify(webSocketListener).onBinaryFrame(isA(byte[].class), eq(true), eq(0));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
     assertTrue(webSocket.isReady());
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link CloseWebSocketFrame#CloseWebSocketFrame()}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given CloseWebSocketFrame()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenCloseWebSocketFrame() {
+  void testOnOpen4() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onTextFrame(Mockito.<String>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocket.bufferFrame(new CloseWebSocketFrame());
+    webSocket.bufferFrame(new TextWebSocketFrame());
 
     // Act
     webSocketUpgradeHandler.onOpen(webSocket);
 
     // Assert
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    verify(webSocketListener).onTextFrame(eq(""), eq(true), eq(0));
     assertTrue(webSocket.isReady());
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link CloseWebSocketFrame#CloseWebSocketFrame(boolean, int)} with finalFragment is {@code true} and rsv is one.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given CloseWebSocketFrame(boolean, int) with finalFragment is 'true' and rsv is one")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenCloseWebSocketFrameWithFinalFragmentIsTrueAndRsvIsOne() {
+  void testOnOpen5() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
-    EmbeddedChannel channel = new EmbeddedChannel();
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onBinaryFrame(Mockito.<byte[]>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
 
-    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocket.bufferFrame(new CloseWebSocketFrame(true, 1));
-
-    // Act
-    webSocketUpgradeHandler.onOpen(webSocket);
-
-    // Assert
-    assertTrue(webSocket.isReady());
-  }
-
-  /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link ContinuationWebSocketFrame#ContinuationWebSocketFrame()}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
-   */
-  @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given ContinuationWebSocketFrame()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenContinuationWebSocketFrame() {
-    // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
-    EmbeddedChannel channel = new EmbeddedChannel();
-
-    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocket.bufferFrame(new ContinuationWebSocketFrame());
-
-    // Act
-    webSocketUpgradeHandler.onOpen(webSocket);
-
-    // Assert
-    assertTrue(webSocket.isReady());
-  }
-
-  /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link DuplicatedByteBuf#DuplicatedByteBuf(ByteBuf)} with buffer is {@link EmptyByteBuf#EmptyByteBuf(ByteBufAllocator)}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
-   */
-  @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given DuplicatedByteBuf(ByteBuf) with buffer is EmptyByteBuf(ByteBufAllocator)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenDuplicatedByteBufWithBufferIsEmptyByteBuf() {
-    // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
@@ -412,87 +381,284 @@ class WebSocketUpgradeHandlerDiffblueTest {
     webSocketUpgradeHandler.onOpen(webSocket);
 
     // Assert
+    verify(webSocketListener).onBinaryFrame(isA(byte[].class), eq(true), eq(0));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
     assertTrue(webSocket.isReady());
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link PingWebSocketFrame#PingWebSocketFrame()}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given PingWebSocketFrame()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenPingWebSocketFrame() {
+  void testOnOpen6() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onTextFrame(Mockito.<String>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocket.bufferFrame(new PingWebSocketFrame());
+    webSocket.bufferFrame(new TextWebSocketFrame("https://example.org/example"));
 
     // Act
     webSocketUpgradeHandler.onOpen(webSocket);
 
     // Assert
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    verify(webSocketListener).onTextFrame(eq("https://example.org/example"), eq(true), eq(0));
     assertTrue(webSocket.isReady());
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link PongWebSocketFrame#PongWebSocketFrame()}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given PongWebSocketFrame()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenPongWebSocketFrame() {
+  void testOnOpen7() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onClose(Mockito.<WebSocket>any(), anyInt(), Mockito.<String>any());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
     EmbeddedChannel channel = new EmbeddedChannel();
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocket.bufferFrame(new PongWebSocketFrame());
+    webSocket.bufferFrame(new CloseWebSocketFrame());
 
     // Act
     webSocketUpgradeHandler.onOpen(webSocket);
 
     // Assert
+    verify(webSocketListener).onClose(isA(WebSocket.class), eq(-1), eq(""));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
     assertTrue(webSocket.isReady());
   }
 
   /**
-   * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
-   * <ul>
-   *   <li>Given {@link TextWebSocketFrame#TextWebSocketFrame()}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
    */
   @Test
-  @DisplayName("Test onOpen(NettyWebSocket); given TextWebSocketFrame()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void WebSocketUpgradeHandler.onOpen(NettyWebSocket)"})
-  void testOnOpen_givenTextWebSocketFrame() {
+  void testOnOpen8() {
     // Arrange
-    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(new ArrayList<>());
-    EmbeddedChannel channel = new EmbeddedChannel();
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onClose(Mockito.<WebSocket>any(), anyInt(), Mockito.<String>any());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.isUseLaxCookieEncoder()).thenReturn(true);
+    when(config.getMaxRedirects()).thenReturn(3);
+    when(config.getIoExceptionFilters()).thenReturn(new ArrayList<>());
+    when(config.getResponseFilters()).thenReturn(new ArrayList<>());
+    EmbeddedChannel channel = new EmbeddedChannel(new HttpHandler(config, null, null));
 
     NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
-    webSocket.bufferFrame(new TextWebSocketFrame());
+    webSocket.bufferFrame(new CloseWebSocketFrame());
 
     // Act
     webSocketUpgradeHandler.onOpen(webSocket);
 
     // Assert
+    verify(config).getIoExceptionFilters();
+    verify(config).getMaxRedirects();
+    verify(config).getResponseFilters();
+    verify(config).isUseLaxCookieEncoder();
+    verify(webSocketListener).onClose(isA(WebSocket.class), eq(-1), eq(""));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  void testOnOpen9() throws Exception {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onClose(Mockito.<WebSocket>any(), anyInt(), Mockito.<String>any());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    ChannelHandler channelHandler = mock(ChannelHandler.class);
+    doThrow(ChannelClosedException.INSTANCE).when(channelHandler).handlerAdded(Mockito.<ChannelHandlerContext>any());
+    doThrow(ChannelClosedException.INSTANCE).when(channelHandler).handlerRemoved(Mockito.<ChannelHandlerContext>any());
+    EmbeddedChannel channel = new EmbeddedChannel(channelHandler);
+
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+    webSocket.bufferFrame(new CloseWebSocketFrame());
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    verify(channelHandler).handlerAdded(isA(ChannelHandlerContext.class));
+    verify(channelHandler).handlerRemoved(isA(ChannelHandlerContext.class));
+    verify(webSocketListener).onClose(isA(WebSocket.class), eq(-1), eq(""));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  void testOnOpen10() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    Channel channel = mock(Channel.class);
+
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+    webSocket.bufferFrame(new ContinuationWebSocketFrame());
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  void testOnOpen11() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onBinaryFrame(Mockito.<byte[]>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    BinaryWebSocketFrame frame = mock(BinaryWebSocketFrame.class);
+    when(frame.rsv()).thenReturn(1);
+    when(frame.release()).thenReturn(true);
+    when(frame.isFinalFragment()).thenReturn(true);
+    when(frame.content()).thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+    when(frame.retain()).thenReturn(new BinaryWebSocketFrame());
+    Channel channel = mock(Channel.class);
+
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+    webSocket.bufferFrame(frame);
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    verify(frame).content();
+    verify(frame).release();
+    verify(frame).retain();
+    verify(frame, atLeast(1)).isFinalFragment();
+    verify(frame).rsv();
+    verify(webSocketListener).onBinaryFrame(isA(byte[].class), eq(true), eq(1));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  void testOnOpen12() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onBinaryFrame(Mockito.<byte[]>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    BinaryWebSocketFrame frame = mock(BinaryWebSocketFrame.class);
+    when(frame.rsv()).thenReturn(1);
+    when(frame.release()).thenReturn(true);
+    when(frame.isFinalFragment()).thenReturn(false);
+    when(frame.content()).thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+    when(frame.retain()).thenReturn(new BinaryWebSocketFrame());
+    Channel channel = mock(Channel.class);
+
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+    webSocket.bufferFrame(frame);
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    verify(frame).content();
+    verify(frame).release();
+    verify(frame).retain();
+    verify(frame, atLeast(1)).isFinalFragment();
+    verify(frame).rsv();
+    verify(webSocketListener).onBinaryFrame(isA(byte[].class), eq(false), eq(1));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
+    assertTrue(webSocket.isReady());
+  }
+
+  /**
+   * Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}
+   */
+  @Test
+  void testOnOpen13() {
+    // Arrange
+    WebSocketListener webSocketListener = mock(WebSocketListener.class);
+    doNothing().when(webSocketListener).onBinaryFrame(Mockito.<byte[]>any(), anyBoolean(), anyInt());
+    doNothing().when(webSocketListener).onOpen(Mockito.<WebSocket>any());
+
+    ArrayList<WebSocketListener> listeners = new ArrayList<>();
+    listeners.add(webSocketListener);
+    WebSocketUpgradeHandler webSocketUpgradeHandler = new WebSocketUpgradeHandler(listeners);
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.hasArray()).thenReturn(false);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+    when(buffer.getBytes(anyInt(), Mockito.<byte[]>any(), anyInt(), anyInt()))
+        .thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+    DuplicatedByteBuf duplicatedByteBuf = new DuplicatedByteBuf(buffer);
+    BinaryWebSocketFrame frame = mock(BinaryWebSocketFrame.class);
+    when(frame.rsv()).thenReturn(1);
+    when(frame.release()).thenReturn(true);
+    when(frame.isFinalFragment()).thenReturn(true);
+    when(frame.content()).thenReturn(duplicatedByteBuf);
+    when(frame.retain()).thenReturn(new BinaryWebSocketFrame());
+    Channel channel = mock(Channel.class);
+
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+    webSocket.bufferFrame(frame);
+
+    // Act
+    webSocketUpgradeHandler.onOpen(webSocket);
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).getBytes(eq(1), isA(byte[].class), eq(0), eq(0));
+    verify(buffer).hasArray();
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    verify(frame).content();
+    verify(frame).release();
+    verify(frame).retain();
+    verify(frame, atLeast(1)).isFinalFragment();
+    verify(frame).rsv();
+    verify(webSocketListener).onBinaryFrame(isA(byte[].class), eq(true), eq(1));
+    verify(webSocketListener).onOpen(isA(WebSocket.class));
     assertTrue(webSocket.isReady());
   }
 }

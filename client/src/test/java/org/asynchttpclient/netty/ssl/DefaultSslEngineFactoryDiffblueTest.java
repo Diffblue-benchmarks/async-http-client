@@ -1,5 +1,6 @@
 package org.asynchttpclient.netty.ssl;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -9,32 +10,21 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.handler.ssl.JdkSslClientContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLParameters;
 import org.asynchttpclient.AsyncHttpClientConfig;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class DefaultSslEngineFactoryDiffblueTest {
   /**
-   * Test {@link DefaultSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}.
-   * <ul>
-   *   <li>Given {@code true}.</li>
-   *   <li>Then return PeerHost is {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link DefaultSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}
+   * Method under test:
+   * {@link DefaultSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}
    */
   @Test
-  @DisplayName("Test newSslEngine(AsyncHttpClientConfig, String, int); given 'true'; then return PeerHost is 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"SSLEngine DefaultSslEngineFactory.newSslEngine(AsyncHttpClientConfig, String, int)"})
-  void testNewSslEngine_givenTrue_thenReturnPeerHostIsNull() throws SSLException {
+  void testNewSslEngine() throws SSLException {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getSslContext()).thenReturn(new JdkSslClientContext());
@@ -62,26 +52,23 @@ class DefaultSslEngineFactoryDiffblueTest {
     assertNull(actualNewSslEngineResult.getHandshakeSession());
     assertEquals(-1, actualNewSslEngineResult.getPeerPort());
     assertEquals(0, sSLParameters.getApplicationProtocols().length);
-    assertEquals(11, sSLParameters.getCipherSuites().length);
-    assertEquals(4, sSLParameters.getProtocols().length);
     assertFalse(sSLParameters.getNeedClientAuth());
     assertFalse(sSLParameters.getWantClientAuth());
     assertTrue(sSLParameters.getUseCipherSuitesOrder());
+    assertArrayEquals(new String[]{"TLSv1.3", "TLSv1.2", "TLSv1.1", "TLSv1"}, sSLParameters.getProtocols());
+    assertArrayEquals(new String[]{"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA", "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_RSA_WITH_AES_128_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA", "TLS_AES_128_GCM_SHA256",
+        "TLS_AES_256_GCM_SHA384"}, sSLParameters.getCipherSuites());
   }
 
   /**
-   * Test {@link DefaultSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}.
-   * <ul>
-   *   <li>Then return SSLParameters EndpointIdentificationAlgorithm is {@code HTTPS}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link DefaultSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}
+   * Method under test:
+   * {@link DefaultSslEngineFactory#newSslEngine(AsyncHttpClientConfig, String, int)}
    */
   @Test
-  @DisplayName("Test newSslEngine(AsyncHttpClientConfig, String, int); then return SSLParameters EndpointIdentificationAlgorithm is 'HTTPS'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"SSLEngine DefaultSslEngineFactory.newSslEngine(AsyncHttpClientConfig, String, int)"})
-  void testNewSslEngine_thenReturnSSLParametersEndpointIdentificationAlgorithmIsHttps() throws SSLException {
+  void testNewSslEngine2() throws SSLException {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getSslContext()).thenReturn(new JdkSslClientContext());
@@ -108,23 +95,23 @@ class DefaultSslEngineFactoryDiffblueTest {
     assertNull(actualNewSslEngineResult.getHandshakeApplicationProtocolSelector());
     assertNull(actualNewSslEngineResult.getHandshakeSession());
     assertEquals(0, sSLParameters.getApplicationProtocols().length);
-    assertEquals(11, sSLParameters.getCipherSuites().length);
-    assertEquals(4, sSLParameters.getProtocols().length);
     assertEquals(8080, actualNewSslEngineResult.getPeerPort());
     assertFalse(sSLParameters.getNeedClientAuth());
     assertFalse(sSLParameters.getWantClientAuth());
     assertTrue(sSLParameters.getUseCipherSuitesOrder());
+    assertArrayEquals(new String[]{"TLSv1.3", "TLSv1.2", "TLSv1.1", "TLSv1"}, sSLParameters.getProtocols());
+    assertArrayEquals(new String[]{"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA", "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_RSA_WITH_AES_128_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA", "TLS_AES_128_GCM_SHA256",
+        "TLS_AES_256_GCM_SHA384"}, sSLParameters.getCipherSuites());
   }
 
   /**
-   * Test {@link DefaultSslEngineFactory#init(AsyncHttpClientConfig)}.
-   * <p>
-   * Method under test: {@link DefaultSslEngineFactory#init(AsyncHttpClientConfig)}
+   * Method under test:
+   * {@link DefaultSslEngineFactory#init(AsyncHttpClientConfig)}
    */
   @Test
-  @DisplayName("Test init(AsyncHttpClientConfig)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void DefaultSslEngineFactory.init(AsyncHttpClientConfig)"})
   void testInit() throws SSLException {
     // Arrange
     DefaultSslEngineFactory defaultSslEngineFactory = new DefaultSslEngineFactory();
@@ -139,18 +126,10 @@ class DefaultSslEngineFactoryDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultSslEngineFactory#destroy()}.
-   * <ul>
-   *   <li>Then calls {@link AsyncHttpClientConfig#getSslContext()}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link DefaultSslEngineFactory#destroy()}
    */
   @Test
-  @DisplayName("Test destroy(); then calls getSslContext()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void DefaultSslEngineFactory.destroy()"})
-  void testDestroy_thenCallsGetSslContext() throws SSLException {
+  void testDestroy() throws SSLException {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getSslContext()).thenReturn(new JdkSslClientContext());
@@ -161,19 +140,15 @@ class DefaultSslEngineFactoryDiffblueTest {
     // Act
     defaultSslEngineFactory.destroy();
 
-    // Assert
+    // Assert that nothing has changed
     verify(config, atLeast(1)).getSslContext();
   }
 
   /**
-   * Test {@link DefaultSslEngineFactory#configureSslContextBuilder(SslContextBuilder)}.
-   * <p>
-   * Method under test: {@link DefaultSslEngineFactory#configureSslContextBuilder(SslContextBuilder)}
+   * Method under test:
+   * {@link DefaultSslEngineFactory#configureSslContextBuilder(SslContextBuilder)}
    */
   @Test
-  @DisplayName("Test configureSslContextBuilder(SslContextBuilder)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"SslContextBuilder DefaultSslEngineFactory.configureSslContextBuilder(SslContextBuilder)"})
   void testConfigureSslContextBuilder() {
     // Arrange
     DefaultSslEngineFactory defaultSslEngineFactory = new DefaultSslEngineFactory();
@@ -181,5 +156,28 @@ class DefaultSslEngineFactoryDiffblueTest {
 
     // Act and Assert
     assertSame(builder, defaultSslEngineFactory.configureSslContextBuilder(builder));
+  }
+
+  /**
+   * Method under test:
+   * {@link DefaultSslEngineFactory#configureSslContextBuilder(SslContextBuilder)}
+   */
+  @Test
+  void testConfigureSslContextBuilder2() throws SSLException {
+    // Arrange
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.getSslContext()).thenReturn(new JdkSslClientContext());
+
+    DefaultSslEngineFactory defaultSslEngineFactory = new DefaultSslEngineFactory();
+    defaultSslEngineFactory.init(config);
+    SslContextBuilder builder = SslContextBuilder.forClient();
+
+    // Act
+    SslContextBuilder actualConfigureSslContextBuilderResult = defaultSslEngineFactory
+        .configureSslContextBuilder(builder);
+
+    // Assert
+    verify(config, atLeast(1)).getSslContext();
+    assertSame(builder, actualConfigureSslContextBuilderResult);
   }
 }

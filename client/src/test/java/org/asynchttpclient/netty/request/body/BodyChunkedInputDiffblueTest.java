@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import io.netty.buffer.AdaptiveByteBufAllocator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -23,72 +23,26 @@ import org.asynchttpclient.request.body.multipart.MultipartBody;
 import org.asynchttpclient.request.body.multipart.Part;
 import org.asynchttpclient.request.body.multipart.part.ByteArrayMultipartPart;
 import org.asynchttpclient.request.body.multipart.part.MultipartPart;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class BodyChunkedInputDiffblueTest {
   /**
-   * Test {@link BodyChunkedInput#BodyChunkedInput(Body)}.
-   * <ul>
-   *   <li>Then return length is minus one.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyChunkedInput#BodyChunkedInput(Body)}
-   */
-  @Test
-  @DisplayName("Test new BodyChunkedInput(Body); then return length is minus one")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void BodyChunkedInput.<init>(Body)"})
-  void testNewBodyChunkedInput_thenReturnLengthIsMinusOne() {
-    // Arrange and Act
-    BodyChunkedInput actualBodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
-
-    // Assert
-    assertEquals(-1L, actualBodyChunkedInput.length());
-    assertEquals(0L, actualBodyChunkedInput.progress());
-    assertFalse(actualBodyChunkedInput.isEndOfInput());
-  }
-
-  /**
-   * Test {@link BodyChunkedInput#BodyChunkedInput(Body)}.
-   * <ul>
-   *   <li>Then return length is one hundred thirty-two.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyChunkedInput#BodyChunkedInput(Body)}
-   */
-  @Test
-  @DisplayName("Test new BodyChunkedInput(Body); then return length is one hundred thirty-two")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void BodyChunkedInput.<init>(Body)"})
-  void testNewBodyChunkedInput_thenReturnLengthIsOneHundredThirtyTwo() throws UnsupportedEncodingException {
-    // Arrange
-    ArrayList<MultipartPart<? extends Part>> parts = new ArrayList<>();
-    ByteArrayPart part = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
-
-    parts.add(new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8")));
-
-    // Act
-    BodyChunkedInput actualBodyChunkedInput = new BodyChunkedInput(
-        new MultipartBody(parts, "https://example.org/example", new byte[]{'A', -1, 'A', -1, 'A', -1, 'A', -1}));
-
-    // Assert
-    assertEquals(0L, actualBodyChunkedInput.progress());
-    assertEquals(132L, actualBodyChunkedInput.length());
-    assertFalse(actualBodyChunkedInput.isEndOfInput());
-  }
-
-  /**
-   * Test {@link BodyChunkedInput#readChunk(ByteBufAllocator)} with {@code alloc}.
-   * <p>
    * Method under test: {@link BodyChunkedInput#readChunk(ByteBufAllocator)}
    */
   @Test
-  @DisplayName("Test readChunk(ByteBufAllocator) with 'alloc'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ByteBuf BodyChunkedInput.readChunk(ByteBufAllocator)"})
-  void testReadChunkWithAlloc() throws Exception {
+  void testReadChunk() throws Exception {
+    // Arrange
+    BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
+
+    // Act and Assert
+    assertNull(bodyChunkedInput.readChunk(new AdaptiveByteBufAllocator()));
+  }
+
+  /**
+   * Method under test: {@link BodyChunkedInput#readChunk(ByteBufAllocator)}
+   */
+  @Test
+  void testReadChunk2() throws Exception {
     // Arrange
     ArrayList<MultipartPart<? extends Part>> parts = new ArrayList<>();
     parts.add(new ByteArrayMultipartPart(
@@ -106,37 +60,43 @@ class BodyChunkedInputDiffblueTest {
   }
 
   /**
-   * Test {@link BodyChunkedInput#readChunk(ByteBufAllocator)} with {@code alloc}.
-   * <ul>
-   *   <li>Given {@link PushBody#PushBody(Queue)} with queue is {@link LinkedList#LinkedList()}.</li>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyChunkedInput#readChunk(ByteBufAllocator)}
-   */
-  @Test
-  @DisplayName("Test readChunk(ByteBufAllocator) with 'alloc'; given PushBody(Queue) with queue is LinkedList(); then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ByteBuf BodyChunkedInput.readChunk(ByteBufAllocator)"})
-  void testReadChunkWithAlloc_givenPushBodyWithQueueIsLinkedList_thenReturnNull() throws Exception {
-    // Arrange
-    BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
-
-    // Act and Assert
-    assertNull(bodyChunkedInput.readChunk(new AdaptiveByteBufAllocator()));
-    assertEquals(0L, bodyChunkedInput.progress());
-  }
-
-  /**
-   * Test {@link BodyChunkedInput#readChunk(ChannelHandlerContext)} with {@code ctx}.
-   * <p>
    * Method under test: {@link BodyChunkedInput#readChunk(ChannelHandlerContext)}
    */
   @Test
-  @DisplayName("Test readChunk(ChannelHandlerContext) with 'ctx'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ByteBuf BodyChunkedInput.readChunk(ChannelHandlerContext)"})
-  void testReadChunkWithCtx() throws Exception {
+  void testReadChunk3() throws Exception {
+    // Arrange
+    BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
+    ChannelHandlerContext ctx = mock(ChannelHandlerContext.class);
+    when(ctx.alloc()).thenReturn(new AdaptiveByteBufAllocator());
+
+    // Act
+    ByteBuf actualReadChunkResult = bodyChunkedInput.readChunk(ctx);
+
+    // Assert
+    verify(ctx).alloc();
+    assertNull(actualReadChunkResult);
+  }
+
+  /**
+   * Method under test: {@link BodyChunkedInput#readChunk(ChannelHandlerContext)}
+   */
+  @Test
+  void testReadChunk4() throws Exception {
+    // Arrange
+    BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
+    ChannelHandlerContext ctx = mock(ChannelHandlerContext.class);
+    when(ctx.alloc()).thenThrow(new IllegalStateException("foo"));
+
+    // Act and Assert
+    assertThrows(IllegalStateException.class, () -> bodyChunkedInput.readChunk(ctx));
+    verify(ctx).alloc();
+  }
+
+  /**
+   * Method under test: {@link BodyChunkedInput#readChunk(ChannelHandlerContext)}
+   */
+  @Test
+  void testReadChunk5() throws Exception {
     // Arrange
     ArrayList<MultipartPart<? extends Part>> parts = new ArrayList<>();
     parts.add(new ByteArrayMultipartPart(
@@ -157,59 +117,33 @@ class BodyChunkedInputDiffblueTest {
   }
 
   /**
-   * Test {@link BodyChunkedInput#readChunk(ChannelHandlerContext)} with {@code ctx}.
-   * <ul>
-   *   <li>Given {@link PushBody#PushBody(Queue)} with queue is {@link LinkedList#LinkedList()}.</li>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyChunkedInput#readChunk(ChannelHandlerContext)}
+   * Method under test: {@link BodyChunkedInput#close()}
    */
   @Test
-  @DisplayName("Test readChunk(ChannelHandlerContext) with 'ctx'; given PushBody(Queue) with queue is LinkedList(); then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ByteBuf BodyChunkedInput.readChunk(ChannelHandlerContext)"})
-  void testReadChunkWithCtx_givenPushBodyWithQueueIsLinkedList_thenReturnNull() throws Exception {
+  void testClose() throws Exception {
     // Arrange
-    BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
-    ChannelHandlerContext ctx = mock(ChannelHandlerContext.class);
-    when(ctx.alloc()).thenReturn(new AdaptiveByteBufAllocator());
+    MultipartBody body = mock(MultipartBody.class);
+    when(body.getContentLength()).thenReturn(3L);
+    doNothing().when(body).close();
 
     // Act
-    ByteBuf actualReadChunkResult = bodyChunkedInput.readChunk(ctx);
+    (new BodyChunkedInput(body)).close();
 
     // Assert
-    verify(ctx).alloc();
-    assertNull(actualReadChunkResult);
-    assertEquals(0L, bodyChunkedInput.progress());
+    verify(body).close();
+    verify(body).getContentLength();
   }
 
   /**
-   * Test {@link BodyChunkedInput#readChunk(ChannelHandlerContext)} with {@code ctx}.
-   * <ul>
-   *   <li>Then throw {@link IllegalStateException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyChunkedInput#readChunk(ChannelHandlerContext)}
+   * Method under test: {@link BodyChunkedInput#length()}
    */
   @Test
-  @DisplayName("Test readChunk(ChannelHandlerContext) with 'ctx'; then throw IllegalStateException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"ByteBuf BodyChunkedInput.readChunk(ChannelHandlerContext)"})
-  void testReadChunkWithCtx_thenThrowIllegalStateException() throws Exception {
-    // Arrange
-    BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
-    ChannelHandlerContext ctx = mock(ChannelHandlerContext.class);
-    when(ctx.alloc()).thenThrow(new IllegalStateException("foo"));
-
-    // Act and Assert
-    assertThrows(IllegalStateException.class, () -> bodyChunkedInput.readChunk(ctx));
-    verify(ctx).alloc();
+  void testLength() {
+    // Arrange, Act and Assert
+    assertEquals(-1L, (new BodyChunkedInput(new PushBody(new LinkedList<>()))).length());
   }
 
   /**
-   * Test getters and setters.
-   * <p>
    * Methods under test:
    * <ul>
    *   <li>{@link BodyChunkedInput#isEndOfInput()}
@@ -217,9 +151,6 @@ class BodyChunkedInputDiffblueTest {
    * </ul>
    */
   @Test
-  @DisplayName("Test getters and setters")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean BodyChunkedInput.isEndOfInput()", "long BodyChunkedInput.progress()"})
   void testGettersAndSetters() {
     // Arrange
     BodyChunkedInput bodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
@@ -233,16 +164,37 @@ class BodyChunkedInputDiffblueTest {
   }
 
   /**
-   * Test {@link BodyChunkedInput#length()}.
-   * <p>
-   * Method under test: {@link BodyChunkedInput#length()}
+   * Method under test: {@link BodyChunkedInput#BodyChunkedInput(Body)}
    */
   @Test
-  @DisplayName("Test length()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"long BodyChunkedInput.length()"})
-  void testLength() {
-    // Arrange, Act and Assert
-    assertEquals(-1L, (new BodyChunkedInput(new PushBody(new LinkedList<>()))).length());
+  void testNewBodyChunkedInput() {
+    // Arrange and Act
+    BodyChunkedInput actualBodyChunkedInput = new BodyChunkedInput(new PushBody(new LinkedList<>()));
+
+    // Assert
+    assertEquals(-1L, actualBodyChunkedInput.length());
+    assertEquals(0L, actualBodyChunkedInput.progress());
+    assertFalse(actualBodyChunkedInput.isEndOfInput());
+  }
+
+  /**
+   * Method under test: {@link BodyChunkedInput#BodyChunkedInput(Body)}
+   */
+  @Test
+  void testNewBodyChunkedInput2() throws UnsupportedEncodingException {
+    // Arrange
+    ArrayList<MultipartPart<? extends Part>> parts = new ArrayList<>();
+    ByteArrayPart part = new ByteArrayPart("https://example.org/example", "AXAXAXAX".getBytes("UTF-8"));
+
+    parts.add(new ByteArrayMultipartPart(part, "AXAXAXAX".getBytes("UTF-8")));
+
+    // Act
+    BodyChunkedInput actualBodyChunkedInput = new BodyChunkedInput(
+        new MultipartBody(parts, "https://example.org/example", new byte[]{'A', -1, 'A', -1, 'A', -1, 'A', -1}));
+
+    // Assert
+    assertEquals(0L, actualBodyChunkedInput.progress());
+    assertEquals(132L, actualBodyChunkedInput.length());
+    assertFalse(actualBodyChunkedInput.isEndOfInput());
   }
 }

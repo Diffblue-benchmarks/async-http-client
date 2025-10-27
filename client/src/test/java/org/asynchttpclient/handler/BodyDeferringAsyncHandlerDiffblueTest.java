@@ -3,15 +3,24 @@ package org.asynchttpclient.handler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import com.diffblue.cover.annotations.MethodsUnderTest;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import io.netty.buffer.AdaptiveByteBufAllocator;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DuplicatedByteBuf;
 import io.netty.buffer.EmptyByteBuf;
+import io.netty.buffer.ReadOnlyByteBuf;
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,129 +30,122 @@ import java.io.OutputStream;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import org.asynchttpclient.AsyncHandler;
-import org.asynchttpclient.AsyncHandler.State;
 import org.asynchttpclient.HttpResponseBodyPart;
 import org.asynchttpclient.Response;
 import org.asynchttpclient.exception.ChannelClosedException;
-import org.asynchttpclient.handler.BodyDeferringAsyncHandler.BodyDeferringInputStream;
 import org.asynchttpclient.netty.EagerResponseBodyPart;
 import org.asynchttpclient.netty.NettyResponseStatus;
 import org.asynchttpclient.uri.Uri;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class BodyDeferringAsyncHandlerDiffblueTest {
   /**
-   * Test BodyDeferringInputStream {@link BodyDeferringInputStream#BodyDeferringInputStream(Future, BodyDeferringAsyncHandler, InputStream)}.
-   * <p>
-   * Method under test: {@link BodyDeferringInputStream#BodyDeferringInputStream(Future, BodyDeferringAsyncHandler, InputStream)}
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler.BodyDeferringInputStream#BodyDeferringInputStream(Future, BodyDeferringAsyncHandler, InputStream)}
    */
   @Test
-  @DisplayName("Test BodyDeferringInputStream new BodyDeferringInputStream(Future, BodyDeferringAsyncHandler, InputStream)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void BodyDeferringInputStream.<init>(Future, BodyDeferringAsyncHandler, InputStream)"})
   void testBodyDeferringInputStreamNewBodyDeferringInputStream() throws IOException {
     // Arrange
     CompletableFuture<Response> future = new CompletableFuture<>();
     BodyDeferringAsyncHandler bdah = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
 
     // Act and Assert
-    assertEquals(8, (new BodyDeferringInputStream(future, bdah, new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"))))
-        .read(new byte[8]));
+    assertEquals(8, (new BodyDeferringAsyncHandler.BodyDeferringInputStream(future, bdah,
+        new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8")))).read(new byte[8]));
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#BodyDeferringAsyncHandler(OutputStream)}.
-   * <p>
-   * Method under test: {@link BodyDeferringAsyncHandler#BodyDeferringAsyncHandler(OutputStream)}
+   * Method under test: {@link BodyDeferringAsyncHandler#onThrowable(Throwable)}
    */
   @Test
-  @DisplayName("Test new BodyDeferringAsyncHandler(OutputStream)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void BodyDeferringAsyncHandler.<init>(OutputStream)"})
-  void testNewBodyDeferringAsyncHandler() {
-    // Arrange and Act
-    BodyDeferringAsyncHandler actualBodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(
-        new ByteArrayOutputStream(1));
+  void testOnThrowable() throws IOException {
+    // Arrange
+    BodyDeferringAsyncHandlerTest.CountingOutputStream os = mock(
+        BodyDeferringAsyncHandlerTest.CountingOutputStream.class);
+    doNothing().when(os).close();
+    doNothing().when(os).flush();
+
+    // Act
+    (new BodyDeferringAsyncHandler(os)).onThrowable(ChannelClosedException.INSTANCE);
 
     // Assert
-    assertEquals(State.CONTINUE, actualBodyDeferringAsyncHandler.onHeadersReceived(null));
-    assertEquals(State.CONTINUE, actualBodyDeferringAsyncHandler.onStatusReceived(null));
-    assertEquals(State.CONTINUE, actualBodyDeferringAsyncHandler.onTrailingHeadersReceived(null));
+    verify(os).close();
+    verify(os).flush();
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onStatusReceived(HttpResponseStatus)}.
-   * <ul>
-   *   <li>Then return {@code CONTINUE}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyDeferringAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onStatusReceived(org.asynchttpclient.HttpResponseStatus)}
    */
   @Test
-  @DisplayName("Test onStatusReceived(HttpResponseStatus); then return 'CONTINUE'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({
-      "AsyncHandler.State BodyDeferringAsyncHandler.onStatusReceived(org.asynchttpclient.HttpResponseStatus)"})
-  void testOnStatusReceived_thenReturnContinue() {
+  void testOnStatusReceived() {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
+    Uri uri = mock(Uri.class);
     HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
 
-    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version,
+        io.netty.handler.codec.http.HttpResponseStatus.valueOf(1));
 
     // Act and Assert
-    assertEquals(State.CONTINUE,
+    assertEquals(AsyncHandler.State.CONTINUE,
         bodyDeferringAsyncHandler.onStatusReceived(new NettyResponseStatus(uri, response, new EmbeddedChannel())));
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onHeadersReceived(HttpHeaders)}.
-   * <p>
-   * Method under test: {@link BodyDeferringAsyncHandler#onHeadersReceived(HttpHeaders)}
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onHeadersReceived(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test onHeadersReceived(HttpHeaders)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"AsyncHandler.State BodyDeferringAsyncHandler.onHeadersReceived(HttpHeaders)"})
   void testOnHeadersReceived() {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
 
     // Act and Assert
-    assertEquals(State.CONTINUE, bodyDeferringAsyncHandler.onHeadersReceived(new DefaultHttpHeaders()));
+    assertEquals(AsyncHandler.State.CONTINUE, bodyDeferringAsyncHandler.onHeadersReceived(new DefaultHttpHeaders()));
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}.
-   * <p>
-   * Method under test: {@link BodyDeferringAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onHeadersReceived(HttpHeaders)}
    */
   @Test
-  @DisplayName("Test onTrailingHeadersReceived(HttpHeaders)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"AsyncHandler.State BodyDeferringAsyncHandler.onTrailingHeadersReceived(HttpHeaders)"})
+  void testOnHeadersReceived2() {
+    // Arrange, Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE,
+        (new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1))).onHeadersReceived(mock(EmptyHttpHeaders.class)));
+  }
+
+  /**
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
+   */
+  @Test
   void testOnTrailingHeadersReceived() {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
 
     // Act and Assert
-    assertEquals(State.CONTINUE, bodyDeferringAsyncHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
+    assertEquals(AsyncHandler.State.CONTINUE,
+        bodyDeferringAsyncHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onRetry()}.
-   * <p>
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onTrailingHeadersReceived(HttpHeaders)}
+   */
+  @Test
+  void testOnTrailingHeadersReceived2() {
+    // Arrange, Act and Assert
+    assertEquals(AsyncHandler.State.CONTINUE, (new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1)))
+        .onTrailingHeadersReceived(mock(EmptyHttpHeaders.class)));
+  }
+
+  /**
    * Method under test: {@link BodyDeferringAsyncHandler#onRetry()}
    */
   @Test
-  @DisplayName("Test onRetry()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void BodyDeferringAsyncHandler.onRetry()"})
   void testOnRetry() {
     // Arrange, Act and Assert
     assertThrows(UnsupportedOperationException.class,
@@ -151,57 +153,81 @@ class BodyDeferringAsyncHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}.
-   * <ul>
-   *   <li>Given {@link ByteArrayOutputStream#ByteArrayOutputStream(int)} with one.</li>
-   *   <li>Then return {@code CONTINUE}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link BodyDeferringAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
    */
   @Test
-  @DisplayName("Test onBodyPartReceived(HttpResponseBodyPart); given ByteArrayOutputStream(int) with one; then return 'CONTINUE'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"AsyncHandler.State BodyDeferringAsyncHandler.onBodyPartReceived(HttpResponseBodyPart)"})
-  void testOnBodyPartReceived_givenByteArrayOutputStreamWithOne_thenReturnContinue() throws Exception {
+  void testOnBodyPartReceived() throws Exception {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
 
     // Act and Assert
-    assertEquals(State.CONTINUE, bodyDeferringAsyncHandler.onBodyPartReceived(
+    assertEquals(AsyncHandler.State.CONTINUE, bodyDeferringAsyncHandler.onBodyPartReceived(
         new EagerResponseBodyPart(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())), true)));
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onCompleted()}.
-   * <ul>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#onBodyPartReceived(HttpResponseBodyPart)}
+   */
+  @Test
+  void testOnBodyPartReceived2() throws Exception {
+    // Arrange
+    BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
+    ByteBuf buffer = mock(ByteBuf.class);
+    when(buffer.capacity()).thenReturn(3);
+    when(buffer.maxCapacity()).thenReturn(3);
+    when(buffer.readerIndex()).thenReturn(1);
+    when(buffer.writerIndex()).thenReturn(1);
+    when(buffer.getBytes(anyInt(), Mockito.<byte[]>any(), anyInt(), anyInt()))
+        .thenReturn(new DuplicatedByteBuf(new EmptyByteBuf(new AdaptiveByteBufAllocator())));
+
+    // Act
+    AsyncHandler.State actualOnBodyPartReceivedResult = bodyDeferringAsyncHandler.onBodyPartReceived(
+        new EagerResponseBodyPart(new DuplicatedByteBuf(new ReadOnlyByteBuf(new DuplicatedByteBuf(buffer))), true));
+
+    // Assert
+    verify(buffer, atLeast(1)).capacity();
+    verify(buffer).getBytes(eq(1), isA(byte[].class), eq(0), eq(0));
+    verify(buffer).maxCapacity();
+    verify(buffer).readerIndex();
+    verify(buffer).writerIndex();
+    assertEquals(AsyncHandler.State.CONTINUE, actualOnBodyPartReceivedResult);
+  }
+
+  /**
+   * Method under test: {@link BodyDeferringAsyncHandler#closeOut()}
+   */
+  @Test
+  void testCloseOut() throws IOException {
+    // Arrange
+    BodyDeferringAsyncHandlerTest.CountingOutputStream os = mock(
+        BodyDeferringAsyncHandlerTest.CountingOutputStream.class);
+    doNothing().when(os).close();
+    doNothing().when(os).flush();
+
+    // Act
+    (new BodyDeferringAsyncHandler(os)).closeOut();
+
+    // Assert
+    verify(os).close();
+    verify(os).flush();
+  }
+
+  /**
    * Method under test: {@link BodyDeferringAsyncHandler#onCompleted()}
    */
   @Test
-  @DisplayName("Test onCompleted(); then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response BodyDeferringAsyncHandler.onCompleted()"})
-  void testOnCompleted_thenReturnNull() throws IOException {
+  void testOnCompleted() throws IOException {
     // Arrange, Act and Assert
     assertNull((new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1))).onCompleted());
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#onCompleted()}.
-   * <ul>
-   *   <li>Then throw {@link IOException}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link BodyDeferringAsyncHandler#onCompleted()}
    */
   @Test
-  @DisplayName("Test onCompleted(); then throw IOException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response BodyDeferringAsyncHandler.onCompleted()"})
-  void testOnCompleted_thenThrowIOException() throws IOException {
+  void testOnCompleted2() throws IOException {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
     bodyDeferringAsyncHandler.onThrowable(ChannelClosedException.INSTANCE);
@@ -211,18 +237,10 @@ class BodyDeferringAsyncHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#getResponse()}.
-   * <ul>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link BodyDeferringAsyncHandler#getResponse()}
    */
   @Test
-  @DisplayName("Test getResponse(); then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response BodyDeferringAsyncHandler.getResponse()"})
-  void testGetResponse_thenReturnNull() throws IOException, InterruptedException {
+  void testGetResponse() throws IOException, InterruptedException {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
     bodyDeferringAsyncHandler.onThrowable(null);
@@ -232,23 +250,31 @@ class BodyDeferringAsyncHandlerDiffblueTest {
   }
 
   /**
-   * Test {@link BodyDeferringAsyncHandler#getResponse()}.
-   * <ul>
-   *   <li>Then throw {@link IOException}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link BodyDeferringAsyncHandler#getResponse()}
    */
   @Test
-  @DisplayName("Test getResponse(); then throw IOException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response BodyDeferringAsyncHandler.getResponse()"})
-  void testGetResponse_thenThrowIOException() throws IOException, InterruptedException {
+  void testGetResponse2() throws IOException, InterruptedException {
     // Arrange
     BodyDeferringAsyncHandler bodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(new ByteArrayOutputStream(1));
     bodyDeferringAsyncHandler.onThrowable(ChannelClosedException.INSTANCE);
 
     // Act and Assert
     assertThrows(IOException.class, () -> bodyDeferringAsyncHandler.getResponse());
+  }
+
+  /**
+   * Method under test:
+   * {@link BodyDeferringAsyncHandler#BodyDeferringAsyncHandler(OutputStream)}
+   */
+  @Test
+  void testNewBodyDeferringAsyncHandler() {
+    // Arrange and Act
+    BodyDeferringAsyncHandler actualBodyDeferringAsyncHandler = new BodyDeferringAsyncHandler(
+        new ByteArrayOutputStream(1));
+
+    // Assert
+    assertEquals(AsyncHandler.State.CONTINUE, actualBodyDeferringAsyncHandler.onHeadersReceived(null));
+    assertEquals(AsyncHandler.State.CONTINUE, actualBodyDeferringAsyncHandler.onStatusReceived(null));
+    assertEquals(AsyncHandler.State.CONTINUE, actualBodyDeferringAsyncHandler.onTrailingHeadersReceived(null));
   }
 }

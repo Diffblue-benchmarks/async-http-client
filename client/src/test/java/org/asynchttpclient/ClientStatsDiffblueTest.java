@@ -3,37 +3,164 @@ package org.asynchttpclient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
+import static org.mockito.Mockito.mock;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+import java.util.function.BiFunction;
 import org.junit.jupiter.api.Test;
 
 class ClientStatsDiffblueTest {
   /**
-   * Test {@link ClientStats#ClientStats(Map)}.
-   * <p>
-   * Method under test: {@link ClientStats#ClientStats(Map)}
+   * Method under test: {@link ClientStats#getTotalConnectionCount()}
    */
   @Test
-  @DisplayName("Test new ClientStats(Map)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void ClientStats.<init>(Map)"})
-  void testNewClientStats() {
-    // Arrange and Act
-    ClientStats actualClientStats = new ClientStats(new HashMap<>());
-
-    // Assert
-    assertEquals(0L, actualClientStats.getTotalActiveConnectionCount());
-    assertEquals(0L, actualClientStats.getTotalConnectionCount());
-    assertEquals(0L, actualClientStats.getTotalIdleConnectionCount());
-    assertTrue(actualClientStats.getStatsPerHost().isEmpty());
+  void testGetTotalConnectionCount() {
+    // Arrange, Act and Assert
+    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalConnectionCount());
   }
 
   /**
-   * Test getters and setters.
-   * <p>
+   * Method under test: {@link ClientStats#getTotalConnectionCount()}
+   */
+  @Test
+  void testGetTotalConnectionCount2() {
+    // Arrange
+    HashMap<String, HostStats> statsPerHost = new HashMap<>();
+    statsPerHost.computeIfPresent("foo", mock(BiFunction.class));
+
+    // Act and Assert
+    assertEquals(0L, (new ClientStats(statsPerHost)).getTotalConnectionCount());
+  }
+
+  /**
+   * Method under test: {@link ClientStats#getTotalActiveConnectionCount()}
+   */
+  @Test
+  void testGetTotalActiveConnectionCount() {
+    // Arrange, Act and Assert
+    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalActiveConnectionCount());
+  }
+
+  /**
+   * Method under test: {@link ClientStats#getTotalActiveConnectionCount()}
+   */
+  @Test
+  void testGetTotalActiveConnectionCount2() {
+    // Arrange
+    HashMap<String, HostStats> statsPerHost = new HashMap<>();
+    statsPerHost.computeIfPresent("foo", mock(BiFunction.class));
+
+    // Act and Assert
+    assertEquals(0L, (new ClientStats(statsPerHost)).getTotalActiveConnectionCount());
+  }
+
+  /**
+   * Method under test: {@link ClientStats#getTotalIdleConnectionCount()}
+   */
+  @Test
+  void testGetTotalIdleConnectionCount() {
+    // Arrange, Act and Assert
+    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalIdleConnectionCount());
+  }
+
+  /**
+   * Method under test: {@link ClientStats#getTotalIdleConnectionCount()}
+   */
+  @Test
+  void testGetTotalIdleConnectionCount2() {
+    // Arrange
+    HashMap<String, HostStats> statsPerHost = new HashMap<>();
+    statsPerHost.computeIfPresent("foo", mock(BiFunction.class));
+
+    // Act and Assert
+    assertEquals(0L, (new ClientStats(statsPerHost)).getTotalIdleConnectionCount());
+  }
+
+  /**
+   * Methods under test:
+   * <ul>
+   *   <li>{@link ClientStats#equals(Object)}
+   *   <li>{@link ClientStats#hashCode()}
+   * </ul>
+   */
+  @Test
+  void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual() {
+    // Arrange
+    ClientStats clientStats = new ClientStats(new HashMap<>());
+    ClientStats clientStats2 = new ClientStats(new HashMap<>());
+
+    // Act and Assert
+    assertEquals(clientStats, clientStats2);
+    int expectedHashCodeResult = clientStats.hashCode();
+    assertEquals(expectedHashCodeResult, clientStats2.hashCode());
+  }
+
+  /**
+   * Methods under test:
+   * <ul>
+   *   <li>{@link ClientStats#equals(Object)}
+   *   <li>{@link ClientStats#hashCode()}
+   * </ul>
+   */
+  @Test
+  void testEqualsAndHashCode_whenOtherIsSame_thenReturnEqual() {
+    // Arrange
+    ClientStats clientStats = new ClientStats(new HashMap<>());
+
+    // Act and Assert
+    assertEquals(clientStats, clientStats);
+    int expectedHashCodeResult = clientStats.hashCode();
+    assertEquals(expectedHashCodeResult, clientStats.hashCode());
+  }
+
+  /**
+   * Method under test: {@link ClientStats#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual() {
+    // Arrange
+    HashMap<String, HostStats> statsPerHost = new HashMap<>();
+    statsPerHost.put("foo", new HostStats(3L, 1L));
+    ClientStats clientStats = new ClientStats(statsPerHost);
+
+    // Act and Assert
+    assertNotEquals(clientStats, new ClientStats(new HashMap<>()));
+  }
+
+  /**
+   * Method under test: {@link ClientStats#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual2() {
+    // Arrange
+    HashMap<String, HostStats> statsPerHost = new HashMap<>();
+    statsPerHost.computeIfPresent("foo", mock(BiFunction.class));
+    statsPerHost.put("foo", new HostStats(3L, 1L));
+    ClientStats clientStats = new ClientStats(statsPerHost);
+
+    // Act and Assert
+    assertNotEquals(clientStats, new ClientStats(new HashMap<>()));
+  }
+
+  /**
+   * Method under test: {@link ClientStats#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsNull_thenReturnNotEqual() {
+    // Arrange, Act and Assert
+    assertNotEquals(new ClientStats(new HashMap<>()), null);
+  }
+
+  /**
+   * Method under test: {@link ClientStats#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsWrongType_thenReturnNotEqual() {
+    // Arrange, Act and Assert
+    assertNotEquals(new ClientStats(new HashMap<>()), "Different type to ClientStats");
+  }
+
+  /**
    * Methods under test:
    * <ul>
    *   <li>{@link ClientStats#toString()}
@@ -41,9 +168,6 @@ class ClientStatsDiffblueTest {
    * </ul>
    */
   @Test
-  @DisplayName("Test getters and setters")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Map ClientStats.getStatsPerHost()", "String ClientStats.toString()"})
   void testGettersAndSetters() {
     // Arrange
     ClientStats clientStats = new ClientStats(new HashMap<>());
@@ -57,167 +181,36 @@ class ClientStatsDiffblueTest {
   }
 
   /**
-   * Test {@link ClientStats#getTotalConnectionCount()}.
-   * <ul>
-   *   <li>Then return zero.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ClientStats#getTotalConnectionCount()}
+   * Method under test: {@link ClientStats#ClientStats(Map)}
    */
   @Test
-  @DisplayName("Test getTotalConnectionCount(); then return zero")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"long ClientStats.getTotalConnectionCount()"})
-  void testGetTotalConnectionCount_thenReturnZero() {
-    // Arrange, Act and Assert
-    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalConnectionCount());
+  void testNewClientStats() {
+    // Arrange and Act
+    ClientStats actualClientStats = new ClientStats(new HashMap<>());
+
+    // Assert
+    assertEquals(0L, actualClientStats.getTotalActiveConnectionCount());
+    assertEquals(0L, actualClientStats.getTotalConnectionCount());
+    assertEquals(0L, actualClientStats.getTotalIdleConnectionCount());
+    assertTrue(actualClientStats.getStatsPerHost().isEmpty());
   }
 
   /**
-   * Test {@link ClientStats#getTotalActiveConnectionCount()}.
-   * <ul>
-   *   <li>Then return zero.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ClientStats#getTotalActiveConnectionCount()}
+   * Method under test: {@link ClientStats#ClientStats(Map)}
    */
   @Test
-  @DisplayName("Test getTotalActiveConnectionCount(); then return zero")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"long ClientStats.getTotalActiveConnectionCount()"})
-  void testGetTotalActiveConnectionCount_thenReturnZero() {
-    // Arrange, Act and Assert
-    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalActiveConnectionCount());
-  }
-
-  /**
-   * Test {@link ClientStats#getTotalIdleConnectionCount()}.
-   * <ul>
-   *   <li>Then return zero.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ClientStats#getTotalIdleConnectionCount()}
-   */
-  @Test
-  @DisplayName("Test getTotalIdleConnectionCount(); then return zero")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"long ClientStats.getTotalIdleConnectionCount()"})
-  void testGetTotalIdleConnectionCount_thenReturnZero() {
-    // Arrange, Act and Assert
-    assertEquals(0L, (new ClientStats(new HashMap<>())).getTotalIdleConnectionCount());
-  }
-
-  /**
-   * Test {@link ClientStats#equals(Object)}, and {@link ClientStats#hashCode()}.
-   * <ul>
-   *   <li>When other is equal.</li>
-   *   <li>Then return equal.</li>
-   * </ul>
-   * <p>
-   * Methods under test:
-   * <ul>
-   *   <li>{@link ClientStats#equals(Object)}
-   *   <li>{@link ClientStats#hashCode()}
-   * </ul>
-   */
-  @Test
-  @DisplayName("Test equals(Object), and hashCode(); when other is equal; then return equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
-  void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual() {
-    // Arrange
-    ClientStats clientStats = new ClientStats(new HashMap<>());
-    ClientStats clientStats2 = new ClientStats(new HashMap<>());
-
-    // Act and Assert
-    assertEquals(clientStats, clientStats2);
-    int expectedHashCodeResult = clientStats.hashCode();
-    assertEquals(expectedHashCodeResult, clientStats2.hashCode());
-  }
-
-  /**
-   * Test {@link ClientStats#equals(Object)}, and {@link ClientStats#hashCode()}.
-   * <ul>
-   *   <li>When other is same.</li>
-   *   <li>Then return equal.</li>
-   * </ul>
-   * <p>
-   * Methods under test:
-   * <ul>
-   *   <li>{@link ClientStats#equals(Object)}
-   *   <li>{@link ClientStats#hashCode()}
-   * </ul>
-   */
-  @Test
-  @DisplayName("Test equals(Object), and hashCode(); when other is same; then return equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
-  void testEqualsAndHashCode_whenOtherIsSame_thenReturnEqual() {
-    // Arrange
-    ClientStats clientStats = new ClientStats(new HashMap<>());
-
-    // Act and Assert
-    assertEquals(clientStats, clientStats);
-    int expectedHashCodeResult = clientStats.hashCode();
-    assertEquals(expectedHashCodeResult, clientStats.hashCode());
-  }
-
-  /**
-   * Test {@link ClientStats#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ClientStats#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual() {
+  void testNewClientStats2() {
     // Arrange
     HashMap<String, HostStats> statsPerHost = new HashMap<>();
-    statsPerHost.put("foo", new HostStats(3L, 1L));
-    ClientStats clientStats = new ClientStats(statsPerHost);
+    statsPerHost.computeIfPresent("foo", mock(BiFunction.class));
 
-    // Act and Assert
-    assertNotEquals(clientStats, new ClientStats(new HashMap<>()));
-  }
+    // Act
+    ClientStats actualClientStats = new ClientStats(statsPerHost);
 
-  /**
-   * Test {@link ClientStats#equals(Object)}.
-   * <ul>
-   *   <li>When other is {@code null}.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ClientStats#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is 'null'; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
-  void testEquals_whenOtherIsNull_thenReturnNotEqual() {
-    // Arrange, Act and Assert
-    assertNotEquals(new ClientStats(new HashMap<>()), null);
-  }
-
-  /**
-   * Test {@link ClientStats#equals(Object)}.
-   * <ul>
-   *   <li>When other is wrong type.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link ClientStats#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is wrong type; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean ClientStats.equals(Object)", "int ClientStats.hashCode()"})
-  void testEquals_whenOtherIsWrongType_thenReturnNotEqual() {
-    // Arrange, Act and Assert
-    assertNotEquals(new ClientStats(new HashMap<>()), "Different type to ClientStats");
+    // Assert
+    assertEquals(0L, actualClientStats.getTotalActiveConnectionCount());
+    assertEquals(0L, actualClientStats.getTotalConnectionCount());
+    assertEquals(0L, actualClientStats.getTotalIdleConnectionCount());
+    assertTrue(actualClientStats.getStatsPerHost().isEmpty());
   }
 }

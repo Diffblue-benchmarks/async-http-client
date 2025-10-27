@@ -2,54 +2,30 @@ package org.asynchttpclient.netty.future;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.io.IOException;
 import org.asynchttpclient.exception.ChannelClosedException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class StackTraceInspectorDiffblueTest {
   /**
-   * Test {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}.
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
+   * Method under test:
+   * {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
    */
   @Test
-  @DisplayName("Test recoverOnNettyDisconnectException(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnNettyDisconnectException(Throwable)"})
   void testRecoverOnNettyDisconnectException() {
     // Arrange, Act and Assert
     assertFalse(StackTraceInspector.recoverOnNettyDisconnectException(
         new Throwable("io.netty.handler.ssl.SslHandler", ChannelClosedException.INSTANCE)));
-  }
-
-  /**
-   * Test {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}.
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
-   */
-  @Test
-  @DisplayName("Test recoverOnNettyDisconnectException(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnNettyDisconnectException(Throwable)"})
-  void testRecoverOnNettyDisconnectException2() {
-    // Arrange, Act and Assert
     assertFalse(StackTraceInspector.recoverOnNettyDisconnectException(new Throwable("io.netty.handler.ssl.SslHandler",
         new Throwable("io.netty.handler.ssl.SslHandler", ChannelClosedException.INSTANCE))));
   }
 
   /**
-   * Test {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}.
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
+   * Method under test:
+   * {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
    */
   @Test
-  @DisplayName("Test recoverOnNettyDisconnectException(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnNettyDisconnectException(Throwable)"})
-  void testRecoverOnNettyDisconnectException3() {
+  void testRecoverOnNettyDisconnectException2() {
     // Arrange
     Throwable t = new Throwable("io.netty.handler.ssl.SslHandler", ChannelClosedException.INSTANCE);
     t.setStackTrace(new StackTraceElement[]{new StackTraceElement("io.netty.handler.ssl.SslHandler",
@@ -60,15 +36,11 @@ class StackTraceInspectorDiffblueTest {
   }
 
   /**
-   * Test {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}.
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
+   * Method under test:
+   * {@link StackTraceInspector#recoverOnNettyDisconnectException(Throwable)}
    */
   @Test
-  @DisplayName("Test recoverOnNettyDisconnectException(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnNettyDisconnectException(Throwable)"})
-  void testRecoverOnNettyDisconnectException4() {
+  void testRecoverOnNettyDisconnectException3() {
     // Arrange
     Throwable t = new Throwable("io.netty.handler.ssl.SslHandler", ChannelClosedException.INSTANCE);
     t.setStackTrace(new StackTraceElement[]{new StackTraceElement("io.netty.handler.ssl.SslHandler", "disconnect",
@@ -79,15 +51,21 @@ class StackTraceInspectorDiffblueTest {
   }
 
   /**
-   * Test {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}.
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}
+   * Method under test:
+   * {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}
    */
   @Test
-  @DisplayName("Test recoverOnReadOrWriteException(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnReadOrWriteException(Throwable)"})
   void testRecoverOnReadOrWriteException() {
+    // Arrange, Act and Assert
+    assertTrue(StackTraceInspector.recoverOnReadOrWriteException(new IOException("Connection reset by peer")));
+  }
+
+  /**
+   * Method under test:
+   * {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}
+   */
+  @Test
+  void testRecoverOnReadOrWriteException2() {
     // Arrange
     Throwable t = new Throwable("Connection reset by peer", ChannelClosedException.INSTANCE);
     t.setStackTrace(new StackTraceElement[]{
@@ -98,15 +76,11 @@ class StackTraceInspectorDiffblueTest {
   }
 
   /**
-   * Test {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}.
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}
+   * Method under test:
+   * {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}
    */
   @Test
-  @DisplayName("Test recoverOnReadOrWriteException(Throwable)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnReadOrWriteException(Throwable)"})
-  void testRecoverOnReadOrWriteException2() {
+  void testRecoverOnReadOrWriteException3() {
     // Arrange
     Throwable t = new Throwable("Connection reset by peer", ChannelClosedException.INSTANCE);
     t.setStackTrace(new StackTraceElement[]{
@@ -114,22 +88,5 @@ class StackTraceInspectorDiffblueTest {
 
     // Act and Assert
     assertTrue(StackTraceInspector.recoverOnReadOrWriteException(t));
-  }
-
-  /**
-   * Test {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}.
-   * <ul>
-   *   <li>When {@link IOException#IOException(String)} with {@code Connection reset by peer}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link StackTraceInspector#recoverOnReadOrWriteException(Throwable)}
-   */
-  @Test
-  @DisplayName("Test recoverOnReadOrWriteException(Throwable); when IOException(String) with 'Connection reset by peer'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean StackTraceInspector.recoverOnReadOrWriteException(Throwable)"})
-  void testRecoverOnReadOrWriteException_whenIOExceptionWithConnectionResetByPeer() {
-    // Arrange, Act and Assert
-    assertTrue(StackTraceInspector.recoverOnReadOrWriteException(new IOException("Connection reset by peer")));
   }
 }

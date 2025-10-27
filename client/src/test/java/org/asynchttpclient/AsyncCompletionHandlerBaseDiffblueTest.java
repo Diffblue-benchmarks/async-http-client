@@ -2,52 +2,53 @@ package org.asynchttpclient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import com.diffblue.cover.annotations.MethodsUnderTest;
-import org.asynchttpclient.AsyncHandler.State;
-import org.asynchttpclient.Response.ResponseBuilder;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.mock;
+import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
+import java.util.ArrayList;
+import org.asynchttpclient.netty.NettyResponse;
+import org.asynchttpclient.netty.NettyResponseStatus;
+import org.asynchttpclient.uri.Uri;
 import org.junit.jupiter.api.Test;
 
 class AsyncCompletionHandlerBaseDiffblueTest {
   /**
-   * Test {@link AsyncCompletionHandlerBase#onCompleted(Response)} with {@code Response}.
-   * <ul>
-   *   <li>When {@link ResponseBuilder} (default constructor) build.</li>
-   *   <li>Then return {@code null}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link AsyncCompletionHandlerBase#onCompleted(Response)}
+   * Method under test: default or parameterless constructor of
+   * {@link AsyncCompletionHandlerBase}
    */
   @Test
-  @DisplayName("Test onCompleted(Response) with 'Response'; when ResponseBuilder (default constructor) build; then return 'null'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Response AsyncCompletionHandlerBase.onCompleted(Response)"})
-  void testOnCompletedWithResponse_whenResponseBuilderBuild_thenReturnNull() throws Exception {
-    // Arrange
-    AsyncCompletionHandlerBase asyncCompletionHandlerBase = new AsyncCompletionHandlerBase();
-    Response response = (new ResponseBuilder()).build();
-
-    // Act and Assert
-    assertNull(asyncCompletionHandlerBase.onCompleted(response));
-  }
-
-  /**
-   * Test new {@link AsyncCompletionHandlerBase} (default constructor).
-   * <p>
-   * Method under test: default or parameterless constructor of {@link AsyncCompletionHandlerBase}
-   */
-  @Test
-  @DisplayName("Test new AsyncCompletionHandlerBase (default constructor)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void AsyncCompletionHandlerBase.<init>()"})
   void testNewAsyncCompletionHandlerBase() throws Exception {
     // Arrange and Act
     AsyncCompletionHandlerBase actualAsyncCompletionHandlerBase = new AsyncCompletionHandlerBase();
 
     // Assert
     assertNull(actualAsyncCompletionHandlerBase.onCompleted());
-    assertEquals(State.CONTINUE, actualAsyncCompletionHandlerBase.onContentWritten());
-    assertEquals(State.CONTINUE, actualAsyncCompletionHandlerBase.onHeadersWritten());
+    assertEquals(AsyncHandler.State.CONTINUE, actualAsyncCompletionHandlerBase.onContentWritten());
+    assertEquals(AsyncHandler.State.CONTINUE, actualAsyncCompletionHandlerBase.onHeadersWritten());
+  }
+
+  /**
+   * Method under test: {@link AsyncCompletionHandlerBase#onCompleted(Response)}
+   */
+  @Test
+  void testOnCompleted() throws Exception {
+    // Arrange
+    AsyncCompletionHandlerBase asyncCompletionHandlerBase = new AsyncCompletionHandlerBase();
+    Uri uri = mock(Uri.class);
+    HttpVersion version = new HttpVersion("https://example.org/example", 1, 1, true);
+
+    DefaultFullHttpResponse response = new DefaultFullHttpResponse(version, HttpResponseStatus.valueOf(1));
+
+    NettyResponseStatus status = new NettyResponseStatus(uri, response, new EmbeddedChannel());
+
+    DefaultHttpHeaders headers = new DefaultHttpHeaders();
+    NettyResponse response2 = new NettyResponse(status, headers, new ArrayList<>());
+
+    // Act and Assert
+    assertSame(response2, asyncCompletionHandlerBase.onCompleted(response2));
   }
 }

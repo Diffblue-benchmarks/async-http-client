@@ -6,135 +6,204 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import com.diffblue.cover.annotations.MethodsUnderTest;
 import java.net.URISyntaxException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class UriDiffblueTest {
   /**
-   * Test {@link Uri#Uri(String, String, String, int, String, String, String)}.
-   * <ul>
-   *   <li>When {@code https://example.org/example}.</li>
-   *   <li>Then return Scheme is {@code https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#Uri(String, String, String, int, String, String, String)}
+   * Method under test: {@link Uri#create(String)}
    */
   @Test
-  @DisplayName("Test new Uri(String, String, String, int, String, String, String); when 'https://example.org/example'; then return Scheme is 'https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.<init>(String, String, String, int, String, String, String)"})
-  void testNewUri_whenHttpsExampleOrgExample_thenReturnSchemeIsHttpsExampleOrgExample() throws URISyntaxException {
+  void testCreate() throws URISyntaxException {
     // Arrange and Act
-    Uri actualUri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-        8080, "https://example.org/example", "https://example.org/example", "https://example.org/example");
+    Uri actualCreateResult = Uri.create("https://example.org/example");
 
     // Assert
-    assertEquals("https://example.org/example", actualUri.getScheme());
-    assertEquals("https://example.org/example://https://example.org/example:8080", actualUri.getBaseUrl());
-    assertEquals("https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-        + "/example.org/example?https://example.org/example", actualUri.toJavaNetURI().toString());
-    assertEquals(80, actualUri.getSchemeDefaultPort());
-    assertFalse(actualUri.isSecured());
-    assertFalse(actualUri.isWebSocket());
+    assertEquals("/example", actualCreateResult.getNonEmptyPath());
+    assertEquals("/example", actualCreateResult.getPath());
+    assertEquals("example.org", actualCreateResult.getHost());
+    assertEquals("example.org:443", actualCreateResult.getAuthority());
+    assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertNull(actualCreateResult.getUserInfo());
+    assertEquals(-1, actualCreateResult.getPort());
+    assertEquals(443, actualCreateResult.getExplicitPort());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isWebSocket());
+    assertTrue(actualCreateResult.isSecured());
+    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
   }
 
   /**
-   * Test {@link Uri#Uri(String, String, String, int, String, String, String)}.
-   * <ul>
-   *   <li>When {@link Uri#HTTPS}.</li>
-   *   <li>Then return BaseUrl is {@code https://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#Uri(String, String, String, int, String, String, String)}
+   * Method under test: {@link Uri#create(String)}
    */
   @Test
-  @DisplayName("Test new Uri(String, String, String, int, String, String, String); when HTTPS; then return BaseUrl is 'https://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.<init>(String, String, String, int, String, String, String)"})
-  void testNewUri_whenHttps_thenReturnBaseUrlIsHttpsHttpsExampleOrgExample8080() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualUri = new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Assert
-    assertEquals("https://https://example.org/example:8080", actualUri.getBaseUrl());
-    assertEquals("https://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
-        + "://example.org/example", actualUri.toJavaNetURI().toString());
-    assertEquals(443, actualUri.getSchemeDefaultPort());
-    assertFalse(actualUri.isWebSocket());
-    assertTrue(actualUri.isSecured());
-    assertEquals(Uri.HTTPS, actualUri.getScheme());
+  void testCreate2() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("originalUrl"));
   }
 
   /**
-   * Test {@link Uri#Uri(String, String, String, int, String, String, String)}.
-   * <ul>
-   *   <li>When {@link Uri#WS}.</li>
-   *   <li>Then return BaseUrl is {@code ws://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#Uri(String, String, String, int, String, String, String)}
+   * Method under test: {@link Uri#create(String)}
    */
   @Test
-  @DisplayName("Test new Uri(String, String, String, int, String, String, String); when WS; then return BaseUrl is 'ws://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.<init>(String, String, String, int, String, String, String)"})
-  void testNewUri_whenWs_thenReturnBaseUrlIsWsHttpsExampleOrgExample8080() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualUri = new Uri(Uri.WS, "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Assert
-    assertEquals("ws://https://example.org/example:8080", actualUri.getBaseUrl());
-    assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/example?https:/"
-        + "/example.org/example", actualUri.toJavaNetURI().toString());
-    assertEquals(80, actualUri.getSchemeDefaultPort());
-    assertFalse(actualUri.isSecured());
-    assertTrue(actualUri.isWebSocket());
-    assertEquals(Uri.WS, actualUri.getScheme());
+  void testCreate3() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("url:"));
   }
 
   /**
-   * Test {@link Uri#Uri(String, String, String, int, String, String, String)}.
-   * <ul>
-   *   <li>When {@link Uri#WSS}.</li>
-   *   <li>Then return BaseUrl is {@code wss://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#Uri(String, String, String, int, String, String, String)}
+   * Method under test: {@link Uri#create(String)}
    */
   @Test
-  @DisplayName("Test new Uri(String, String, String, int, String, String, String); when WSS; then return BaseUrl is 'wss://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.<init>(String, String, String, int, String, String, String)"})
-  void testNewUri_whenWss_thenReturnBaseUrlIsWssHttpsExampleOrgExample8080() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualUri = new Uri(Uri.WSS, "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Assert
-    assertEquals("wss://https://example.org/example:8080", actualUri.getBaseUrl());
-    assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/example?https:"
-        + "//example.org/example", actualUri.toJavaNetURI().toString());
-    assertEquals(443, actualUri.getSchemeDefaultPort());
-    assertTrue(actualUri.isSecured());
-    assertTrue(actualUri.isWebSocket());
-    assertEquals(Uri.WSS, actualUri.getScheme());
+  void testCreate4() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("////"));
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <p>
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate5() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("//"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate6() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create(""));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate7() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualCreateResult = Uri.create("https://example.org/examplehttps://example.org/example");
+
+    // Assert
+    assertEquals("/examplehttps://example.org/example", actualCreateResult.getNonEmptyPath());
+    assertEquals("/examplehttps://example.org/example", actualCreateResult.getPath());
+    assertEquals("example.org", actualCreateResult.getHost());
+    assertEquals("example.org:443", actualCreateResult.getAuthority());
+    assertEquals("https://example.org/examplehttps://example.org/example",
+        actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertNull(actualCreateResult.getUserInfo());
+    assertEquals(-1, actualCreateResult.getPort());
+    assertEquals(443, actualCreateResult.getExplicitPort());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isWebSocket());
+    assertTrue(actualCreateResult.isSecured());
+    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate8() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualCreateResult = Uri.create("originalUrlhttps://example.org/example");
+
+    // Assert
+    assertEquals("/example", actualCreateResult.getNonEmptyPath());
+    assertEquals("/example", actualCreateResult.getPath());
+    assertEquals("example.org", actualCreateResult.getHost());
+    assertEquals("example.org:80", actualCreateResult.getAuthority());
+    assertEquals("originalurlhttps", actualCreateResult.getScheme());
+    assertEquals("originalurlhttps://example.org/example", actualCreateResult.toJavaNetURI().toString());
+    assertEquals("originalurlhttps://example.org:80", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertNull(actualCreateResult.getUserInfo());
+    assertEquals(-1, actualCreateResult.getPort());
+    assertEquals(80, actualCreateResult.getExplicitPort());
+    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isSecured());
+    assertFalse(actualCreateResult.isWebSocket());
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate9() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("originalUrlurl:"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate10() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("//https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate11() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("Original Urlhttps://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(String)}
+   */
+  @Test
+  void testCreate12() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create("42https://example.org/example"));
+  }
+
+  /**
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl() throws URISyntaxException {
+  void testCreate13() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualCreateResult = Uri.create(
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"),
+        "https://example.org/example");
+
+    // Assert
+    assertEquals("/example", actualCreateResult.getNonEmptyPath());
+    assertEquals("/example", actualCreateResult.getPath());
+    assertEquals("example.org", actualCreateResult.getHost());
+    assertEquals("example.org:443", actualCreateResult.getAuthority());
+    assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertNull(actualCreateResult.getUserInfo());
+    assertEquals(-1, actualCreateResult.getPort());
+    assertEquals(443, actualCreateResult.getExplicitPort());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isWebSocket());
+    assertTrue(actualCreateResult.isSecured());
+    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate14() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri.create(
         new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
@@ -148,42 +217,81 @@ class UriDiffblueTest {
     assertEquals("example.org:443", actualCreateResult.getAuthority());
     assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
     assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
     assertNull(actualCreateResult.getUserInfo());
     assertEquals(-1, actualCreateResult.getPort());
     assertEquals(443, actualCreateResult.getExplicitPort());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isWebSocket());
+    assertTrue(actualCreateResult.isSecured());
     assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl2() {
+  void testCreate15() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualCreateResult = Uri.create(null, "https://example.org/example");
+
+    // Assert
+    assertEquals("/example", actualCreateResult.getNonEmptyPath());
+    assertEquals("/example", actualCreateResult.getPath());
+    assertEquals("example.org", actualCreateResult.getHost());
+    assertEquals("example.org:443", actualCreateResult.getAuthority());
+    assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertNull(actualCreateResult.getUserInfo());
+    assertEquals(-1, actualCreateResult.getPort());
+    assertEquals(443, actualCreateResult.getExplicitPort());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isWebSocket());
+    assertTrue(actualCreateResult.isSecured());
+    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate16() throws URISyntaxException {
     // Arrange
     Uri context = Uri.create(
         new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
             "https://example.org/example", "https://example.org/example", "https://example.org/example"),
         "https://example.org/example");
 
-    // Act and Assert
-    assertEquals(context, Uri.create(context, "https://example.org/example"));
+    // Act
+    Uri actualCreateResult = Uri.create(context, "https://example.org/example");
+
+    // Assert
+    assertEquals("/example", context.getNonEmptyPath());
+    assertEquals("/example", context.getPath());
+    assertEquals("example.org", context.getHost());
+    assertEquals("example.org:443", context.getAuthority());
+    assertEquals("https://example.org/example", context.toJavaNetURI().toString());
+    assertEquals("https://example.org:443", context.getBaseUrl());
+    assertNull(context.getFragment());
+    assertNull(context.getQuery());
+    assertNull(context.getUserInfo());
+    assertEquals(-1, context.getPort());
+    assertEquals(443, context.getExplicitPort());
+    assertEquals(443, context.getSchemeDefaultPort());
+    assertFalse(context.isWebSocket());
+    assertTrue(context.isSecured());
+    assertEquals(context, actualCreateResult);
+    assertEquals(Uri.HTTPS, context.getScheme());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl3() throws URISyntaxException {
+  void testCreate17() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri.create(
         new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
@@ -191,24 +299,98 @@ class UriDiffblueTest {
         "originalUrl");
 
     // Assert
+    assertEquals("https://example.org/example", actualCreateResult.getHost());
     assertEquals("https://example.org/example", actualCreateResult.getScheme());
+    assertEquals("https://example.org/example", actualCreateResult.getUserInfo());
     assertEquals("https://example.org/example://https://example.org/example:8080", actualCreateResult.getBaseUrl());
     assertEquals("https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
         + "/example.org/originalUrl", actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org/example:8080", actualCreateResult.getAuthority());
     assertEquals("https://example.org/originalUrl", actualCreateResult.getNonEmptyPath());
     assertEquals("https://example.org/originalUrl", actualCreateResult.getPath());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
+    assertEquals(8080, actualCreateResult.getExplicitPort());
+    assertEquals(8080, actualCreateResult.getPort());
+    assertFalse(actualCreateResult.isSecured());
+    assertFalse(actualCreateResult.isWebSocket());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl4() throws URISyntaxException {
+  void testCreate18() {
+    // Arrange
+    Uri context = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+        8080, "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(context, Uri.create(context, "url:"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate19() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualCreateResult = Uri
+        .create(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"), "////");
+
+    // Assert
+    assertEquals("////", actualCreateResult.getNonEmptyPath());
+    assertEquals("////", actualCreateResult.getPath());
+    assertEquals("https://example.org/example", actualCreateResult.getHost());
+    assertEquals("https://example.org/example", actualCreateResult.getScheme());
+    assertEquals("https://example.org/example", actualCreateResult.getUserInfo());
+    assertEquals("https://example.org/example://https://example.org/example:8080", actualCreateResult.getBaseUrl());
+    assertEquals("https://example.org/example://https://example.org/example@https://example.org/example:8080////",
+        actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org/example:8080", actualCreateResult.getAuthority());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
+    assertEquals(8080, actualCreateResult.getExplicitPort());
+    assertEquals(8080, actualCreateResult.getPort());
+    assertFalse(actualCreateResult.isSecured());
+    assertFalse(actualCreateResult.isWebSocket());
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate20() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class,
+        () -> Uri
+            .create(
+                new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+                    8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
+                "//"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate21() {
+    // Arrange
+    Uri context = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+        8080, "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(context, Uri.create(context, ""));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate22() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri.create(new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example",
         8080, "", "https://example.org/example", "https://example.org/example"), "https://example.org/example");
@@ -220,22 +402,31 @@ class UriDiffblueTest {
     assertEquals("example.org:443", actualCreateResult.getAuthority());
     assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
     assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
     assertNull(actualCreateResult.getUserInfo());
     assertEquals(-1, actualCreateResult.getPort());
     assertEquals(443, actualCreateResult.getExplicitPort());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertFalse(actualCreateResult.isWebSocket());
+    assertTrue(actualCreateResult.isSecured());
     assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl5() throws URISyntaxException {
+  void testCreate23() {
+    // Arrange, Act and Assert
+    assertThrows(IllegalArgumentException.class, () -> Uri.create(null, "originalUrl"));
+  }
+
+  /**
+   * Method under test: {@link Uri#create(Uri, String)}
+   */
+  @Test
+  void testCreate24() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri.create(
         new Uri(Uri.WSS, "https://example.org/example", "https://example.org/example", 8080,
@@ -243,26 +434,29 @@ class UriDiffblueTest {
         "originalUrl");
 
     // Assert
+    assertEquals("https://example.org/example", actualCreateResult.getHost());
+    assertEquals("https://example.org/example", actualCreateResult.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualCreateResult.getAuthority());
+    assertEquals("https://example.org/originalUrl", actualCreateResult.getNonEmptyPath());
+    assertEquals("https://example.org/originalUrl", actualCreateResult.getPath());
     assertEquals("wss://https://example.org/example:8080", actualCreateResult.getBaseUrl());
     assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/originalUrl",
         actualCreateResult.toJavaNetURI().toString());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
+    assertEquals(8080, actualCreateResult.getExplicitPort());
+    assertEquals(8080, actualCreateResult.getPort());
+    assertTrue(actualCreateResult.isSecured());
     assertTrue(actualCreateResult.isWebSocket());
     assertEquals(Uri.WSS, actualCreateResult.getScheme());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>Then return BaseUrl is {@code ws://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; then return BaseUrl is 'ws://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_thenReturnBaseUrlIsWsHttpsExampleOrgExample8080() throws URISyntaxException {
+  void testCreate25() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri.create(
         new Uri(Uri.WS, "https://example.org/example", "https://example.org/example", 8080,
@@ -270,86 +464,59 @@ class UriDiffblueTest {
         "originalUrl");
 
     // Assert
+    assertEquals("https://example.org/example", actualCreateResult.getHost());
+    assertEquals("https://example.org/example", actualCreateResult.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualCreateResult.getAuthority());
+    assertEquals("https://example.org/originalUrl", actualCreateResult.getNonEmptyPath());
+    assertEquals("https://example.org/originalUrl", actualCreateResult.getPath());
     assertEquals("ws://https://example.org/example:8080", actualCreateResult.getBaseUrl());
     assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/originalUrl",
         actualCreateResult.toJavaNetURI().toString());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
+    assertEquals(8080, actualCreateResult.getExplicitPort());
+    assertEquals(8080, actualCreateResult.getPort());
+    assertFalse(actualCreateResult.isSecured());
     assertTrue(actualCreateResult.isWebSocket());
     assertEquals(Uri.WS, actualCreateResult.getScheme());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>Then return NonEmptyPath is {@code /example}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; then return NonEmptyPath is '/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_thenReturnNonEmptyPathIsExample() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualCreateResult = Uri.create(
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"),
-        "https://example.org/example");
-
-    // Assert
-    assertEquals("/example", actualCreateResult.getNonEmptyPath());
-    assertEquals("/example", actualCreateResult.getPath());
-    assertEquals("example.org", actualCreateResult.getHost());
-    assertEquals("example.org:443", actualCreateResult.getAuthority());
-    assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
-    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
-    assertNull(actualCreateResult.getUserInfo());
-    assertEquals(-1, actualCreateResult.getPort());
-    assertEquals(443, actualCreateResult.getExplicitPort());
-    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>Then return NonEmptyPath is {@code originalUrl}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
-   */
-  @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; then return NonEmptyPath is 'originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_thenReturnNonEmptyPathIsOriginalUrl() throws URISyntaxException {
+  void testCreate26() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri
         .create(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
             8080, "originalUrl", "https://example.org/example", "https://example.org/example"), "originalUrl");
 
     // Assert
+    assertEquals("https://example.org/example", actualCreateResult.getHost());
     assertEquals("https://example.org/example", actualCreateResult.getScheme());
+    assertEquals("https://example.org/example", actualCreateResult.getUserInfo());
     assertEquals("https://example.org/example://https://example.org/example:8080", actualCreateResult.getBaseUrl());
     assertEquals(
         "https://example.org/example://https://example.org/example@https://example.org/example" + ":8080originalUrl",
         actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org/example:8080", actualCreateResult.getAuthority());
     assertEquals("originalUrl", actualCreateResult.getNonEmptyPath());
     assertEquals("originalUrl", actualCreateResult.getPath());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
+    assertEquals(8080, actualCreateResult.getExplicitPort());
+    assertEquals(8080, actualCreateResult.getPort());
+    assertFalse(actualCreateResult.isSecured());
+    assertFalse(actualCreateResult.isWebSocket());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>Then return NonEmptyPath is {@code /../originalUrl}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link Uri#create(Uri, String)}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; then return NonEmptyPath is '/../originalUrl'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_thenReturnNonEmptyPathIsOriginalUrl2() throws URISyntaxException {
+  void testCreate27() throws URISyntaxException {
     // Arrange and Act
     Uri actualCreateResult = Uri.create(new Uri("https://example.org/example", "https://example.org/example",
         "https://example.org/example", 8080, "/../", "https://example.org/example", "https://example.org/example"),
@@ -358,395 +525,736 @@ class UriDiffblueTest {
     // Assert
     assertEquals("/../originalUrl", actualCreateResult.getNonEmptyPath());
     assertEquals("/../originalUrl", actualCreateResult.getPath());
+    assertEquals("https://example.org/example", actualCreateResult.getHost());
     assertEquals("https://example.org/example", actualCreateResult.getScheme());
+    assertEquals("https://example.org/example", actualCreateResult.getUserInfo());
     assertEquals("https://example.org/example://https://example.org/example:8080", actualCreateResult.getBaseUrl());
     assertEquals("https://example.org/example://https://example.org/example@https://example.org/example:8080/.."
         + "/originalUrl", actualCreateResult.toJavaNetURI().toString());
+    assertEquals("https://example.org/example:8080", actualCreateResult.getAuthority());
+    assertNull(actualCreateResult.getFragment());
+    assertNull(actualCreateResult.getQuery());
+    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
+    assertEquals(8080, actualCreateResult.getExplicitPort());
+    assertEquals(8080, actualCreateResult.getPort());
+    assertFalse(actualCreateResult.isSecured());
+    assertFalse(actualCreateResult.isWebSocket());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>Then return NonEmptyPath is {@code ////}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
+   * Method under test: {@link Uri#toJavaNetURI()}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; then return NonEmptyPath is '////'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_thenReturnNonEmptyPathIsSlashSlashSlashSlash() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualCreateResult = Uri
-        .create(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"), "////");
-
-    // Assert
-    assertEquals("////", actualCreateResult.getNonEmptyPath());
-    assertEquals("////", actualCreateResult.getPath());
-    assertEquals("https://example.org/example", actualCreateResult.getScheme());
-    assertEquals("https://example.org/example://https://example.org/example:8080", actualCreateResult.getBaseUrl());
-    assertEquals("https://example.org/example://https://example.org/example@https://example.org/example:8080////",
-        actualCreateResult.toJavaNetURI().toString());
-  }
-
-  /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>When empty string.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
-   */
-  @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; when empty string")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_whenEmptyString() {
-    // Arrange
-    Uri context = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-        8080, "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertEquals(context, Uri.create(context, ""));
-  }
-
-  /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code null}.</li>
-   *   <li>Then return NonEmptyPath is {@code /example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
-   */
-  @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; when 'null'; then return NonEmptyPath is '/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_whenNull_thenReturnNonEmptyPathIsExample() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualCreateResult = Uri.create(null, "https://example.org/example");
-
-    // Assert
-    assertEquals("/example", actualCreateResult.getNonEmptyPath());
-    assertEquals("/example", actualCreateResult.getPath());
-    assertEquals("example.org", actualCreateResult.getHost());
-    assertEquals("example.org:443", actualCreateResult.getAuthority());
-    assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
-    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
-    assertNull(actualCreateResult.getUserInfo());
-    assertEquals(-1, actualCreateResult.getPort());
-    assertEquals(443, actualCreateResult.getExplicitPort());
-    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code null}.</li>
-   *   <li>Then throw {@link IllegalArgumentException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
-   */
-  @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; when 'null'; then throw IllegalArgumentException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_whenNull_thenThrowIllegalArgumentException() {
+  void testToJavaNetURI() throws URISyntaxException {
     // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create(null, "originalUrl"));
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toJavaNetURI()
+                .toString());
+    assertEquals(
+        "https://example.org/example://https://example.org/example:8080https://example.org/example?https:/"
+            + "/example.org/example",
+        (new Uri("https://example.org/example", null, "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toJavaNetURI()
+                .toString());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/examplehttps://example"
+            + ".org/example?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toJavaNetURI()
+                .toString());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080?https:/"
+            + "/example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            null, "https://example.org/example", "https://example.org/example")).toJavaNetURI().toString());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", null, "https://example.org/example")).toJavaNetURI().toString());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code //}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
+   * Method under test: {@link Uri#getExplicitPort()}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; when '//'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_whenSlashSlash() {
+  void testGetExplicitPort() {
     // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> Uri
+    assertEquals(8080,
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getExplicitPort());
+    assertEquals(80,
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getExplicitPort());
+    assertEquals(
+        443, Uri
             .create(
                 new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
                     8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
-                "//"));
+                "https://example.org/example")
+            .getExplicitPort());
   }
 
   /**
-   * Test {@link Uri#create(Uri, String)} with {@code context}, {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code url:}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(Uri, String)}
+   * Method under test: {@link Uri#getSchemeDefaultPort()}
    */
   @Test
-  @DisplayName("Test create(Uri, String) with 'context', 'originalUrl'; when 'url:'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(Uri, String)"})
-  void testCreateWithContextOriginalUrl_whenUrl() {
+  void testGetSchemeDefaultPort() {
+    // Arrange, Act and Assert
+    assertEquals(80,
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getSchemeDefaultPort());
+    assertEquals(443,
+        (new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getSchemeDefaultPort());
+  }
+
+  /**
+   * Method under test: {@link Uri#toUrl()}
+   */
+  @Test
+  void testToUrl() {
+    // Arrange, Act and Assert
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example:8080https://example.org/example?https:/"
+            + "/example.org/example",
+        (new Uri("https://example.org/example", null, "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/examplehttps://example"
+            + ".org/example?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080?https:/"
+            + "/example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            null, "https://example.org/example", "https://example.org/example")).toUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", null, "https://example.org/example")).toUrl());
+  }
+
+  /**
+   * Method under test: {@link Uri#toBaseUrl()}
+   */
+  @Test
+  void testToBaseUrl() {
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example://https://example.org/example:8080https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
+    assertEquals("https://https://example.org/example:8080https://example.org/example",
+        (new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
+    assertEquals("https://example.org/example://https://example.org/examplehttps://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
+    assertEquals("https://example.org/example://https://example.org/examplehttps://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 80,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
+    assertEquals("https://example.org/example://https://example.org/example:8080",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080, "",
+            "https://example.org/example", "https://example.org/example")).toBaseUrl());
+  }
+
+  /**
+   * Method under test: {@link Uri#toRelativeUrl()}
+   */
+  @Test
+  void testToRelativeUrl() {
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .toRelativeUrl());
+    assertEquals("/?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            null, "https://example.org/example", "https://example.org/example")).toRelativeUrl());
+    assertEquals("/?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080, "",
+            "https://example.org/example", "https://example.org/example")).toRelativeUrl());
+    assertEquals("https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", null, "https://example.org/example")).toRelativeUrl());
+  }
+
+  /**
+   * Method under test: {@link Uri#toFullUrl()}
+   */
+  @Test
+  void testToFullUrl() {
+    // Arrange, Act and Assert
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example#https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toFullUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example:8080https://example.org/example?https:/"
+            + "/example.org/example#https://example.org/example",
+        (new Uri("https://example.org/example", null, "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toFullUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/examplehttps://example"
+            + ".org/example?https://example.org/example#https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toFullUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080?https:/"
+            + "/example.org/example#https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            null, "https://example.org/example", "https://example.org/example")).toFullUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example#https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", null, "https://example.org/example")).toFullUrl());
+    assertEquals(
+        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+            + "/example.org/example?https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", null)).toFullUrl());
+  }
+
+  /**
+   * Method under test: {@link Uri#getBaseUrl()}
+   */
+  @Test
+  void testGetBaseUrl() {
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example://https://example.org/example:8080",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).getBaseUrl());
+    assertEquals("https://example.org/example://https://example.org/example:80",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example")).getBaseUrl());
+    assertEquals(
+        "https://example.org:443", Uri
+            .create(
+                new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+                    8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
+                "https://example.org/example")
+            .getBaseUrl());
+  }
+
+  /**
+   * Method under test: {@link Uri#getAuthority()}
+   */
+  @Test
+  void testGetAuthority() {
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example:8080",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getAuthority());
+    assertEquals("https://example.org/example:80",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getAuthority());
+    assertEquals(
+        "example.org:443", Uri
+            .create(
+                new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+                    8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
+                "https://example.org/example")
+            .getAuthority());
+  }
+
+  /**
+   * Method under test: {@link Uri#isSameBase(Uri)}
+   */
+  @Test
+  void testIsSameBase() {
     // Arrange
-    Uri context = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertTrue(uri
+        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+  }
+
+  /**
+   * Method under test: {@link Uri#isSameBase(Uri)}
+   */
+  @Test
+  void testIsSameBase2() {
+    // Arrange
+    Uri uri = new Uri("Scheme", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertFalse(uri
+        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+  }
+
+  /**
+   * Method under test: {@link Uri#isSameBase(Uri)}
+   */
+  @Test
+  void testIsSameBase3() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "localhost", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertFalse(uri
+        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+  }
+
+  /**
+   * Method under test: {@link Uri#isSameBase(Uri)}
+   */
+  @Test
+  void testIsSameBase4() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 1,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertFalse(uri
+        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+  }
+
+  /**
+   * Method under test: {@link Uri#isSameBase(Uri)}
+   */
+  @Test
+  void testIsSameBase5() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertFalse(uri
+        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+  }
+
+  /**
+   * Method under test: {@link Uri#getNonEmptyPath()}
+   */
+  @Test
+  void testGetNonEmptyPath() {
+    // Arrange, Act and Assert
+    assertEquals("https://example.org/example",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
+                .getNonEmptyPath());
+    assertEquals("/",
+        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080, "",
+            "https://example.org/example", "https://example.org/example")).getNonEmptyPath());
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewScheme(String)}
+   */
+  @Test
+  void testWithNewScheme() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(uri, uri.withNewScheme("https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewScheme(String)}
+   */
+  @Test
+  void testWithNewScheme2() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualWithNewSchemeResult = (new Uri("https://example.org/example", "https://example.org/example",
+        "https://example.org/example", 8080, "https://example.org/example", "https://example.org/example",
+        "https://example.org/example")).withNewScheme(Uri.HTTPS);
+
+    // Assert
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getFragment());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getHost());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getPath());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getQuery());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualWithNewSchemeResult.getAuthority());
+    assertEquals("https://https://example.org/example:8080", actualWithNewSchemeResult.getBaseUrl());
+    assertEquals("https://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
+        + "://example.org/example", actualWithNewSchemeResult.toJavaNetURI().toString());
+    assertEquals(443, actualWithNewSchemeResult.getSchemeDefaultPort());
+    assertEquals(8080, actualWithNewSchemeResult.getExplicitPort());
+    assertEquals(8080, actualWithNewSchemeResult.getPort());
+    assertFalse(actualWithNewSchemeResult.isWebSocket());
+    assertTrue(actualWithNewSchemeResult.isSecured());
+    assertEquals(Uri.HTTPS, actualWithNewSchemeResult.getScheme());
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewScheme(String)}
+   */
+  @Test
+  void testWithNewScheme3() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualWithNewSchemeResult = (new Uri("https://example.org/example", "https://example.org/example",
+        "https://example.org/example", 8080, "https://example.org/example", "https://example.org/example",
+        "https://example.org/example")).withNewScheme(Uri.WSS);
+
+    // Assert
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getFragment());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getHost());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getPath());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getQuery());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualWithNewSchemeResult.getAuthority());
+    assertEquals("wss://https://example.org/example:8080", actualWithNewSchemeResult.getBaseUrl());
+    assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/example?https:"
+        + "//example.org/example", actualWithNewSchemeResult.toJavaNetURI().toString());
+    assertEquals(443, actualWithNewSchemeResult.getSchemeDefaultPort());
+    assertEquals(8080, actualWithNewSchemeResult.getExplicitPort());
+    assertEquals(8080, actualWithNewSchemeResult.getPort());
+    assertTrue(actualWithNewSchemeResult.isSecured());
+    assertTrue(actualWithNewSchemeResult.isWebSocket());
+    assertEquals(Uri.WSS, actualWithNewSchemeResult.getScheme());
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewScheme(String)}
+   */
+  @Test
+  void testWithNewScheme4() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualWithNewSchemeResult = (new Uri("https://example.org/example", "https://example.org/example",
+        "https://example.org/example", 8080, "https://example.org/example", "https://example.org/example",
+        "https://example.org/example")).withNewScheme(Uri.WS);
+
+    // Assert
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getFragment());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getHost());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getPath());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getQuery());
+    assertEquals("https://example.org/example", actualWithNewSchemeResult.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualWithNewSchemeResult.getAuthority());
+    assertEquals("ws://https://example.org/example:8080", actualWithNewSchemeResult.getBaseUrl());
+    assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/example?https:/"
+        + "/example.org/example", actualWithNewSchemeResult.toJavaNetURI().toString());
+    assertEquals(80, actualWithNewSchemeResult.getSchemeDefaultPort());
+    assertEquals(8080, actualWithNewSchemeResult.getExplicitPort());
+    assertEquals(8080, actualWithNewSchemeResult.getPort());
+    assertFalse(actualWithNewSchemeResult.isSecured());
+    assertTrue(actualWithNewSchemeResult.isWebSocket());
+    assertEquals(Uri.WS, actualWithNewSchemeResult.getScheme());
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewQuery(String)}
+   */
+  @Test
+  void testWithNewQuery() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewQuery(String)}
+   */
+  @Test
+  void testWithNewQuery2() {
+    // Arrange
+    Uri uri = new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewQuery(String)}
+   */
+  @Test
+  void testWithNewQuery3() {
+    // Arrange
+    Uri uri = new Uri(Uri.WSS, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#withNewQuery(String)}
+   */
+  @Test
+  void testWithNewQuery4() {
+    // Arrange
+    Uri uri = new Uri(Uri.WS, "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
+  }
+
+  /**
+   * Methods under test:
+   * <ul>
+   *   <li>{@link Uri#equals(Object)}
+   *   <li>{@link Uri#hashCode()}
+   * </ul>
+   */
+  @Test
+  void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+    Uri uri2 = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
         8080, "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
     // Act and Assert
-    assertEquals(context, Uri.create(context, "url:"));
+    assertEquals(uri, uri2);
+    int expectedHashCodeResult = uri.hashCode();
+    assertEquals(expectedHashCodeResult, uri2.hashCode());
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
+   * Methods under test:
    * <ul>
-   *   <li>Then return Authority is {@code example.org:80}.</li>
+   *   <li>{@link Uri#equals(Object)}
+   *   <li>{@link Uri#hashCode()}
    * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; then return Authority is 'example.org:80'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_thenReturnAuthorityIsExampleOrg80() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualCreateResult = Uri.create("originalUrlhttps://example.org/example");
+  void testEqualsAndHashCode_whenOtherIsSame_thenReturnEqual() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    // Assert
-    assertEquals("example.org:80", actualCreateResult.getAuthority());
-    assertEquals("originalurlhttps", actualCreateResult.getScheme());
-    assertEquals("originalurlhttps://example.org/example", actualCreateResult.toJavaNetURI().toString());
-    assertEquals("originalurlhttps://example.org:80", actualCreateResult.getBaseUrl());
-    assertEquals(80, actualCreateResult.getExplicitPort());
-    assertEquals(80, actualCreateResult.getSchemeDefaultPort());
-    assertFalse(actualCreateResult.isSecured());
+    // Act and Assert
+    assertEquals(uri, uri);
+    int expectedHashCodeResult = uri.hashCode();
+    assertEquals(expectedHashCodeResult, uri.hashCode());
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>Then return NonEmptyPath is {@code /example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#validateSupportedScheme(Uri)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; then return NonEmptyPath is '/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_thenReturnNonEmptyPathIsExample() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualCreateResult = Uri.create("https://example.org/example");
-
-    // Assert
-    assertEquals("/example", actualCreateResult.getNonEmptyPath());
-    assertEquals("/example", actualCreateResult.getPath());
-    assertEquals("example.org:443", actualCreateResult.getAuthority());
-    assertEquals("https://example.org/example", actualCreateResult.toJavaNetURI().toString());
-    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
-    assertEquals(443, actualCreateResult.getExplicitPort());
-    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
-    assertTrue(actualCreateResult.isSecured());
-    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>Then return NonEmptyPath is {@code /examplehttps://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
-   */
-  @Test
-  @DisplayName("Test create(String) with 'originalUrl'; then return NonEmptyPath is '/examplehttps://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_thenReturnNonEmptyPathIsExamplehttpsExampleOrgExample() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualCreateResult = Uri.create("https://example.org/examplehttps://example.org/example");
-
-    // Assert
-    assertEquals("/examplehttps://example.org/example", actualCreateResult.getNonEmptyPath());
-    assertEquals("/examplehttps://example.org/example", actualCreateResult.getPath());
-    assertEquals("example.org:443", actualCreateResult.getAuthority());
-    assertEquals("https://example.org/examplehttps://example.org/example",
-        actualCreateResult.toJavaNetURI().toString());
-    assertEquals("https://example.org:443", actualCreateResult.getBaseUrl());
-    assertEquals(443, actualCreateResult.getExplicitPort());
-    assertEquals(443, actualCreateResult.getSchemeDefaultPort());
-    assertTrue(actualCreateResult.isSecured());
-    assertEquals(Uri.HTTPS, actualCreateResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code 42https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
-   */
-  @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when '42https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_when42httpsExampleOrgExample() {
+  void testValidateSupportedScheme() {
     // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("42https://example.org/example"));
+    assertThrows(IllegalArgumentException.class,
+        () -> Uri.validateSupportedScheme(
+            new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+                "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+    assertThrows(IllegalArgumentException.class,
+        () -> Uri.validateSupportedScheme(new Uri("https://example.org/example", null, "https://example.org/example",
+            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+    assertThrows(IllegalArgumentException.class,
+        () -> Uri.validateSupportedScheme(
+            new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
+                "https://example.org/example", "https://example.org/example", "https://example.org/example")));
+    assertThrows(IllegalArgumentException.class,
+        () -> Uri.validateSupportedScheme(new Uri("https://example.org/example", "https://example.org/example",
+            "https://example.org/example", 8080, null, "https://example.org/example", "https://example.org/example")));
+    assertThrows(IllegalArgumentException.class,
+        () -> Uri.validateSupportedScheme(new Uri("https://example.org/example", "https://example.org/example",
+            "https://example.org/example", 8080, "https://example.org/example", null, "https://example.org/example")));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When empty string.</li>
-   *   <li>Then throw {@link IllegalArgumentException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when empty string; then throw IllegalArgumentException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenEmptyString_thenThrowIllegalArgumentException() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create(""));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual() {
+    // Arrange
+    Uri uri = new Uri("Scheme", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code //https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when '//https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenHttpsExampleOrgExample() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("//https://example.org/example"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual2() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "User Info", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code originalUrl}.</li>
-   *   <li>Then throw {@link IllegalArgumentException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when 'originalUrl'; then throw IllegalArgumentException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenOriginalUrl_thenThrowIllegalArgumentException() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("originalUrl"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual3() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", null, "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code Original Urlhttps://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when 'Original Urlhttps://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenOriginalUrlhttpsExampleOrgExample() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("Original Urlhttps://example.org/example"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual4() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "localhost", 8080,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code originalUrlurl:}.</li>
-   *   <li>Then throw {@link IllegalArgumentException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when 'originalUrlurl:'; then throw IllegalArgumentException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenOriginalUrlurl_thenThrowIllegalArgumentException() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("originalUrlurl:"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual5() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 1,
+        "https://example.org/example", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code ////}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when '////'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenSlashSlashSlashSlash() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("////"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual6() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "Path", "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code //}.</li>
-   *   <li>Then throw {@link IllegalArgumentException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when '//'; then throw IllegalArgumentException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenSlashSlash_thenThrowIllegalArgumentException() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("//"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual7() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        null, "https://example.org/example", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test {@link Uri#create(String)} with {@code originalUrl}.
-   * <ul>
-   *   <li>When {@code url:}.</li>
-   *   <li>Then throw {@link IllegalArgumentException}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#create(String)}
+   * Method under test: {@link Uri#equals(Object)}
    */
   @Test
-  @DisplayName("Test create(String) with 'originalUrl'; when 'url:'; then throw IllegalArgumentException")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.create(String)"})
-  void testCreateWithOriginalUrl_whenUrl_thenThrowIllegalArgumentException() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class, () -> Uri.create("url:"));
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual8() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "Query", "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
   }
 
   /**
-   * Test getters and setters.
-   * <p>
+   * Method under test: {@link Uri#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual9() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", null, "https://example.org/example");
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsDifferent_thenReturnNotEqual10() {
+    // Arrange
+    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+        "https://example.org/example", "https://example.org/example", null);
+
+    // Act and Assert
+    assertNotEquals(uri,
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
+  }
+
+  /**
+   * Method under test: {@link Uri#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsNull_thenReturnNotEqual() {
+    // Arrange, Act and Assert
+    assertNotEquals(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+        8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"), null);
+  }
+
+  /**
+   * Method under test: {@link Uri#equals(Object)}
+   */
+  @Test
+  void testEquals_whenOtherIsWrongType_thenReturnNotEqual() {
+    // Arrange, Act and Assert
+    assertNotEquals(
+        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+            "https://example.org/example", "https://example.org/example", "https://example.org/example"),
+        "Different type to Uri");
+  }
+
+  /**
    * Methods under test:
    * <ul>
    *   <li>{@link Uri#toString()}
@@ -762,11 +1270,6 @@ class UriDiffblueTest {
    * </ul>
    */
   @Test
-  @DisplayName("Test getters and setters")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getFragment()", "String Uri.getHost()", "String Uri.getPath()", "int Uri.getPort()",
-      "String Uri.getQuery()", "String Uri.getScheme()", "String Uri.getUserInfo()", "boolean Uri.isSecured()",
-      "boolean Uri.isWebSocket()", "String Uri.toString()"})
   void testGettersAndSetters() {
     // Arrange
     Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
@@ -798,1413 +1301,118 @@ class UriDiffblueTest {
   }
 
   /**
-   * Test {@link Uri#toJavaNetURI()}.
-   * <p>
-   * Method under test: {@link Uri#toJavaNetURI()}
+   * Method under test:
+   * {@link Uri#Uri(String, String, String, int, String, String, String)}
    */
   @Test
-  @DisplayName("Test toJavaNetURI()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"java.net.URI Uri.toJavaNetURI()"})
-  void testToJavaNetURI() throws URISyntaxException {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toJavaNetURI()
-                .toString());
-  }
-
-  /**
-   * Test {@link Uri#toJavaNetURI()}.
-   * <p>
-   * Method under test: {@link Uri#toJavaNetURI()}
-   */
-  @Test
-  @DisplayName("Test toJavaNetURI()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"java.net.URI Uri.toJavaNetURI()"})
-  void testToJavaNetURI2() throws URISyntaxException {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example:8080https://example.org/example?https:/"
-            + "/example.org/example",
-        (new Uri("https://example.org/example", null, "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toJavaNetURI()
-                .toString());
-  }
-
-  /**
-   * Test {@link Uri#toJavaNetURI()}.
-   * <p>
-   * Method under test: {@link Uri#toJavaNetURI()}
-   */
-  @Test
-  @DisplayName("Test toJavaNetURI()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"java.net.URI Uri.toJavaNetURI()"})
-  void testToJavaNetURI3() throws URISyntaxException {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/examplehttps://example"
-            + ".org/example?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toJavaNetURI()
-                .toString());
-  }
-
-  /**
-   * Test {@link Uri#toJavaNetURI()}.
-   * <p>
-   * Method under test: {@link Uri#toJavaNetURI()}
-   */
-  @Test
-  @DisplayName("Test toJavaNetURI()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"java.net.URI Uri.toJavaNetURI()"})
-  void testToJavaNetURI4() throws URISyntaxException {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080?https:/"
-            + "/example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            null, "https://example.org/example", "https://example.org/example")).toJavaNetURI().toString());
-  }
-
-  /**
-   * Test {@link Uri#toJavaNetURI()}.
-   * <p>
-   * Method under test: {@link Uri#toJavaNetURI()}
-   */
-  @Test
-  @DisplayName("Test toJavaNetURI()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"java.net.URI Uri.toJavaNetURI()"})
-  void testToJavaNetURI5() throws URISyntaxException {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", null, "https://example.org/example")).toJavaNetURI().toString());
-  }
-
-  /**
-   * Test {@link Uri#getExplicitPort()}.
-   * <ul>
-   *   <li>Then return {@code 8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getExplicitPort()}
-   */
-  @Test
-  @DisplayName("Test getExplicitPort(); then return '8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"int Uri.getExplicitPort()"})
-  void testGetExplicitPort_thenReturn8080() {
-    // Arrange, Act and Assert
-    assertEquals(8080,
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getExplicitPort());
-  }
-
-  /**
-   * Test {@link Uri#getExplicitPort()}.
-   * <ul>
-   *   <li>Then return eighty.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getExplicitPort()}
-   */
-  @Test
-  @DisplayName("Test getExplicitPort(); then return eighty")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"int Uri.getExplicitPort()"})
-  void testGetExplicitPort_thenReturnEighty() {
-    // Arrange, Act and Assert
-    assertEquals(80,
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getExplicitPort());
-  }
-
-  /**
-   * Test {@link Uri#getExplicitPort()}.
-   * <ul>
-   *   <li>Then return four hundred forty-three.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getExplicitPort()}
-   */
-  @Test
-  @DisplayName("Test getExplicitPort(); then return four hundred forty-three")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"int Uri.getExplicitPort()"})
-  void testGetExplicitPort_thenReturnFourHundredFortyThree() {
-    // Arrange, Act and Assert
-    assertEquals(
-        443, Uri
-            .create(
-                new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-                    8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
-                "https://example.org/example")
-            .getExplicitPort());
-  }
-
-  /**
-   * Test {@link Uri#getSchemeDefaultPort()}.
-   * <ul>
-   *   <li>Then return eighty.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getSchemeDefaultPort()}
-   */
-  @Test
-  @DisplayName("Test getSchemeDefaultPort(); then return eighty")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"int Uri.getSchemeDefaultPort()"})
-  void testGetSchemeDefaultPort_thenReturnEighty() {
-    // Arrange, Act and Assert
-    assertEquals(80,
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getSchemeDefaultPort());
-  }
-
-  /**
-   * Test {@link Uri#getSchemeDefaultPort()}.
-   * <ul>
-   *   <li>Then return four hundred forty-three.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getSchemeDefaultPort()}
-   */
-  @Test
-  @DisplayName("Test getSchemeDefaultPort(); then return four hundred forty-three")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"int Uri.getSchemeDefaultPort()"})
-  void testGetSchemeDefaultPort_thenReturnFourHundredFortyThree() {
-    // Arrange, Act and Assert
-    assertEquals(443,
-        (new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getSchemeDefaultPort());
-  }
-
-  /**
-   * Test {@link Uri#toUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toUrl()}
-   */
-  @Test
-  @DisplayName("Test toUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toUrl()"})
-  void testToUrl() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toUrl());
-  }
-
-  /**
-   * Test {@link Uri#toUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toUrl()}
-   */
-  @Test
-  @DisplayName("Test toUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toUrl()"})
-  void testToUrl2() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example:8080https://example.org/example?https:/"
-            + "/example.org/example",
-        (new Uri("https://example.org/example", null, "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toUrl());
-  }
-
-  /**
-   * Test {@link Uri#toUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toUrl()}
-   */
-  @Test
-  @DisplayName("Test toUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toUrl()"})
-  void testToUrl3() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/examplehttps://example"
-            + ".org/example?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toUrl());
-  }
-
-  /**
-   * Test {@link Uri#toUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toUrl()}
-   */
-  @Test
-  @DisplayName("Test toUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toUrl()"})
-  void testToUrl4() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080?https:/"
-            + "/example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            null, "https://example.org/example", "https://example.org/example")).toUrl());
-  }
-
-  /**
-   * Test {@link Uri#toUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toUrl()}
-   */
-  @Test
-  @DisplayName("Test toUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toUrl()"})
-  void testToUrl5() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", null, "https://example.org/example")).toUrl());
-  }
-
-  /**
-   * Test {@link Uri#toBaseUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test toBaseUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toBaseUrl()"})
-  void testToBaseUrl() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example://https://example.org/example:8080https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#toBaseUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test toBaseUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toBaseUrl()"})
-  void testToBaseUrl2() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example://https://example.org/examplehttps://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#toBaseUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test toBaseUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toBaseUrl()"})
-  void testToBaseUrl3() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example://https://example.org/examplehttps://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 80,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#toBaseUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#toBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test toBaseUrl(); then return 'https://example.org/example://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toBaseUrl()"})
-  void testToBaseUrl_thenReturnHttpsExampleOrgExampleHttpsExampleOrgExample8080() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example://https://example.org/example:8080",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080, "",
-            "https://example.org/example", "https://example.org/example")).toBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#toBaseUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://https://example.org/example:8080https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#toBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test toBaseUrl(); then return 'https://https://example.org/example:8080https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toBaseUrl()"})
-  void testToBaseUrl_thenReturnHttpsHttpsExampleOrgExample8080httpsExampleOrgExample() {
-    // Arrange, Act and Assert
-    assertEquals("https://https://example.org/example:8080https://example.org/example",
-        (new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#toRelativeUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toRelativeUrl()}
-   */
-  @Test
-  @DisplayName("Test toRelativeUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toRelativeUrl()"})
-  void testToRelativeUrl() {
-    // Arrange, Act and Assert
-    assertEquals("/?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            null, "https://example.org/example", "https://example.org/example")).toRelativeUrl());
-  }
-
-  /**
-   * Test {@link Uri#toRelativeUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toRelativeUrl()}
-   */
-  @Test
-  @DisplayName("Test toRelativeUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toRelativeUrl()"})
-  void testToRelativeUrl2() {
-    // Arrange, Act and Assert
-    assertEquals("/?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080, "",
-            "https://example.org/example", "https://example.org/example")).toRelativeUrl());
-  }
-
-  /**
-   * Test {@link Uri#toRelativeUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#toRelativeUrl()}
-   */
-  @Test
-  @DisplayName("Test toRelativeUrl(); then return 'https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toRelativeUrl()"})
-  void testToRelativeUrl_thenReturnHttpsExampleOrgExample() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", null, "https://example.org/example")).toRelativeUrl());
-  }
-
-  /**
-   * Test {@link Uri#toRelativeUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example?https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#toRelativeUrl()}
-   */
-  @Test
-  @DisplayName("Test toRelativeUrl(); then return 'https://example.org/example?https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toRelativeUrl()"})
-  void testToRelativeUrl_thenReturnHttpsExampleOrgExampleHttpsExampleOrgExample() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .toRelativeUrl());
-  }
-
-  /**
-   * Test {@link Uri#toFullUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toFullUrl()}
-   */
-  @Test
-  @DisplayName("Test toFullUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toFullUrl()"})
-  void testToFullUrl() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example?https://example.org/example#https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toFullUrl());
-  }
-
-  /**
-   * Test {@link Uri#toFullUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toFullUrl()}
-   */
-  @Test
-  @DisplayName("Test toFullUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toFullUrl()"})
-  void testToFullUrl2() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example:8080https://example.org/example?https:/"
-            + "/example.org/example#https://example.org/example",
-        (new Uri("https://example.org/example", null, "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toFullUrl());
-  }
-
-  /**
-   * Test {@link Uri#toFullUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toFullUrl()}
-   */
-  @Test
-  @DisplayName("Test toFullUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toFullUrl()"})
-  void testToFullUrl3() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/examplehttps://example"
-            + ".org/example?https://example.org/example#https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).toFullUrl());
-  }
-
-  /**
-   * Test {@link Uri#toFullUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toFullUrl()}
-   */
-  @Test
-  @DisplayName("Test toFullUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toFullUrl()"})
-  void testToFullUrl4() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080?https:/"
-            + "/example.org/example#https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            null, "https://example.org/example", "https://example.org/example")).toFullUrl());
-  }
-
-  /**
-   * Test {@link Uri#toFullUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toFullUrl()}
-   */
-  @Test
-  @DisplayName("Test toFullUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toFullUrl()"})
-  void testToFullUrl5() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example#https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", null, "https://example.org/example")).toFullUrl());
-  }
-
-  /**
-   * Test {@link Uri#toFullUrl()}.
-   * <p>
-   * Method under test: {@link Uri#toFullUrl()}
-   */
-  @Test
-  @DisplayName("Test toFullUrl()")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.toFullUrl()"})
-  void testToFullUrl6() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
-            + "/example.org/example?https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", null)).toFullUrl());
-  }
-
-  /**
-   * Test {@link Uri#getBaseUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org:443}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test getBaseUrl(); then return 'https://example.org:443'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getBaseUrl()"})
-  void testGetBaseUrl_thenReturnHttpsExampleOrg443() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "https://example.org:443", Uri
-            .create(
-                new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-                    8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
-                "https://example.org/example")
-            .getBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#getBaseUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example://https://example.org/example:80}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test getBaseUrl(); then return 'https://example.org/example://https://example.org/example:80'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getBaseUrl()"})
-  void testGetBaseUrl_thenReturnHttpsExampleOrgExampleHttpsExampleOrgExample80() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example://https://example.org/example:80",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).getBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#getBaseUrl()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getBaseUrl()}
-   */
-  @Test
-  @DisplayName("Test getBaseUrl(); then return 'https://example.org/example://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getBaseUrl()"})
-  void testGetBaseUrl_thenReturnHttpsExampleOrgExampleHttpsExampleOrgExample8080() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example://https://example.org/example:8080",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example")).getBaseUrl());
-  }
-
-  /**
-   * Test {@link Uri#getAuthority()}.
-   * <ul>
-   *   <li>Then return {@code example.org:443}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getAuthority()}
-   */
-  @Test
-  @DisplayName("Test getAuthority(); then return 'example.org:443'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getAuthority()"})
-  void testGetAuthority_thenReturnExampleOrg443() {
-    // Arrange, Act and Assert
-    assertEquals(
-        "example.org:443", Uri
-            .create(
-                new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-                    8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"),
-                "https://example.org/example")
-            .getAuthority());
-  }
-
-  /**
-   * Test {@link Uri#getAuthority()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example:80}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getAuthority()}
-   */
-  @Test
-  @DisplayName("Test getAuthority(); then return 'https://example.org/example:80'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getAuthority()"})
-  void testGetAuthority_thenReturnHttpsExampleOrgExample80() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example:80",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getAuthority());
-  }
-
-  /**
-   * Test {@link Uri#getAuthority()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getAuthority()}
-   */
-  @Test
-  @DisplayName("Test getAuthority(); then return 'https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getAuthority()"})
-  void testGetAuthority_thenReturnHttpsExampleOrgExample8080() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example:8080",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getAuthority());
-  }
-
-  /**
-   * Test {@link Uri#isSameBase(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#isSameBase(Uri)}
-   */
-  @Test
-  @DisplayName("Test isSameBase(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.isSameBase(Uri)"})
-  void testIsSameBase() {
-    // Arrange
-    Uri uri = new Uri("Scheme", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertFalse(uri
-        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#isSameBase(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#isSameBase(Uri)}
-   */
-  @Test
-  @DisplayName("Test isSameBase(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.isSameBase(Uri)"})
-  void testIsSameBase2() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "localhost", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertFalse(uri
-        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#isSameBase(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#isSameBase(Uri)}
-   */
-  @Test
-  @DisplayName("Test isSameBase(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.isSameBase(Uri)"})
-  void testIsSameBase3() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 1,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertFalse(uri
-        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#isSameBase(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#isSameBase(Uri)}
-   */
-  @Test
-  @DisplayName("Test isSameBase(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.isSameBase(Uri)"})
-  void testIsSameBase4() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertFalse(uri
-        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#isSameBase(Uri)}.
-   * <ul>
-   *   <li>Then return {@code true}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#isSameBase(Uri)}
-   */
-  @Test
-  @DisplayName("Test isSameBase(Uri); then return 'true'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.isSameBase(Uri)"})
-  void testIsSameBase_thenReturnTrue() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertTrue(uri
-        .isSameBase(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#getNonEmptyPath()}.
-   * <ul>
-   *   <li>Then return {@code https://example.org/example}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getNonEmptyPath()}
-   */
-  @Test
-  @DisplayName("Test getNonEmptyPath(); then return 'https://example.org/example'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getNonEmptyPath()"})
-  void testGetNonEmptyPath_thenReturnHttpsExampleOrgExample() {
-    // Arrange, Act and Assert
-    assertEquals("https://example.org/example",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"))
-                .getNonEmptyPath());
-  }
-
-  /**
-   * Test {@link Uri#getNonEmptyPath()}.
-   * <ul>
-   *   <li>Then return {@code /}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#getNonEmptyPath()}
-   */
-  @Test
-  @DisplayName("Test getNonEmptyPath(); then return '/'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"String Uri.getNonEmptyPath()"})
-  void testGetNonEmptyPath_thenReturnSlash() {
-    // Arrange, Act and Assert
-    assertEquals("/",
-        (new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080, "",
-            "https://example.org/example", "https://example.org/example")).getNonEmptyPath());
-  }
-
-  /**
-   * Test {@link Uri#withNewScheme(String)}.
-   * <p>
-   * Method under test: {@link Uri#withNewScheme(String)}
-   */
-  @Test
-  @DisplayName("Test withNewScheme(String)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewScheme(String)"})
-  void testWithNewScheme() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertEquals(uri, uri.withNewScheme("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#withNewScheme(String)}.
-   * <ul>
-   *   <li>When {@link Uri#HTTPS}.</li>
-   *   <li>Then return BaseUrl is {@code https://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#withNewScheme(String)}
-   */
-  @Test
-  @DisplayName("Test withNewScheme(String); when HTTPS; then return BaseUrl is 'https://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewScheme(String)"})
-  void testWithNewScheme_whenHttps_thenReturnBaseUrlIsHttpsHttpsExampleOrgExample8080() throws URISyntaxException {
+  void testNewUri() throws URISyntaxException {
     // Arrange and Act
-    Uri actualWithNewSchemeResult = (new Uri("https://example.org/example", "https://example.org/example",
-        "https://example.org/example", 8080, "https://example.org/example", "https://example.org/example",
-        "https://example.org/example")).withNewScheme(Uri.HTTPS);
-
-    // Assert
-    assertEquals("https://https://example.org/example:8080", actualWithNewSchemeResult.getBaseUrl());
-    assertEquals("https://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
-        + "://example.org/example", actualWithNewSchemeResult.toJavaNetURI().toString());
-    assertFalse(actualWithNewSchemeResult.isWebSocket());
-    assertEquals(Uri.HTTPS, actualWithNewSchemeResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#withNewScheme(String)}.
-   * <ul>
-   *   <li>When {@link Uri#WS}.</li>
-   *   <li>Then return BaseUrl is {@code ws://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#withNewScheme(String)}
-   */
-  @Test
-  @DisplayName("Test withNewScheme(String); when WS; then return BaseUrl is 'ws://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewScheme(String)"})
-  void testWithNewScheme_whenWs_thenReturnBaseUrlIsWsHttpsExampleOrgExample8080() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualWithNewSchemeResult = (new Uri("https://example.org/example", "https://example.org/example",
-        "https://example.org/example", 8080, "https://example.org/example", "https://example.org/example",
-        "https://example.org/example")).withNewScheme(Uri.WS);
-
-    // Assert
-    assertEquals("ws://https://example.org/example:8080", actualWithNewSchemeResult.getBaseUrl());
-    assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/example?https:/"
-        + "/example.org/example", actualWithNewSchemeResult.toJavaNetURI().toString());
-    assertEquals(80, actualWithNewSchemeResult.getSchemeDefaultPort());
-    assertFalse(actualWithNewSchemeResult.isSecured());
-    assertEquals(Uri.WS, actualWithNewSchemeResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#withNewScheme(String)}.
-   * <ul>
-   *   <li>When {@link Uri#WSS}.</li>
-   *   <li>Then return BaseUrl is {@code wss://https://example.org/example:8080}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#withNewScheme(String)}
-   */
-  @Test
-  @DisplayName("Test withNewScheme(String); when WSS; then return BaseUrl is 'wss://https://example.org/example:8080'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewScheme(String)"})
-  void testWithNewScheme_whenWss_thenReturnBaseUrlIsWssHttpsExampleOrgExample8080() throws URISyntaxException {
-    // Arrange and Act
-    Uri actualWithNewSchemeResult = (new Uri("https://example.org/example", "https://example.org/example",
-        "https://example.org/example", 8080, "https://example.org/example", "https://example.org/example",
-        "https://example.org/example")).withNewScheme(Uri.WSS);
-
-    // Assert
-    assertEquals("wss://https://example.org/example:8080", actualWithNewSchemeResult.getBaseUrl());
-    assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/example?https:"
-        + "//example.org/example", actualWithNewSchemeResult.toJavaNetURI().toString());
-    assertEquals(443, actualWithNewSchemeResult.getSchemeDefaultPort());
-    assertTrue(actualWithNewSchemeResult.isSecured());
-    assertTrue(actualWithNewSchemeResult.isWebSocket());
-    assertEquals(Uri.WSS, actualWithNewSchemeResult.getScheme());
-  }
-
-  /**
-   * Test {@link Uri#withNewQuery(String)}.
-   * <p>
-   * Method under test: {@link Uri#withNewQuery(String)}
-   */
-  @Test
-  @DisplayName("Test withNewQuery(String)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewQuery(String)"})
-  void testWithNewQuery() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#withNewQuery(String)}.
-   * <p>
-   * Method under test: {@link Uri#withNewQuery(String)}
-   */
-  @Test
-  @DisplayName("Test withNewQuery(String)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewQuery(String)"})
-  void testWithNewQuery2() {
-    // Arrange
-    Uri uri = new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#withNewQuery(String)}.
-   * <p>
-   * Method under test: {@link Uri#withNewQuery(String)}
-   */
-  @Test
-  @DisplayName("Test withNewQuery(String)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewQuery(String)"})
-  void testWithNewQuery3() {
-    // Arrange
-    Uri uri = new Uri(Uri.WSS, "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#withNewQuery(String)}.
-   * <p>
-   * Method under test: {@link Uri#withNewQuery(String)}
-   */
-  @Test
-  @DisplayName("Test withNewQuery(String)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"Uri Uri.withNewQuery(String)"})
-  void testWithNewQuery4() {
-    // Arrange
-    Uri uri = new Uri(Uri.WS, "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertEquals(uri, uri.withNewQuery("https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}, and {@link Uri#hashCode()}.
-   * <ul>
-   *   <li>When other is equal.</li>
-   *   <li>Then return equal.</li>
-   * </ul>
-   * <p>
-   * Methods under test:
-   * <ul>
-   *   <li>{@link Uri#equals(Object)}
-   *   <li>{@link Uri#hashCode()}
-   * </ul>
-   */
-  @Test
-  @DisplayName("Test equals(Object), and hashCode(); when other is equal; then return equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEqualsAndHashCode_whenOtherIsEqual_thenReturnEqual() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-    Uri uri2 = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
+    Uri actualUri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
         8080, "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    // Act and Assert
-    assertEquals(uri, uri2);
-    int expectedHashCodeResult = uri.hashCode();
-    assertEquals(expectedHashCodeResult, uri2.hashCode());
+    // Assert
+    assertEquals("https://example.org/example", actualUri.getFragment());
+    assertEquals("https://example.org/example", actualUri.getHost());
+    assertEquals("https://example.org/example", actualUri.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualUri.getPath());
+    assertEquals("https://example.org/example", actualUri.getQuery());
+    assertEquals("https://example.org/example", actualUri.getScheme());
+    assertEquals("https://example.org/example", actualUri.getUserInfo());
+    assertEquals("https://example.org/example://https://example.org/example:8080", actualUri.getBaseUrl());
+    assertEquals("https://example.org/example://https://example.org/example@https://example.org/example:8080https:/"
+        + "/example.org/example?https://example.org/example", actualUri.toJavaNetURI().toString());
+    assertEquals("https://example.org/example:8080", actualUri.getAuthority());
+    assertEquals(80, actualUri.getSchemeDefaultPort());
+    assertEquals(8080, actualUri.getExplicitPort());
+    assertEquals(8080, actualUri.getPort());
+    assertFalse(actualUri.isSecured());
+    assertFalse(actualUri.isWebSocket());
   }
 
   /**
-   * Test {@link Uri#equals(Object)}, and {@link Uri#hashCode()}.
-   * <ul>
-   *   <li>When other is same.</li>
-   *   <li>Then return equal.</li>
-   * </ul>
-   * <p>
-   * Methods under test:
-   * <ul>
-   *   <li>{@link Uri#equals(Object)}
-   *   <li>{@link Uri#hashCode()}
-   * </ul>
+   * Method under test:
+   * {@link Uri#Uri(String, String, String, int, String, String, String)}
    */
   @Test
-  @DisplayName("Test equals(Object), and hashCode(); when other is same; then return equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEqualsAndHashCode_whenOtherIsSame_thenReturnEqual() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
+  void testNewUri2() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualUri = new Uri(Uri.HTTPS, "https://example.org/example", "https://example.org/example", 8080,
         "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    // Act and Assert
-    assertEquals(uri, uri);
-    int expectedHashCodeResult = uri.hashCode();
-    assertEquals(expectedHashCodeResult, uri.hashCode());
+    // Assert
+    assertEquals("https://example.org/example", actualUri.getFragment());
+    assertEquals("https://example.org/example", actualUri.getHost());
+    assertEquals("https://example.org/example", actualUri.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualUri.getPath());
+    assertEquals("https://example.org/example", actualUri.getQuery());
+    assertEquals("https://example.org/example", actualUri.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualUri.getAuthority());
+    assertEquals("https://https://example.org/example:8080", actualUri.getBaseUrl());
+    assertEquals("https://https://example.org/example@https://example.org/example:8080https://example.org/example?https"
+        + "://example.org/example", actualUri.toJavaNetURI().toString());
+    assertEquals(443, actualUri.getSchemeDefaultPort());
+    assertEquals(8080, actualUri.getExplicitPort());
+    assertEquals(8080, actualUri.getPort());
+    assertFalse(actualUri.isWebSocket());
+    assertTrue(actualUri.isSecured());
+    assertEquals(Uri.HTTPS, actualUri.getScheme());
   }
 
   /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
+   * Method under test:
+   * {@link Uri#Uri(String, String, String, int, String, String, String)}
    */
   @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual() {
-    // Arrange
-    Uri uri = new Uri("Scheme", "https://example.org/example", "https://example.org/example", 8080,
+  void testNewUri3() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualUri = new Uri(Uri.WSS, "https://example.org/example", "https://example.org/example", 8080,
         "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
+    // Assert
+    assertEquals("https://example.org/example", actualUri.getFragment());
+    assertEquals("https://example.org/example", actualUri.getHost());
+    assertEquals("https://example.org/example", actualUri.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualUri.getPath());
+    assertEquals("https://example.org/example", actualUri.getQuery());
+    assertEquals("https://example.org/example", actualUri.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualUri.getAuthority());
+    assertEquals("wss://https://example.org/example:8080", actualUri.getBaseUrl());
+    assertEquals("wss://https://example.org/example@https://example.org/example:8080https://example.org/example?https:"
+        + "//example.org/example", actualUri.toJavaNetURI().toString());
+    assertEquals(443, actualUri.getSchemeDefaultPort());
+    assertEquals(8080, actualUri.getExplicitPort());
+    assertEquals(8080, actualUri.getPort());
+    assertTrue(actualUri.isSecured());
+    assertTrue(actualUri.isWebSocket());
+    assertEquals(Uri.WSS, actualUri.getScheme());
   }
 
   /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
+   * Method under test:
+   * {@link Uri#Uri(String, String, String, int, String, String, String)}
    */
   @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual2() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "User Info", "https://example.org/example", 8080,
+  void testNewUri4() throws URISyntaxException {
+    // Arrange and Act
+    Uri actualUri = new Uri(Uri.WS, "https://example.org/example", "https://example.org/example", 8080,
         "https://example.org/example", "https://example.org/example", "https://example.org/example");
 
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual3() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", null, "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual4() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "localhost", 8080,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual5() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 1,
-        "https://example.org/example", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual6() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "Path", "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual7() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        null, "https://example.org/example", "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual8() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "Query", "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual9() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", null, "https://example.org/example");
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is different.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is different; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsDifferent_thenReturnNotEqual10() {
-    // Arrange
-    Uri uri = new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-        "https://example.org/example", "https://example.org/example", null);
-
-    // Act and Assert
-    assertNotEquals(uri,
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"));
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is {@code null}.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is 'null'; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsNull_thenReturnNotEqual() {
-    // Arrange, Act and Assert
-    assertNotEquals(new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example",
-        8080, "https://example.org/example", "https://example.org/example", "https://example.org/example"), null);
-  }
-
-  /**
-   * Test {@link Uri#equals(Object)}.
-   * <ul>
-   *   <li>When other is wrong type.</li>
-   *   <li>Then return not equal.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link Uri#equals(Object)}
-   */
-  @Test
-  @DisplayName("Test equals(Object); when other is wrong type; then return not equal")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"boolean Uri.equals(Object)", "int Uri.hashCode()"})
-  void testEquals_whenOtherIsWrongType_thenReturnNotEqual() {
-    // Arrange, Act and Assert
-    assertNotEquals(
-        new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-            "https://example.org/example", "https://example.org/example", "https://example.org/example"),
-        "Different type to Uri");
-  }
-
-  /**
-   * Test {@link Uri#validateSupportedScheme(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#validateSupportedScheme(Uri)}
-   */
-  @Test
-  @DisplayName("Test validateSupportedScheme(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.validateSupportedScheme(Uri)"})
-  void testValidateSupportedScheme() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> Uri.validateSupportedScheme(
-            new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", 8080,
-                "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#validateSupportedScheme(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#validateSupportedScheme(Uri)}
-   */
-  @Test
-  @DisplayName("Test validateSupportedScheme(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.validateSupportedScheme(Uri)"})
-  void testValidateSupportedScheme2() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> Uri.validateSupportedScheme(new Uri("https://example.org/example", null, "https://example.org/example",
-            8080, "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#validateSupportedScheme(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#validateSupportedScheme(Uri)}
-   */
-  @Test
-  @DisplayName("Test validateSupportedScheme(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.validateSupportedScheme(Uri)"})
-  void testValidateSupportedScheme3() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> Uri.validateSupportedScheme(
-            new Uri("https://example.org/example", "https://example.org/example", "https://example.org/example", -1,
-                "https://example.org/example", "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#validateSupportedScheme(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#validateSupportedScheme(Uri)}
-   */
-  @Test
-  @DisplayName("Test validateSupportedScheme(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.validateSupportedScheme(Uri)"})
-  void testValidateSupportedScheme4() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> Uri.validateSupportedScheme(new Uri("https://example.org/example", "https://example.org/example",
-            "https://example.org/example", 8080, null, "https://example.org/example", "https://example.org/example")));
-  }
-
-  /**
-   * Test {@link Uri#validateSupportedScheme(Uri)}.
-   * <p>
-   * Method under test: {@link Uri#validateSupportedScheme(Uri)}
-   */
-  @Test
-  @DisplayName("Test validateSupportedScheme(Uri)")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"void Uri.validateSupportedScheme(Uri)"})
-  void testValidateSupportedScheme5() {
-    // Arrange, Act and Assert
-    assertThrows(IllegalArgumentException.class,
-        () -> Uri.validateSupportedScheme(new Uri("https://example.org/example", "https://example.org/example",
-            "https://example.org/example", 8080, "https://example.org/example", null, "https://example.org/example")));
+    // Assert
+    assertEquals("https://example.org/example", actualUri.getFragment());
+    assertEquals("https://example.org/example", actualUri.getHost());
+    assertEquals("https://example.org/example", actualUri.getNonEmptyPath());
+    assertEquals("https://example.org/example", actualUri.getPath());
+    assertEquals("https://example.org/example", actualUri.getQuery());
+    assertEquals("https://example.org/example", actualUri.getUserInfo());
+    assertEquals("https://example.org/example:8080", actualUri.getAuthority());
+    assertEquals("ws://https://example.org/example:8080", actualUri.getBaseUrl());
+    assertEquals("ws://https://example.org/example@https://example.org/example:8080https://example.org/example?https:/"
+        + "/example.org/example", actualUri.toJavaNetURI().toString());
+    assertEquals(80, actualUri.getSchemeDefaultPort());
+    assertEquals(8080, actualUri.getExplicitPort());
+    assertEquals(8080, actualUri.getPort());
+    assertFalse(actualUri.isSecured());
+    assertTrue(actualUri.isWebSocket());
+    assertEquals(Uri.WS, actualUri.getScheme());
   }
 }

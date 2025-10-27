@@ -1,45 +1,16 @@
 package org.asynchttpclient.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.diffblue.cover.annotations.MethodsUnderTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class UriEncoderDiffblueTest {
   /**
-   * Test {@link UriEncoder#uriEncoder(boolean)}.
-   * <ul>
-   *   <li>When {@code false}.</li>
-   *   <li>Then return {@code FIXING}.</li>
-   * </ul>
-   * <p>
    * Method under test: {@link UriEncoder#uriEncoder(boolean)}
    */
   @Test
-  @DisplayName("Test uriEncoder(boolean); when 'false'; then return 'FIXING'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"UriEncoder UriEncoder.uriEncoder(boolean)"})
-  void testUriEncoder_whenFalse_thenReturnFixing() {
-    // Arrange, Act and Assert
-    assertEquals(UriEncoder.FIXING, UriEncoder.uriEncoder(false));
-  }
-
-  /**
-   * Test {@link UriEncoder#uriEncoder(boolean)}.
-   * <ul>
-   *   <li>When {@code true}.</li>
-   *   <li>Then return {@code RAW}.</li>
-   * </ul>
-   * <p>
-   * Method under test: {@link UriEncoder#uriEncoder(boolean)}
-   */
-  @Test
-  @DisplayName("Test uriEncoder(boolean); when 'true'; then return 'RAW'")
-  @Tag("MaintainedByDiffblue")
-  @MethodsUnderTest({"UriEncoder UriEncoder.uriEncoder(boolean)"})
-  void testUriEncoder_whenTrue_thenReturnRaw() {
+  void testUriEncoder() {
     // Arrange, Act and Assert
     assertEquals(UriEncoder.RAW, UriEncoder.uriEncoder(true));
+    assertEquals(UriEncoder.FIXING, UriEncoder.uriEncoder(false));
   }
 }
