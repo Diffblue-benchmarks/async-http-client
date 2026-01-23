@@ -19,3 +19,9 @@ MANIFEST.MF
 work
 atlassian-ide-plugin.xml
 /bom/.flattened-pom.xml
+
+.diffblue/cache
+**.diffblue/cache
+**/.diffblue/cache
+**/**.diffblue/cache
+**/**/.diffblue/cache
