@@ -1,6 +1,7 @@
 package org.asynchttpclient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,6 +31,7 @@ import org.asynchttpclient.AsyncHttpClientConfig.ResponseBodyPartFactory;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig.Builder;
 import org.asynchttpclient.Realm.AuthScheme;
 import org.asynchttpclient.channel.ChannelPool;
+import org.asynchttpclient.channel.DefaultKeepAliveStrategy;
 import org.asynchttpclient.channel.KeepAliveStrategy;
 import org.asynchttpclient.channel.NoopChannelPool;
 import org.asynchttpclient.cookie.CookieStore;
@@ -148,7 +150,7 @@ class DefaultAsyncHttpClientConfigDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"void Builder.<init>(AsyncHttpClientConfig)"})
-  void testBuilderNewBuilder() throws SSLException {
+  void testBuilderNewBuilder2() throws SSLException {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.isAggregateWebSocketFrameFragments()).thenReturn(true);

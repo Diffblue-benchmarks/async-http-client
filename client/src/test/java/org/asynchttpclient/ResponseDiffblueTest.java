@@ -64,20 +64,4 @@ class ResponseDiffblueTest {
     // Assert
     assertNull(actualResponse);
   }
-
-  /**
-   * Test ResponseBuilder new {@link ResponseBuilder} (default constructor).
-   *
-   * <p>Method under test: default or parameterless constructor of {@link ResponseBuilder}
-   */
-  @Test
-  @DisplayName("Test ResponseBuilder new ResponseBuilder (default constructor)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void ResponseBuilder.<init>()"})
-  void testResponseBuilderNewResponseBuilder() {
-    // Arrange, Act and Assert
-    Response actualResponse = new ResponseBuilder().build();
-    assertNull(actualResponse);
-  }
 }

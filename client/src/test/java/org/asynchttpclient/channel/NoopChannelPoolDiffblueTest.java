@@ -1,16 +1,34 @@
 package org.asynchttpclient.channel;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import com.diffblue.cover.annotations.ManagedByDiffblue;
 import com.diffblue.cover.annotations.MethodsUnderTest;
+import io.netty.channel.Channel;
+import io.netty.channel.embedded.EmbeddedChannel;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 class NoopChannelPoolDiffblueTest {
+  /**
+   * Test {@link NoopChannelPool#offer(Channel, Object)}.
+   *
+   * <p>Method under test: {@link NoopChannelPool#offer(Channel, Object)}
+   */
+  @Test
+  @DisplayName("Test offer(Channel, Object)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"boolean NoopChannelPool.offer(Channel, Object)"})
+  void testOffer() {
+    // Arrange, Act and Assert
+    assertFalse(NoopChannelPool.INSTANCE.offer(new EmbeddedChannel(), "Partition Key"));
+  }
+
   /**
    * Test {@link NoopChannelPool#poll(Object)}.
    *
@@ -20,10 +38,25 @@ class NoopChannelPoolDiffblueTest {
   @DisplayName("Test poll(Object)")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({"io.netty.channel.Channel NoopChannelPool.poll(Object)"})
+  @MethodsUnderTest({"Channel NoopChannelPool.poll(Object)"})
   void testPoll() {
     // Arrange, Act and Assert
     assertNull(NoopChannelPool.INSTANCE.poll("Partition Key"));
+  }
+
+  /**
+   * Test {@link NoopChannelPool#removeAll(Channel)}.
+   *
+   * <p>Method under test: {@link NoopChannelPool#removeAll(Channel)}
+   */
+  @Test
+  @DisplayName("Test removeAll(Channel)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"boolean NoopChannelPool.removeAll(Channel)"})
+  void testRemoveAll() {
+    // Arrange, Act and Assert
+    assertFalse(NoopChannelPool.INSTANCE.removeAll(new EmbeddedChannel()));
   }
 
   /**

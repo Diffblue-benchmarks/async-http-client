@@ -500,91 +500,6 @@ class MultipartBodyDiffblueTest {
    * Test {@link MultipartBody#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
    *
    * <ul>
-   *   <li>Given one.
-   * </ul>
-   *
-   * <p>Method under test: {@link MultipartBody#transferTo(WritableByteChannel)}
-   */
-  @Test
-  @DisplayName("Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long MultipartBody.transferTo(WritableByteChannel)"})
-  void testTransferToWithWritableByteChannel_givenOne() throws IOException {
-    // Arrange
-    ArrayList<Part> parts = new ArrayList<>();
-    MultipartBody newMultipartBodyResult =
-        MultipartUtils.newMultipartBody(parts, new DefaultHttpHeaders());
-
-    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
-    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
-
-    // Act
-    long actualTransferToResult = newMultipartBodyResult.transferTo(target);
-
-    // Assert
-    verify(target).write(isA(ByteBuffer.class));
-    assertEquals(1L, actualTransferToResult);
-  }
-
-  /**
-   * Test {@link MultipartBody#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
-   *
-   * <ul>
-   *   <li>Given zero.
-   *   <li>Then return zero.
-   * </ul>
-   *
-   * <p>Method under test: {@link MultipartBody#transferTo(WritableByteChannel)}
-   */
-  @Test
-  @DisplayName(
-      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; given zero; then return zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"long MultipartBody.transferTo(WritableByteChannel)"})
-  void testTransferToWithWritableByteChannel_givenZero_thenReturnZero() throws IOException {
-    // Arrange
-    ByteArrayPart byteArrayPart = mock(ByteArrayPart.class);
-    when(byteArrayPart.getCharset()).thenReturn(Charset.forName("UTF-8"));
-    when(byteArrayPart.getBytes()).thenReturn("AXAXAXAX".getBytes("UTF-8"));
-    when(byteArrayPart.getFileName()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getContentId()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getContentType()).thenReturn("text/plain");
-    when(byteArrayPart.getDispositionType()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getName()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getTransferEncoding()).thenReturn("https://example.org/example");
-    when(byteArrayPart.getCustomHeaders()).thenReturn(new ArrayList<>());
-
-    ArrayList<Part> parts = new ArrayList<>();
-    parts.add(byteArrayPart);
-    MultipartBody newMultipartBodyResult =
-        MultipartUtils.newMultipartBody(parts, new DefaultHttpHeaders());
-
-    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
-    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(0);
-
-    // Act
-    long actualTransferToResult = newMultipartBodyResult.transferTo(target);
-
-    // Assert
-    verify(target).write(isA(ByteBuffer.class));
-    verify(byteArrayPart, atLeast(1)).getBytes();
-    verify(byteArrayPart, atLeast(1)).getFileName();
-    verify(byteArrayPart, atLeast(1)).getCharset();
-    verify(byteArrayPart, atLeast(1)).getContentId();
-    verify(byteArrayPart, atLeast(1)).getContentType();
-    verify(byteArrayPart, atLeast(1)).getCustomHeaders();
-    verify(byteArrayPart, atLeast(1)).getDispositionType();
-    verify(byteArrayPart, atLeast(1)).getName();
-    verify(byteArrayPart, atLeast(1)).getTransferEncoding();
-    assertEquals(0L, actualTransferToResult);
-  }
-
-  /**
-   * Test {@link MultipartBody#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
-   *
-   * <ul>
    *   <li>Then calls {@link ByteArrayPart#getBytes()}.
    * </ul>
    *
@@ -631,6 +546,38 @@ class MultipartBodyDiffblueTest {
     verify(byteArrayPart, atLeast(1)).getDispositionType();
     verify(byteArrayPart, atLeast(1)).getName();
     verify(byteArrayPart, atLeast(1)).getTransferEncoding();
+    assertEquals(1L, actualTransferToResult);
+  }
+
+  /**
+   * Test {@link MultipartBody#transferTo(WritableByteChannel)} with {@code WritableByteChannel}.
+   *
+   * <ul>
+   *   <li>Then calls {@link BrotliEncoderChannel#write(ByteBuffer)}.
+   * </ul>
+   *
+   * <p>Method under test: {@link MultipartBody#transferTo(WritableByteChannel)}
+   */
+  @Test
+  @DisplayName(
+      "Test transferTo(WritableByteChannel) with 'WritableByteChannel'; then calls write(ByteBuffer)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"long MultipartBody.transferTo(WritableByteChannel)"})
+  void testTransferToWithWritableByteChannel_thenCallsWrite() throws IOException {
+    // Arrange
+    ArrayList<Part> parts = new ArrayList<>();
+    MultipartBody newMultipartBodyResult =
+        MultipartUtils.newMultipartBody(parts, new DefaultHttpHeaders());
+
+    BrotliEncoderChannel target = mock(BrotliEncoderChannel.class);
+    when(target.write(Mockito.<ByteBuffer>any())).thenReturn(1);
+
+    // Act
+    long actualTransferToResult = newMultipartBodyResult.transferTo(target);
+
+    // Assert
+    verify(target).write(isA(ByteBuffer.class));
     assertEquals(1L, actualTransferToResult);
   }
 

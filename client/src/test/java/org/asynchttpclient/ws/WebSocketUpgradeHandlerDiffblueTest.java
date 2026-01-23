@@ -237,6 +237,30 @@ class WebSocketUpgradeHandlerDiffblueTest {
   }
 
   /**
+   * Test {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}.
+   *
+   * <p>Method under test: {@link WebSocketUpgradeHandler#setWebSocket(NettyWebSocket)}
+   */
+  @Test
+  @DisplayName("Test setWebSocket(NettyWebSocket)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void WebSocketUpgradeHandler.setWebSocket(NettyWebSocket)"})
+  void testSetWebSocket() throws Exception {
+    // Arrange
+    WebSocketUpgradeHandler webSocketUpgradeHandler =
+        new WebSocketUpgradeHandler(new ArrayList<>());
+    EmbeddedChannel channel = new EmbeddedChannel();
+    NettyWebSocket webSocket = new NettyWebSocket(channel, new DefaultHttpHeaders());
+
+    // Act
+    webSocketUpgradeHandler.setWebSocket(webSocket);
+
+    // Assert
+    assertSame(webSocket, webSocketUpgradeHandler.onCompleted());
+  }
+
+  /**
    * Test {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}.
    *
    * <p>Method under test: {@link WebSocketUpgradeHandler#onOpen(NettyWebSocket)}

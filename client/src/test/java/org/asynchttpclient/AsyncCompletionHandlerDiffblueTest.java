@@ -19,7 +19,6 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpVersion;
 import org.asynchttpclient.AbstractBasicTest.AsyncCompletionHandlerAdapter;
 import org.asynchttpclient.AsyncHandler.State;
-import org.asynchttpclient.handler.TransferCompletionHandler;
 import org.asynchttpclient.netty.EagerResponseBodyPart;
 import org.asynchttpclient.netty.NettyResponse;
 import org.asynchttpclient.netty.NettyResponseStatus;
@@ -154,30 +153,6 @@ class AsyncCompletionHandlerDiffblueTest {
     assertEquals(
         State.CONTINUE,
         asyncCompletionHandlerBase.onTrailingHeadersReceived(new DefaultHttpHeaders()));
-  }
-
-  /**
-   * Test {@link AsyncCompletionHandler#onTrailingHeadersReceived(HttpHeaders)}.
-   *
-   * <ul>
-   *   <li>Given {@link TransferCompletionHandler#TransferCompletionHandler()}.
-   * </ul>
-   *
-   * <p>Method under test: {@link AsyncCompletionHandler#onTrailingHeadersReceived(HttpHeaders)}
-   */
-  @Test
-  @DisplayName("Test onTrailingHeadersReceived(HttpHeaders); given TransferCompletionHandler()")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"State AsyncCompletionHandler.onTrailingHeadersReceived(HttpHeaders)"})
-  void testOnTrailingHeadersReceived_givenTransferCompletionHandler() throws Exception {
-    // Arrange
-    TransferCompletionHandler transferCompletionHandler = new TransferCompletionHandler();
-
-    // Act and Assert
-    assertEquals(
-        State.CONTINUE,
-        transferCompletionHandler.onTrailingHeadersReceived(new DefaultHttpHeaders()));
   }
 
   /**

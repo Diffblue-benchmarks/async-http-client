@@ -20,7 +20,10 @@ import io.netty.util.Timer;
 import io.netty.util.TimerTask;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.Year;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.asynchttpclient.AsyncHttpClientConfig;
@@ -32,79 +35,30 @@ import org.mockito.Mockito;
 
 class DefaultChannelPoolDiffblueTest {
   /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
+   * Duration)}.
    *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
-   * Duration)}
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
+   * PoolLeaseStrategy, Timer, Duration)}
    */
   @Test
-  @DisplayName("Test new DefaultChannelPool(Duration, Duration, Timer, Duration)")
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration)")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
+  @MethodsUnderTest({
+    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
+  })
   void testNewDefaultChannelPool() {
     // Arrange
     Duration maxIdleTime = Duration.ofSeconds(1L);
     Duration connectionTtl = Duration.ofSeconds(1L);
-    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS, 1000);
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(-1L));
-
-    // Assert
-    assertEquals(1L, nettyTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
-   * Duration)}
-   */
-  @Test
-  @DisplayName("Test new DefaultChannelPool(Duration, Duration, Timer, Duration)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
-  void testNewDefaultChannelPool2() {
-    // Arrange
-    Duration maxIdleTime = Duration.ofSeconds(1L);
-    Duration connectionTtl = Duration.ofSeconds(-1L);
-    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS, 1000);
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(-1L));
-
-    // Assert
-    assertEquals(1L, nettyTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
-   * Duration)}
-   */
-  @Test
-  @DisplayName("Test new DefaultChannelPool(Duration, Duration, Timer, Duration)")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
-  void testNewDefaultChannelPool3() {
-    // Arrange
-    Duration maxIdleTime = Duration.ofSeconds(1L);
-    Duration connectionTtl = Duration.ofSeconds(-1L);
     HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(-1L));
+        new DefaultChannelPool(
+            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ZERO);
 
     // Assert
     assertEquals(1L, nettyTimer.pendingTimeouts());
@@ -113,25 +67,30 @@ class DefaultChannelPoolDiffblueTest {
   }
 
   /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
+   * Duration)}.
    *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
-   * Duration)}
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
+   * PoolLeaseStrategy, Timer, Duration)}
    */
   @Test
-  @DisplayName("Test new DefaultChannelPool(Duration, Duration, Timer, Duration)")
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration)")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
-  void testNewDefaultChannelPool4() {
+  @MethodsUnderTest({
+    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
+  })
+  void testNewDefaultChannelPool2() {
     // Arrange
     Duration maxIdleTime = Duration.ofSeconds(1L);
-    Duration connectionTtl = Duration.ofSeconds(-1L);
-    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.SECONDS);
+    Duration connectionTtl = Duration.ofSeconds(1L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(-1L));
+        new DefaultChannelPool(
+            maxIdleTime, connectionTtl, PoolLeaseStrategy.FIFO, nettyTimer, Duration.ZERO);
 
     // Assert
     assertEquals(1L, nettyTimer.pendingTimeouts());
@@ -150,13 +109,75 @@ class DefaultChannelPoolDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
+  void testNewDefaultChannelPool3() {
+    // Arrange
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS, 1000);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
+
+    // Assert
+    verify(config).getConnectionPoolCleanerPeriod();
+    verify(config).getConnectionTtl();
+    verify(config).getPooledConnectionIdleTimeout();
+    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
+   * Timer)}
+   */
+  @Test
+  @DisplayName("Test new DefaultChannelPool(AsyncHttpClientConfig, Timer)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
+  void testNewDefaultChannelPool4() {
+    // Arrange
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS, 1000);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
+
+    // Assert
+    verify(config).getConnectionPoolCleanerPeriod();
+    verify(config).getConnectionTtl();
+    verify(config).getPooledConnectionIdleTimeout();
+    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
+   * Timer)}
+   */
+  @Test
+  @DisplayName("Test new DefaultChannelPool(AsyncHttpClientConfig, Timer)")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
   void testNewDefaultChannelPool5() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
     when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.NANOSECONDS, 1);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MINUTES, 1000);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -184,10 +205,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool6() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.MILLISECONDS, 1);
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -215,10 +236,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool7() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.HOURS, 1);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -246,9 +267,9 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool8() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
@@ -277,9 +298,9 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool9() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
@@ -308,9 +329,9 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool10() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
@@ -339,9 +360,9 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool11() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(-1L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
@@ -370,9 +391,9 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool12() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
 
     // Act
@@ -401,10 +422,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool13() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.SECONDS);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -432,10 +453,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool14() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MICROSECONDS);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -463,10 +484,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool15() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -494,9 +515,9 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool16() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
 
     // Act
@@ -527,8 +548,8 @@ class DefaultChannelPoolDiffblueTest {
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.SECONDS);
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -537,7 +558,7 @@ class DefaultChannelPoolDiffblueTest {
     verify(config).getConnectionPoolCleanerPeriod();
     verify(config).getConnectionTtl();
     verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertEquals(0L, hashedWheelTimer.pendingTimeouts());
     assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
     assertTrue(actualDefaultChannelPool.isOpen());
   }
@@ -556,10 +577,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool18() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -588,9 +609,9 @@ class DefaultChannelPoolDiffblueTest {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MICROSECONDS);
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -618,10 +639,10 @@ class DefaultChannelPoolDiffblueTest {
   void testNewDefaultChannelPool20() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1000L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.SECONDS);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(-1L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -630,7 +651,7 @@ class DefaultChannelPoolDiffblueTest {
     verify(config).getConnectionPoolCleanerPeriod();
     verify(config).getConnectionTtl();
     verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertEquals(0L, hashedWheelTimer.pendingTimeouts());
     assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
     assertTrue(actualDefaultChannelPool.isOpen());
   }
@@ -650,9 +671,9 @@ class DefaultChannelPoolDiffblueTest {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(-1L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -661,7 +682,7 @@ class DefaultChannelPoolDiffblueTest {
     verify(config).getConnectionPoolCleanerPeriod();
     verify(config).getConnectionTtl();
     verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertEquals(0L, hashedWheelTimer.pendingTimeouts());
     assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
     assertTrue(actualDefaultChannelPool.isOpen());
   }
@@ -682,8 +703,8 @@ class DefaultChannelPoolDiffblueTest {
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(-1L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -712,9 +733,9 @@ class DefaultChannelPoolDiffblueTest {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1L, TimeUnit.MILLISECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -741,11 +762,14 @@ class DefaultChannelPoolDiffblueTest {
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
   void testNewDefaultChannelPool24() {
     // Arrange
+    Duration ofSecondsResult = Duration.ofSeconds(0L);
+    ofSecondsResult.addTo(LocalDate.ofEpochDay(1L));
+
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS, 1000);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -772,11 +796,14 @@ class DefaultChannelPoolDiffblueTest {
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
   void testNewDefaultChannelPool25() {
     // Arrange
+    Duration ofSecondsResult = Duration.ofSeconds(0L);
+    ofSecondsResult.addTo(LocalDate.ofEpochDay(1L));
+
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS, 1000);
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -785,41 +812,207 @@ class DefaultChannelPoolDiffblueTest {
     verify(config).getConnectionPoolCleanerPeriod();
     verify(config).getConnectionTtl();
     verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertEquals(0L, hashedWheelTimer.pendingTimeouts());
     assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
     assertTrue(actualDefaultChannelPool.isOpen());
   }
 
   /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
-   * Duration)}.
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   *
+   * <ul>
+   *   <li>Given {@link LocalDate} with {@code 1970} and one and one.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
+   * Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, Timer, Duration); given LocalDate with '1970' and one and one")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
+  void testNewDefaultChannelPool_givenLocalDateWith1970AndOneAndOne() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(0L);
+    OffsetDateTime ofResult =
+        OffsetDateTime.of(LocalDate.of(1970, 1, 1), LocalTime.MIDNIGHT, ZoneOffset.UTC);
+    maxIdleTime.addTo(ofResult);
+    Duration connectionTtl = Duration.ofSeconds(1L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(1000L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   *
+   * <ul>
+   *   <li>Given now.
+   *   <li>When ofSeconds zero addTo now.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
+   * Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, Timer, Duration); given now; when ofSeconds zero addTo now")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
+  void testNewDefaultChannelPool_givenNow_whenOfSecondsZeroAddToNow() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(0L);
+    maxIdleTime.addTo(Year.now());
+    Duration connectionTtl = Duration.ofSeconds(1L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(1L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   *
+   * <ul>
+   *   <li>Given {@code null}.
+   *   <li>When ofSeconds zero addTo {@code null}.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
+   * Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, Timer, Duration); given 'null'; when ofSeconds zero addTo 'null'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
+  void testNewDefaultChannelPool_givenNull_whenOfSecondsZeroAddToNull() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(0L);
+    maxIdleTime.addTo(null);
+    Duration connectionTtl = Duration.ofSeconds(2147483647L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(1000L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
    *
    * <ul>
    *   <li>Given ofEpochDay one thousand.
    * </ul>
    *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
-   * PoolLeaseStrategy, Timer, Duration)}
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
+   * Duration)}
    */
   @Test
   @DisplayName(
-      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); given ofEpochDay one thousand")
+      "Test new DefaultChannelPool(Duration, Duration, Timer, Duration); given ofEpochDay one thousand")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
-  })
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
   void testNewDefaultChannelPool_givenOfEpochDayOneThousand() {
     // Arrange
     Duration maxIdleTime = Duration.ofSeconds(0L);
     maxIdleTime.addTo(LocalDate.ofEpochDay(1000L));
     Duration connectionTtl = Duration.ofSeconds(1L);
-    HashedWheelTimer nettyTimer = new HashedWheelTimer();
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(
-            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ofSeconds(1L));
+        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(1L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   *
+   * <ul>
+   *   <li>Given ofEpochDay one thousand.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
+   * Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, Timer, Duration); given ofEpochDay one thousand")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
+  void testNewDefaultChannelPool_givenOfEpochDayOneThousand2() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(0L);
+    maxIdleTime.addTo(LocalDate.ofEpochDay(1000L));
+    Duration connectionTtl = Duration.ofSeconds(1L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(1000L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer, Duration)}.
+   *
+   * <ul>
+   *   <li>Given ofEpochDay one thousand.
+   *   <li>When ofSeconds {@code 2147483647}.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, Timer,
+   * Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, Timer, Duration); given ofEpochDay one thousand; when ofSeconds '2147483647'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(Duration, Duration, Timer, Duration)"})
+  void testNewDefaultChannelPool_givenOfEpochDayOneThousand_whenOfSeconds2147483647() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(0L);
+    maxIdleTime.addTo(LocalDate.ofEpochDay(1000L));
+    Duration connectionTtl = Duration.ofSeconds(2147483647L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(maxIdleTime, connectionTtl, nettyTimer, Duration.ofSeconds(1000L));
 
     // Assert
     assertEquals(1L, nettyTimer.pendingTimeouts());
@@ -831,7 +1024,7 @@ class DefaultChannelPoolDiffblueTest {
    * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
    *
    * <ul>
-   *   <li>Given ofSeconds {@code 2147483647}.
+   *   <li>Given ofSeconds {@code 1000000}.
    * </ul>
    *
    * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
@@ -839,88 +1032,16 @@ class DefaultChannelPoolDiffblueTest {
    */
   @Test
   @DisplayName(
-      "Test new DefaultChannelPool(AsyncHttpClientConfig, Timer); given ofSeconds '2147483647'")
+      "Test new DefaultChannelPool(AsyncHttpClientConfig, Timer); given ofSeconds '1000000'")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_givenOfSeconds2147483647() {
+  void testNewDefaultChannelPool_givenOfSeconds1000000() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
-
-    // Assert
-    verify(config).getConnectionPoolCleanerPeriod();
-    verify(config).getConnectionTtl();
-    verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
-   *
-   * <ul>
-   *   <li>Given ofSeconds {@code 2147483647}.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
-   * Timer)}
-   */
-  @Test
-  @DisplayName(
-      "Test new DefaultChannelPool(AsyncHttpClientConfig, Timer); given ofSeconds '2147483647'")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_givenOfSeconds21474836472() {
-    // Arrange
-    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
-
-    // Assert
-    verify(config).getConnectionPoolCleanerPeriod();
-    verify(config).getConnectionTtl();
-    verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
-   *
-   * <ul>
-   *   <li>Given ofSeconds minus one thousand.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
-   * Timer)}
-   */
-  @Test
-  @DisplayName(
-      "Test new DefaultChannelPool(AsyncHttpClientConfig, Timer); given ofSeconds minus one thousand")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_givenOfSecondsMinusOneThousand() {
-    // Arrange
-    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1000L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000000L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
@@ -955,12 +1076,54 @@ class DefaultChannelPoolDiffblueTest {
     // Arrange
     Duration ofSecondsResult = Duration.ofSeconds(0L);
     ofSecondsResult.addTo(LocalDate.ofEpochDay(-1000L));
+    ofSecondsResult.addTo(LocalDate.ofEpochDay(1L));
 
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(0L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1000L));
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
     when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult);
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
+
+    // Assert
+    verify(config).getConnectionPoolCleanerPeriod();
+    verify(config).getConnectionTtl();
+    verify(config).getPooledConnectionIdleTimeout();
+    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
+   *
+   * <ul>
+   *   <li>Given ofSeconds zero addTo ofEpochDay minus one thousand.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
+   * Timer)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(AsyncHttpClientConfig, Timer); given ofSeconds zero addTo ofEpochDay minus one thousand")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
+  void testNewDefaultChannelPool_givenOfSecondsZeroAddToOfEpochDayMinusOneThousand2() {
+    // Arrange
+    Duration ofSecondsResult = Duration.ofSeconds(0L);
+    ofSecondsResult.addTo(LocalDate.ofEpochDay(-1000L));
+    ofSecondsResult.addTo(LocalDate.ofEpochDay(-1000L));
+    ofSecondsResult.addTo(LocalDate.ofEpochDay(1L));
+
+    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -996,10 +1159,10 @@ class DefaultChannelPoolDiffblueTest {
     ofSecondsResult.addTo(LocalDate.ofEpochDay(1L));
 
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(ofSecondsResult);
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.MILLISECONDS);
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -1035,10 +1198,10 @@ class DefaultChannelPoolDiffblueTest {
     ofSecondsResult.addTo(LocalDate.ofEpochDay(1L));
 
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(ofSecondsResult);
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer();
+    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
+    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(2147483647L));
+    when(config.getPooledConnectionIdleTimeout()).thenReturn(ofSecondsResult);
+    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(1000L, TimeUnit.NANOSECONDS);
 
     // Act
     DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
@@ -1185,6 +1348,78 @@ class DefaultChannelPoolDiffblueTest {
   }
 
   /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
+   * Duration)}.
+   *
+   * <ul>
+   *   <li>Then {@link HashedWheelTimer#HashedWheelTimer()} pendingTimeouts is one.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
+   * PoolLeaseStrategy, Timer, Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); then HashedWheelTimer() pendingTimeouts is one")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
+  })
+  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne5() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(0L);
+    Duration connectionTtl = Duration.ofSeconds(1L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer();
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(
+            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ofSeconds(1L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
+   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
+   * Duration)}.
+   *
+   * <ul>
+   *   <li>Then {@link HashedWheelTimer#HashedWheelTimer()} pendingTimeouts is one.
+   * </ul>
+   *
+   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
+   * PoolLeaseStrategy, Timer, Duration)}
+   */
+  @Test
+  @DisplayName(
+      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); then HashedWheelTimer() pendingTimeouts is one")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({
+    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
+  })
+  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne6() {
+    // Arrange
+    Duration maxIdleTime = Duration.ofSeconds(1L);
+    Duration connectionTtl = Duration.ofSeconds(0L);
+    HashedWheelTimer nettyTimer = new HashedWheelTimer();
+
+    // Act
+    DefaultChannelPool actualDefaultChannelPool =
+        new DefaultChannelPool(
+            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ofSeconds(1L));
+
+    // Assert
+    assertEquals(1L, nettyTimer.pendingTimeouts());
+    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
+    assertTrue(actualDefaultChannelPool.isOpen());
+  }
+
+  /**
    * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
    *
    * <ul>
@@ -1200,7 +1435,7 @@ class DefaultChannelPoolDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne5() {
+  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne7() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
@@ -1236,7 +1471,7 @@ class DefaultChannelPoolDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne6() {
+  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne8() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
@@ -1272,48 +1507,12 @@ class DefaultChannelPoolDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne7() {
+  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne9() {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
     when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(0L));
-    HashedWheelTimer hashedWheelTimer = new HashedWheelTimer();
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
-
-    // Assert
-    verify(config).getConnectionPoolCleanerPeriod();
-    verify(config).getConnectionTtl();
-    verify(config).getPooledConnectionIdleTimeout();
-    assertEquals(1L, hashedWheelTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig, Timer)}.
-   *
-   * <ul>
-   *   <li>Then {@link HashedWheelTimer#HashedWheelTimer()} pendingTimeouts is one.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(AsyncHttpClientConfig,
-   * Timer)}
-   */
-  @Test
-  @DisplayName(
-      "Test new DefaultChannelPool(AsyncHttpClientConfig, Timer); then HashedWheelTimer() pendingTimeouts is one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.<init>(AsyncHttpClientConfig, Timer)"})
-  void testNewDefaultChannelPool_thenHashedWheelTimerPendingTimeoutsIsOne8() {
-    // Arrange
-    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(-1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
     HashedWheelTimer hashedWheelTimer = new HashedWheelTimer();
 
     // Act
@@ -1437,7 +1636,8 @@ class DefaultChannelPoolDiffblueTest {
    * Duration)}.
    *
    * <ul>
-   *   <li>When ofSeconds one thousand.
+   *   <li>When {@code FIFO}.
+   *   <li>Then {@link HashedWheelTimer#HashedWheelTimer()} pendingTimeouts is one.
    * </ul>
    *
    * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
@@ -1445,94 +1645,22 @@ class DefaultChannelPoolDiffblueTest {
    */
   @Test
   @DisplayName(
-      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); when ofSeconds one thousand")
+      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); when 'FIFO'; then HashedWheelTimer() pendingTimeouts is one")
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({
     "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
   })
-  void testNewDefaultChannelPool_whenOfSecondsOneThousand() {
+  void testNewDefaultChannelPool_whenFifo_thenHashedWheelTimerPendingTimeoutsIsOne() {
     // Arrange
     Duration maxIdleTime = Duration.ofSeconds(1L);
-    Duration connectionTtl = Duration.ofSeconds(1000L);
-    HashedWheelTimer nettyTimer = new HashedWheelTimer();
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(
-            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ofSeconds(1L));
-
-    // Assert
-    assertEquals(1L, nettyTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
-   * Duration)}.
-   *
-   * <ul>
-   *   <li>When ofSeconds zero.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
-   * PoolLeaseStrategy, Timer, Duration)}
-   */
-  @Test
-  @DisplayName(
-      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); when ofSeconds zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
-  })
-  void testNewDefaultChannelPool_whenOfSecondsZero() {
-    // Arrange
-    Duration maxIdleTime = Duration.ofSeconds(0L);
     Duration connectionTtl = Duration.ofSeconds(1L);
     HashedWheelTimer nettyTimer = new HashedWheelTimer();
 
     // Act
     DefaultChannelPool actualDefaultChannelPool =
         new DefaultChannelPool(
-            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ofSeconds(1L));
-
-    // Assert
-    assertEquals(1L, nettyTimer.pendingTimeouts());
-    assertTrue(actualDefaultChannelPool.getIdleChannelCountPerHost().isEmpty());
-    assertTrue(actualDefaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer,
-   * Duration)}.
-   *
-   * <ul>
-   *   <li>When ofSeconds zero.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultChannelPool#DefaultChannelPool(Duration, Duration,
-   * PoolLeaseStrategy, Timer, Duration)}
-   */
-  @Test
-  @DisplayName(
-      "Test new DefaultChannelPool(Duration, Duration, PoolLeaseStrategy, Timer, Duration); when ofSeconds zero")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({
-    "void DefaultChannelPool.<init>(Duration, Duration, PoolLeaseStrategy, Timer, Duration)"
-  })
-  void testNewDefaultChannelPool_whenOfSecondsZero2() {
-    // Arrange
-    Duration maxIdleTime = Duration.ofSeconds(1L);
-    Duration connectionTtl = Duration.ofSeconds(0L);
-    HashedWheelTimer nettyTimer = new HashedWheelTimer();
-
-    // Act
-    DefaultChannelPool actualDefaultChannelPool =
-        new DefaultChannelPool(
-            maxIdleTime, connectionTtl, PoolLeaseStrategy.LIFO, nettyTimer, Duration.ofSeconds(1L));
+            maxIdleTime, connectionTtl, PoolLeaseStrategy.FIFO, nettyTimer, Duration.ZERO);
 
     // Assert
     assertEquals(1L, nettyTimer.pendingTimeouts());
@@ -1781,49 +1909,6 @@ class DefaultChannelPoolDiffblueTest {
     // Arrange
     AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
     when(config.getConnectionPoolCleanerPeriod()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
-    when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
-
-    Timer hashedWheelTimer = mock(Timer.class);
-    when(hashedWheelTimer.newTimeout(Mockito.<TimerTask>any(), anyLong(), Mockito.<TimeUnit>any()))
-        .thenReturn(mock(Timeout.class));
-
-    DefaultChannelPool defaultChannelPool = new DefaultChannelPool(config, hashedWheelTimer);
-
-    // Act
-    defaultChannelPool.destroy();
-
-    // Assert
-    verify(hashedWheelTimer).newTimeout(isA(TimerTask.class), eq(1000L), eq(TimeUnit.MILLISECONDS));
-    verify(config).getConnectionPoolCleanerPeriod();
-    verify(config).getConnectionTtl();
-    verify(config).getPooledConnectionIdleTimeout();
-    assertFalse(defaultChannelPool.isOpen());
-  }
-
-  /**
-   * Test {@link DefaultChannelPool#destroy()}.
-   *
-   * <ul>
-   *   <li>Given ofSeconds one addTo {@link LocalDateTime} with one and one and one and one and one.
-   * </ul>
-   *
-   * <p>Method under test: {@link DefaultChannelPool#destroy()}
-   */
-  @Test
-  @DisplayName(
-      "Test destroy(); given ofSeconds one addTo LocalDateTime with one and one and one and one and one")
-  @Tag("ContributionFromDiffblue")
-  @ManagedByDiffblue
-  @MethodsUnderTest({"void DefaultChannelPool.destroy()"})
-  void testDestroy_givenOfSecondsOneAddToLocalDateTimeWithOneAndOneAndOneAndOneAndOne() {
-    // Arrange
-    Duration ofSecondsResult = Duration.ofSeconds(1L);
-    LocalDateTime ofResult = LocalDateTime.of(1, 1, 1, 1, 1);
-    ofSecondsResult.addTo(ofResult);
-
-    AsyncHttpClientConfig config = mock(AsyncHttpClientConfig.class);
-    when(config.getConnectionPoolCleanerPeriod()).thenReturn(ofSecondsResult);
     when(config.getConnectionTtl()).thenReturn(Duration.ofSeconds(1L));
     when(config.getPooledConnectionIdleTimeout()).thenReturn(Duration.ofSeconds(1L));
 

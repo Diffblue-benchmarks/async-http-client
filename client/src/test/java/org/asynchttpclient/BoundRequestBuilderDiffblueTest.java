@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
@@ -1433,9 +1434,8 @@ class BoundRequestBuilderDiffblueTest {
 
     BoundRequestBuilder boundRequestBuilder =
         new BoundRequestBuilder(new DefaultAsyncHttpClient(), prototype);
-    boundRequestBuilder.addQueryParams(new ArrayList<>());
     boundRequestBuilder.setChannelPoolPartitioning(channelPoolPartitioning);
-    boundRequestBuilder.setProxyServer(Dsl.proxyServer("https://example.org/example", 8080));
+    boundRequestBuilder.setProxyServer(new Builder("https://example.org/example", 8080));
 
     // Act
     ListenableFuture<Response> actualExecuteResult = boundRequestBuilder.execute();
@@ -1830,6 +1830,124 @@ class BoundRequestBuilderDiffblueTest {
 
     ProxyServer proxyServer = mock(ProxyServer.class);
     when(proxyServer.isIgnoredForHost(Mockito.<String>any())).thenReturn(true);
+
+    Realm realm = mock(Realm.class);
+    when(realm.getPassword()).thenReturn("https://example.org/example");
+    when(realm.getPrincipal()).thenReturn("https://example.org/example");
+    when(realm.getCharset()).thenReturn(Charset.forName("UTF-8"));
+    when(realm.getScheme()).thenReturn(AuthScheme.BASIC);
+    when(realm.isUsePreemptiveAuth()).thenReturn(true);
+
+    ChannelPoolPartitioning channelPoolPartitioning = mock(ChannelPoolPartitioning.class);
+    when(channelPoolPartitioning.getPartitionKey(
+            Mockito.<Uri>any(), Mockito.<String>any(), Mockito.<ProxyServer>any()))
+        .thenReturn("Partition Key");
+    InetAddress address = mock(InetAddress.class);
+    InetAddress localAddress = mock(InetAddress.class);
+    ArrayList<Cookie> cookies = new ArrayList<>();
+    byte[] byteData = "AXAXAXAX".getBytes("UTF-8");
+    ArrayList<byte[]> compositeByteData = new ArrayList<>();
+    ByteBuffer byteBufferData = ByteBuffer.wrap("AXAXAXAX".getBytes("UTF-8"));
+    ByteBuf byteBufData = mock(ByteBuf.class);
+    ByteArrayInputStream streamData = new ByteArrayInputStream("AXAXAXAX".getBytes("UTF-8"));
+    BodyGenerator bodyGenerator = mock(BodyGenerator.class);
+    ArrayList<Param> formParams = new ArrayList<>();
+    ArrayList<Part> bodyParts = new ArrayList<>();
+    File file = Paths.get(System.getProperty("java.io.tmpdir"), "test.txt").toFile();
+    Duration requestTimeout = Duration.ofSeconds(1L);
+    Duration readTimeout = Duration.ofSeconds(1L);
+
+    DefaultRequest prototype =
+        new DefaultRequest(
+            "https://example.org/example",
+            uri,
+            address,
+            localAddress,
+            headers,
+            cookies,
+            byteData,
+            compositeByteData,
+            "https://example.org/example",
+            byteBufferData,
+            byteBufData,
+            streamData,
+            bodyGenerator,
+            formParams,
+            bodyParts,
+            "https://example.org/example",
+            proxyServer,
+            realm,
+            file,
+            true,
+            requestTimeout,
+            readTimeout,
+            1L,
+            Charset.forName("UTF-8"),
+            channelPoolPartitioning,
+            mock(NameResolver.class));
+    BoundRequestBuilder boundRequestBuilder =
+        new BoundRequestBuilder(new DefaultAsyncHttpClient(), prototype);
+
+    AsyncHandler<Object> handler = mock(AsyncHandler.class);
+    doNothing().when(handler).onTcpConnectAttempt(Mockito.<InetSocketAddress>any());
+    doNothing().when(handler).onConnectionPoolAttempt();
+
+    // Act
+    ListenableFuture<Object> actualExecuteResult = boundRequestBuilder.execute(handler);
+
+    // Assert
+    verify(headers).iterator();
+    verify(handler).onConnectionPoolAttempt();
+    verify(handler).onTcpConnectAttempt(isA(InetSocketAddress.class));
+    verify(realm).getCharset();
+    verify(realm).getPassword();
+    verify(realm).getPrincipal();
+    verify(realm, atLeast(1)).getScheme();
+    verify(realm, atLeast(1)).isUsePreemptiveAuth();
+    verify(channelPoolPartitioning, atLeast(1))
+        .getPartitionKey(isA(Uri.class), eq("https://example.org/example"), isNull());
+    verify(proxyServer).isIgnoredForHost("https://example.org/example");
+    verify(uri).getFragment();
+    verify(uri).getHost();
+    verify(uri).getPath();
+    verify(uri).getPort();
+    verify(uri).getQuery();
+    verify(uri, atLeast(1)).getScheme();
+    verify(uri).getUserInfo();
+    assertTrue(actualExecuteResult instanceof NettyResponseFuture);
+    assertEquals("UTF-8", boundRequestBuilder.charset.name());
+  }
+
+  /**
+   * Test {@link BoundRequestBuilder#execute(AsyncHandler)} with {@code AsyncHandler}.
+   *
+   * <p>Method under test: {@link BoundRequestBuilder#execute(AsyncHandler)}
+   */
+  @Test
+  @DisplayName("Test execute(AsyncHandler) with 'AsyncHandler'")
+  @Tag("ContributionFromDiffblue")
+  @ManagedByDiffblue
+  @MethodsUnderTest({"ListenableFuture BoundRequestBuilder.execute(AsyncHandler)"})
+  void testExecuteWithAsyncHandler4() throws UnsupportedEncodingException {
+    // Arrange
+    Paths.get(System.getProperty("java.io.tmpdir"), "test.txt");
+
+    Uri uri = mock(Uri.class);
+    when(uri.getPort()).thenReturn(8080);
+    when(uri.getFragment()).thenReturn("https://example.org/example");
+    when(uri.getHost()).thenReturn("https://example.org/example");
+    when(uri.getQuery()).thenReturn("https://example.org/example");
+    when(uri.getUserInfo()).thenReturn("https://example.org/example");
+    when(uri.getPath()).thenReturn("https://example.org/example");
+    when(uri.getScheme()).thenReturn("http");
+
+    HttpHeaders headers = mock(HttpHeaders.class);
+
+    ArrayList<Entry<String, String>> entryList = new ArrayList<>();
+    when(headers.iterator()).thenReturn(entryList.iterator());
+
+    ProxyServer proxyServer = mock(ProxyServer.class);
+    when(proxyServer.isIgnoredForHost(Mockito.<String>any())).thenReturn(true);
     InetAddress address = mock(InetAddress.class);
     InetAddress localAddress = mock(InetAddress.class);
     ArrayList<Cookie> cookies = new ArrayList<>();
@@ -1912,7 +2030,7 @@ class BoundRequestBuilderDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"ListenableFuture BoundRequestBuilder.execute(AsyncHandler)"})
-  void testExecuteWithAsyncHandler4() throws UnsupportedEncodingException {
+  void testExecuteWithAsyncHandler5() throws UnsupportedEncodingException {
     // Arrange
     Paths.get(System.getProperty("java.io.tmpdir"), "test.txt");
 
@@ -2013,7 +2131,7 @@ class BoundRequestBuilderDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"ListenableFuture BoundRequestBuilder.execute(AsyncHandler)"})
-  void testExecuteWithAsyncHandler5() throws UnsupportedEncodingException {
+  void testExecuteWithAsyncHandler6() throws UnsupportedEncodingException {
     // Arrange
     Paths.get(System.getProperty("java.io.tmpdir"), "test.txt");
 
@@ -2122,7 +2240,7 @@ class BoundRequestBuilderDiffblueTest {
   @Tag("ContributionFromDiffblue")
   @ManagedByDiffblue
   @MethodsUnderTest({"ListenableFuture BoundRequestBuilder.execute(AsyncHandler)"})
-  void testExecuteWithAsyncHandler6() throws UnsupportedEncodingException {
+  void testExecuteWithAsyncHandler7() throws UnsupportedEncodingException {
     // Arrange
     Paths.get(System.getProperty("java.io.tmpdir"), "test.txt");
 
